@@ -5,7 +5,7 @@ include 'includes/header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -424,7 +424,7 @@ while ($row = $result->fetch_assoc()) {
                     <p style="color: #555; margin: 10px 0;">
                         <?php echo nl2br(htmlspecialchars(substr($feedback['feedback_message'], 0, 200))); ?>
                         <?php if (strlen($feedback['feedback_message']) > 200): ?>
-                            <a href="view-feedback.php?id=<?php echo $feedback['feedback_id']; ?>">Read more...</a>
+                            <a href="view-feedback?id=<?php echo $feedback['feedback_id']; ?>">Read more...</a>
                         <?php endif; ?>
                     </p>
                     
@@ -454,7 +454,7 @@ while ($row = $result->fetch_assoc()) {
                                 <i class="fas fa-user-secret"></i> Anonymous
                             </span>
                         <?php endif; ?>
-                        <a href="view-feedback.php?id=<?php echo $feedback['feedback_id']; ?>" 
+                        <a href="view-feedback?id=<?php echo $feedback['feedback_id']; ?>" 
                            style="color: #ff6b35; text-decoration: none;">
                             <i class="fas fa-eye"></i> View Details
                         </a>
@@ -463,7 +463,7 @@ while ($row = $result->fetch_assoc()) {
             <?php endforeach; ?>
             
             <div style="text-align: center; margin-top: 20px;">
-                <a href="my-feedback.php" class="btn btn-info">
+                <a href="my-feedback" class="btn btn-info">
                     <i class="fas fa-list"></i> View All Feedback
                 </a>
             </div>

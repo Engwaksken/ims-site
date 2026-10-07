@@ -3,7 +3,7 @@ require_once __DIR__ . '/includes/config.php';
 
 // Check if user is logged in
 if (empty($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -68,10 +68,10 @@ function kpi_owned_or_redirect(mysqli $conn, int $kpi_id, int $user_id, string $
 {
     $kpi = kpi_fetch($conn, $kpi_id);
     if (!$kpi) {
-        kpi_redirect('my-kpis.php', 'KPI not found', 'danger');
+        kpi_redirect('my-kpis', 'KPI not found', 'danger');
     }
     if ((int) $kpi['user_id'] !== $user_id) {
-        kpi_redirect('my-kpis.php', "You do not have permission to $verb this KPI", 'danger');
+        kpi_redirect('my-kpis', "You do not have permission to $verb this KPI", 'danger');
     }
     return $kpi;
 }
@@ -79,7 +79,7 @@ function kpi_owned_or_redirect(mysqli $conn, int $kpi_id, int $user_id, string $
 function kpi_review_back(int $kpi_id): string
 {
     $referer = (string) ($_SERVER['HTTP_REFERER'] ?? '');
-    return str_contains($referer, 'view-kpi') ? "view-kpi.php?id=$kpi_id" : 'kpi-management.php';
+    return str_contains($referer, 'view-kpi') ? "view-kpi?id=$kpi_id" : 'kpi-management';
 }
 
 function calculate_overall_achievement(mysqli $conn, int $kpi_id): void
@@ -124,7 +124,7 @@ if ($stmt) {
 // ======================
 if ($action === 'create') {
     if (!$user_dept || !$user_dept['department_id']) {
-        kpi_redirect('my-profile.php', 'Please complete your employee profile first', 'danger');
+        kpi_redirect('my-profile', 'Please complete your employee profile first', 'danger');
     }
 
     $user_id = $current_user_id;
@@ -145,16 +145,16 @@ if ($action === 'create') {
     $q4_target = (float) ($_POST['q4_target'] ?? 0);
 
     if ($kpi_title === '' || $measurement_criteria === '' || $target_value <= 0 || $category_id <= 0) {
-        kpi_redirect('create-kpi.php', 'Please fill in all required fields', 'danger');
+        kpi_redirect('create-kpi', 'Please fill in all required fields', 'danger');
     }
     if ($fiscal_year < 2000 || $fiscal_year > (int) date('Y') + 5) {
-        kpi_redirect('create-kpi.php', 'Invalid fiscal year', 'danger');
+        kpi_redirect('create-kpi', 'Invalid fiscal year', 'danger');
     }
     if ($weight_percentage < 0 || $weight_percentage > 100) {
-        kpi_redirect('create-kpi.php', 'Weight percentage must be between 0 and 100', 'danger');
+        kpi_redirect('create-kpi', 'Weight percentage must be between 0 and 100', 'danger');
     }
     if ($q1_target < 0 || $q2_target < 0 || $q3_target < 0 || $q4_target < 0) {
-        kpi_redirect('create-kpi.php', 'Quarterly targets cannot be negative', 'danger');
+        kpi_redirect('create-kpi', 'Quarterly targets cannot be negative', 'danger');
     }
 
     $status = isset($_POST['submit_kpi']) ? 'Submitted' : 'Draft';
@@ -190,14 +190,14 @@ if ($action === 'create') {
         }
 
         kpi_redirect(
-            "view-kpi.php?id=$kpi_id",
+            "view-kpi?id=$kpi_id",
             $status === 'Submitted' ? 'KPI created and submitted for review successfully' : 'KPI saved as draft successfully',
             'success'
         );
     }
 
     error_log('Create KPI failed: ' . $stmt->error);
-    kpi_redirect('create-kpi.php', 'Error creating KPI. Please try again.', 'danger');
+    kpi_redirect('create-kpi', 'Error creating KPI. Please try again.', 'danger');
 }
 
 // ======================
@@ -208,7 +208,7 @@ if ($action === 'update') {
     $kpi_data = kpi_owned_or_redirect($conn, $kpi_id, $current_user_id, 'edit');
 
     if (!in_array($kpi_data['status'], ['Draft', 'Rejected'], true)) {
-        kpi_redirect("view-kpi.php?id=$kpi_id", 'Only draft or rejected KPIs can be edited', 'danger');
+        kpi_redirect("view-kpi?id=$kpi_id", 'Only draft or rejected KPIs can be edited', 'danger');
     }
 
     $category_id = (int) ($_POST['category_id'] ?? $kpi_data['category_id']);
@@ -226,13 +226,13 @@ if ($action === 'update') {
     $q4_target = (float) ($_POST['q4_target'] ?? 0);
 
     if ($kpi_title === '' || $measurement_criteria === '' || $target_value <= 0 || $category_id <= 0) {
-        kpi_redirect("edit-kpi.php?id=$kpi_id", 'Please fill in all required fields', 'danger');
+        kpi_redirect("edit-kpi?id=$kpi_id", 'Please fill in all required fields', 'danger');
     }
     if ($weight_percentage < 0 || $weight_percentage > 100) {
-        kpi_redirect("edit-kpi.php?id=$kpi_id", 'Weight percentage must be between 0 and 100', 'danger');
+        kpi_redirect("edit-kpi?id=$kpi_id", 'Weight percentage must be between 0 and 100', 'danger');
     }
     if ($q1_target < 0 || $q2_target < 0 || $q3_target < 0 || $q4_target < 0) {
-        kpi_redirect("edit-kpi.php?id=$kpi_id", 'Quarterly targets cannot be negative', 'danger');
+        kpi_redirect("edit-kpi?id=$kpi_id", 'Quarterly targets cannot be negative', 'danger');
     }
     if ($fiscal_year < 2000 || $fiscal_year > (int) date('Y') + 5) {
         $fiscal_year = (int) $kpi_data['fiscal_year'];
@@ -274,7 +274,7 @@ if ($action === 'update') {
     }
     $stmt->close();
 
-    kpi_redirect("view-kpi.php?id=$kpi_id");
+    kpi_redirect("view-kpi?id=$kpi_id");
 }
 
 // ======================
@@ -287,13 +287,13 @@ if ($action === 'update_progress') {
     $kpi_data = kpi_owned_or_redirect($conn, $kpi_id, $current_user_id, 'update');
 
     if ($kpi_data['status'] !== 'Approved') {
-        kpi_redirect("view-kpi.php?id=$kpi_id", 'Only approved KPIs can be updated', 'danger');
+        kpi_redirect("view-kpi?id=$kpi_id", 'Only approved KPIs can be updated', 'danger');
     }
 
     // Quarter is used as a column prefix: strict whitelist (was SQL injectable).
     $quarter_columns = ['Q1' => 'q1', 'Q2' => 'q2', 'Q3' => 'q3', 'Q4' => 'q4'];
     if (!isset($quarter_columns[$quarter])) {
-        kpi_redirect("view-kpi.php?id=$kpi_id", 'Invalid quarter selected', 'danger');
+        kpi_redirect("view-kpi?id=$kpi_id", 'Invalid quarter selected', 'danger');
     }
     $q_lower = $quarter_columns[$quarter];
 
@@ -336,7 +336,7 @@ if ($action === 'update_progress') {
     }
     $stmt->close();
 
-    kpi_redirect("view-kpi.php?id=$kpi_id");
+    kpi_redirect("view-kpi?id=$kpi_id");
 }
 
 // ======================
@@ -347,7 +347,7 @@ if ($action === 'submit') {
     $kpi_data = kpi_owned_or_redirect($conn, $kpi_id, $current_user_id, 'submit');
 
     if (!in_array($kpi_data['status'], ['Draft', 'Rejected'], true)) {
-        kpi_redirect('my-kpis.php', 'This KPI has already been submitted', 'warning');
+        kpi_redirect('my-kpis', 'This KPI has already been submitted', 'warning');
     }
 
     $stmt = $conn->prepare("UPDATE kpis SET status = 'Submitted', submitted_at = NOW(), rejection_reason = NULL WHERE kpi_id = ? AND user_id = ?");
@@ -363,7 +363,7 @@ if ($action === 'submit') {
     }
     $stmt->close();
 
-    kpi_redirect('my-kpis.php');
+    kpi_redirect('my-kpis');
 }
 
 // ======================
@@ -375,7 +375,7 @@ if ($action === 'delete') {
 
     // Draft and rejected KPIs can be deleted (the list shows Delete for both)
     if (!in_array($kpi_data['status'], ['Draft', 'Rejected'], true)) {
-        kpi_redirect('my-kpis.php', 'Only draft or rejected KPIs can be deleted', 'danger');
+        kpi_redirect('my-kpis', 'Only draft or rejected KPIs can be deleted', 'danger');
     }
 
     $stmt = $conn->prepare("DELETE FROM kpis WHERE kpi_id = ? AND user_id = ?");
@@ -390,7 +390,7 @@ if ($action === 'delete') {
     }
     $stmt->close();
 
-    kpi_redirect('my-kpis.php');
+    kpi_redirect('my-kpis');
 }
 
 // ======================
@@ -406,7 +406,7 @@ if ($action === 'approve' || $action === 'reject') {
     $kpi_data = kpi_fetch($conn, $kpi_id);
 
     if (!$kpi_data) {
-        kpi_redirect('kpi-management.php', 'KPI not found', 'danger');
+        kpi_redirect('kpi-management', 'KPI not found', 'danger');
     }
     if (!in_array($kpi_data['status'], ['Submitted', 'Under Review'], true)) {
         kpi_redirect($back, 'Only submitted KPIs can be reviewed', 'warning');
@@ -469,12 +469,12 @@ if ($action === 'add_comment') {
 
     $kpi_data = kpi_fetch($conn, $kpi_id);
     if (!$kpi_data) {
-        kpi_redirect('my-kpis.php', 'KPI not found', 'danger');
+        kpi_redirect('my-kpis', 'KPI not found', 'danger');
     }
 
     // IDOR fix: only the owner or a KPI reviewer may comment.
     if ((int) $kpi_data['user_id'] !== $current_user_id && !$is_kpi_reviewer) {
-        kpi_redirect('my-kpis.php', 'You do not have permission to comment on this KPI', 'danger');
+        kpi_redirect('my-kpis', 'You do not have permission to comment on this KPI', 'danger');
     }
 
     if (!in_array($quarter, KPI_COMMENT_QUARTERS, true)) {
@@ -484,7 +484,7 @@ if ($action === 'add_comment') {
         $comment_type = 'Progress Update';
     }
     if ($comment_text === '') {
-        kpi_redirect("view-kpi.php?id=$kpi_id", 'Comment cannot be empty', 'danger');
+        kpi_redirect("view-kpi?id=$kpi_id", 'Comment cannot be empty', 'danger');
     }
 
     $stmt = $conn->prepare("INSERT INTO kpi_comments (kpi_id, user_id, quarter, comment_type, comment_text)
@@ -500,9 +500,9 @@ if ($action === 'add_comment') {
     }
     $stmt->close();
 
-    kpi_redirect("view-kpi.php?id=$kpi_id");
+    kpi_redirect("view-kpi?id=$kpi_id");
 }
 
 // If no valid action, redirect
-header("Location: my-kpis.php");
+header("Location: my-kpis");
 exit();

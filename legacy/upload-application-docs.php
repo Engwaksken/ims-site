@@ -4,12 +4,12 @@ require_once __DIR__ . '/includes/config.php';
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = "Please log in to upload documents.";
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
-    header("Location: my-applications.php");
+    header("Location: my-applications");
     exit();
 }
 
@@ -20,7 +20,7 @@ $application_id = isset($_POST['application_id']) ? intval($_POST['application_i
 
 if (!$application_id) {
     $_SESSION['error'] = "Invalid application ID.";
-    header("Location: my-applications.php");
+    header("Location: my-applications");
     exit();
 }
 
@@ -33,7 +33,7 @@ $check->close();
 
 if (!$application) {
     $_SESSION['error'] = "Application not found or you don't have permission to upload documents.";
-    header("Location: my-applications.php");
+    header("Location: my-applications");
     exit();
 }
 
@@ -46,7 +46,7 @@ if ($document_type === '') {
 // Handle file upload
 if (!isset($_FILES['document']) || (int)$_FILES['document']['error'] !== UPLOAD_ERR_OK) {
     $_SESSION['error'] = "No file uploaded or upload error occurred.";
-    header("Location: my-applications.php");
+    header("Location: my-applications");
     exit();
 }
 
@@ -61,7 +61,7 @@ $validation = ims_validate_upload(
 
 if (!$validation['ok']) {
     $_SESSION['error'] = $validation['error'] . " Allowed: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, PNG (max 10MB).";
-    header("Location: my-applications.php");
+    header("Location: my-applications");
     exit();
 }
 
@@ -107,5 +107,5 @@ if (move_uploaded_file($file['tmp_name'], $filepath)) {
     $_SESSION['error'] = "Error uploading file. Please try again.";
 }
 
-header("Location: my-applications.php");
+header("Location: my-applications");
 exit();

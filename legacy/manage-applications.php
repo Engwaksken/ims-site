@@ -25,7 +25,7 @@ if (!function_exists('h')) {
 $opportunity_id = isset($_GET['opportunity_id']) ? (int)$_GET['opportunity_id'] : 0;
 if (!$opportunity_id) {
     $_SESSION['error'] = 'Invalid opportunity ID.';
-    header('Location: application-opportunities.php');
+    header('Location: application-opportunities');
     exit();
 }
 
@@ -36,7 +36,7 @@ $opp_result = $opp_stmt->get_result();
 
 if (!$opp_result || $opp_result->num_rows === 0) {
     $_SESSION['error'] = 'Opportunity not found.';
-    header('Location: application-opportunities.php');
+    header('Location: application-opportunities');
     exit();
 }
 $opportunity = $opp_result->fetch_assoc();
@@ -420,10 +420,10 @@ $status_options = ['Draft','Submitted','Under Review','Approved','Rejected','Wai
         <p><?= h($opportunity['opportunity_title']) ?></p>
     </div>
     <div class="opp-hero-actions" style="position:relative;">
-        <a href="view-opportunity.php?id=<?= $opportunity_id ?>" class="btn btn-white btn-sm">
+        <a href="view-opportunity?id=<?= $opportunity_id ?>" class="btn btn-white btn-sm">
             <i class="fas fa-eye"></i> View Opportunity
         </a>
-        <a href="application-opportunities.php" class="btn btn-white btn-sm">
+        <a href="application-opportunities" class="btn btn-white btn-sm">
             <i class="fas fa-arrow-left"></i> Back
         </a>
     </div>
@@ -517,7 +517,7 @@ $status_options = ['Draft','Submitted','Under Review','Approved','Rejected','Wai
                     <i class="fas fa-filter"></i> Filter
                 </button>
                 <?php if ($filter_status !== '' || $filter_stage !== '' || $search !== ''): ?>
-                    <a href="manage-applications.php?opportunity_id=<?= $opportunity_id ?>" class="btn btn-secondary btn-sm">
+                    <a href="manage-applications?opportunity_id=<?= $opportunity_id ?>" class="btn btn-secondary btn-sm">
                         <i class="fas fa-times"></i> Clear
                     </a>
                 <?php endif; ?>
@@ -528,7 +528,7 @@ $status_options = ['Draft','Submitted','Under Review','Approved','Rejected','Wai
                 <button type="button" onclick="exportApplications()" class="btn btn-success btn-sm">
                     <i class="fas fa-download"></i> Export CSV
                 </button>
-                <a href="application-csv-import.php?opportunity_id=<?= $opportunity_id ?>" class="btn btn-secondary btn-sm">
+                <a href="application-csv-import?opportunity_id=<?= $opportunity_id ?>" class="btn btn-secondary btn-sm">
                     <i class="fas fa-file-csv"></i> CSV Import
                 </a>
             </div>
@@ -539,7 +539,7 @@ $status_options = ['Draft','Submitted','Under Review','Approved','Rejected','Wai
 <!-- -- Applications table (or empty state) --------------------- -->
 <?php if (!empty($applications)): ?>
 
-<form method="POST" action="review-application-process.php" id="bulkForm">
+<form method="POST" action="review-application-process" id="bulkForm">
     <input type="hidden" name="action" value="bulk_status_change">
     <input type="hidden" name="opportunity_id" value="<?= $opportunity_id ?>">
 
@@ -667,7 +667,7 @@ $status_options = ['Draft','Submitted','Under Review','Approved','Rejected','Wai
 
                         <td>
                             <div class="ma-actions">
-                                <a href="view-application.php?id=<?= (int)$app['application_id'] ?>"
+                                <a href="view-application?id=<?= (int)$app['application_id'] ?>"
                                    class="btn btn-secondary btn-sm" title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>
@@ -710,7 +710,7 @@ $status_options = ['Draft','Submitted','Under Review','Approved','Rejected','Wai
                 <?php endif; ?>
             </p>
             <?php if ($filter_status !== '' || $filter_stage !== '' || $search !== ''): ?>
-                <a href="manage-applications.php?opportunity_id=<?= $opportunity_id ?>" class="btn btn-secondary btn-sm">
+                <a href="manage-applications?opportunity_id=<?= $opportunity_id ?>" class="btn btn-secondary btn-sm">
                     <i class="fas fa-times"></i> Clear Filters
                 </a>
             <?php endif; ?>
@@ -764,12 +764,12 @@ function sortBy(column) {
 
 function quickShortlist(id) {
     if (confirm('Shortlist this application?'))
-        window.location.href = 'review-application-process.php?action=change_status&csrf_token=<?= h(csrf_token()) ?>&application_id=' + id + '&status=Shortlisted';
+        window.location.href = 'review-application-process?action=change_status&csrf_token=<?= h(csrf_token()) ?>&application_id=' + id + '&status=Shortlisted';
 }
 
 function quickAccept(id) {
     if (confirm('Accept this application?'))
-        window.location.href = 'review-application-process.php?action=change_status&csrf_token=<?= h(csrf_token()) ?>&application_id=' + id + '&status=Accepted';
+        window.location.href = 'review-application-process?action=change_status&csrf_token=<?= h(csrf_token()) ?>&application_id=' + id + '&status=Accepted';
 }
 
 function exportApplications() {

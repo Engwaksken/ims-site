@@ -17,7 +17,7 @@ $event_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($event_id <= 0) {
     send_notification($_SESSION['user_id'] ?? 0, 'Invalid event ID', 'danger');
-    header('Location: events.php');
+    header('Location: events');
     exit();
 }
 
@@ -29,7 +29,7 @@ $stmt->close();
 
 if (!$event) {
     send_notification($_SESSION['user_id'] ?? 0, 'Event not found', 'danger');
-    header('Location: events.php');
+    header('Location: events');
     exit();
 }
 
@@ -104,7 +104,7 @@ $process_url = 'includes/event-attendance-process.php?id=' . (int)$event_id . '&
 ?>
 
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:10px;flex-wrap:wrap;">
-    <a href="events.php" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Events</a>
+    <a href="events" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Events</a>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a href="<?= e($process_url) ?>&export=csv" class="btn btn-success"><i class="fas fa-file-csv"></i> Export CSV</a>
         <a href="<?= e($process_url) ?>&export=pdf" class="btn btn-danger" target="_blank"><i class="fas fa-file-pdf"></i> Export PDF</a>
@@ -166,7 +166,7 @@ $process_url = 'includes/event-attendance-process.php?id=' . (int)$event_id . '&
             <?php if (!empty($project_beneficiaries)): ?>
                 <button onclick="openModal('bulkRegisterModal')" class="btn btn-success" type="button"><i class="fas fa-users"></i> Bulk Register</button>
             <?php endif; ?>
-            <button onclick="window.location.href='download-attendance-template.php?event_id=<?= (int)$event_id ?>&day=<?= e($selected_day) ?>'" class="btn btn-info" type="button"><i class="fas fa-download"></i> Template</button>
+            <button onclick="window.location.href='download-attendance-template?event_id=<?= (int)$event_id ?>&day=<?= e($selected_day) ?>'" class="btn btn-info" type="button"><i class="fas fa-download"></i> Template</button>
             <button onclick="openModal('uploadCsvModal')" class="btn btn-info" type="button"><i class="fas fa-upload"></i> Upload CSV</button>
             <button onclick="window.print()" class="btn btn-secondary" type="button"><i class="fas fa-print"></i> Print</button>
         </div>

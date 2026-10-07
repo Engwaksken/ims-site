@@ -20,27 +20,27 @@ if (isset($_POST['add_indicator'])) {
     // Validate context selection
     if (empty($context_type) || ($context_type !== 'project' && $context_type !== 'program')) {
         send_notification($_SESSION['user_id'], 'Please select a valid context (Project or Program)', 'danger');
-        header("Location: ../indicators.php");
+        header("Location: ../indicators");
         exit();
     }
     
     // Validate that either project_id or program_id is set based on context
     if ($context_type === 'project' && ($project_id === null || $project_id <= 0)) {
         send_notification($_SESSION['user_id'], 'Please select a project', 'danger');
-        header("Location: ../indicators.php");
+        header("Location: ../indicators");
         exit();
     }
     
     if ($context_type === 'program' && ($program_id === null || $program_id <= 0)) {
         send_notification($_SESSION['user_id'], 'Please select a program', 'danger');
-        header("Location: ../indicators.php");
+        header("Location: ../indicators");
         exit();
     }
     
     // Validate required fields
     if (empty($indicator_name) || empty($indicator_type) || $target_value <= 0) {
         send_notification($_SESSION['user_id'], 'Indicator name, type, and target value (greater than zero) are required', 'danger');
-        header("Location: ../indicators.php");
+        header("Location: ../indicators");
         exit();
     }
     
@@ -69,7 +69,7 @@ if (isset($_POST['add_indicator'])) {
         send_notification($_SESSION['user_id'], 'Error adding indicator: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../indicators.php");
+    header("Location: ../indicators");
     exit();
 }
 
@@ -91,27 +91,27 @@ if (isset($_POST['edit_indicator'])) {
     // Validate context selection
     if (empty($context_type) || ($context_type !== 'project' && $context_type !== 'program')) {
         send_notification($_SESSION['user_id'], 'Please select a valid context (Project or Program)', 'danger');
-        header("Location: ../indicators.php?edit=$indicator_id");
+        header("Location: ../indicators?edit=$indicator_id");
         exit();
     }
     
     // Validate that either project_id or program_id is set based on context
     if ($context_type === 'project' && ($project_id === null || $project_id <= 0)) {
         send_notification($_SESSION['user_id'], 'Please select a project', 'danger');
-        header("Location: ../indicators.php?edit=$indicator_id");
+        header("Location: ../indicators?edit=$indicator_id");
         exit();
     }
     
     if ($context_type === 'program' && ($program_id === null || $program_id <= 0)) {
         send_notification($_SESSION['user_id'], 'Please select a program', 'danger');
-        header("Location: ../indicators.php?edit=$indicator_id");
+        header("Location: ../indicators?edit=$indicator_id");
         exit();
     }
     
     // Validate required fields
     if (empty($indicator_name) || empty($indicator_type) || $target_value <= 0) {
         send_notification($_SESSION['user_id'], 'Indicator name, type, and target value (greater than zero) are required', 'danger');
-        header("Location: ../indicators.php?edit=$indicator_id");
+        header("Location: ../indicators?edit=$indicator_id");
         exit();
     }
     
@@ -133,7 +133,7 @@ if (isset($_POST['edit_indicator'])) {
         send_notification($_SESSION['user_id'], 'Error updating indicator: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../indicators.php");
+    header("Location: ../indicators");
     exit();
 }
 
@@ -148,7 +148,7 @@ if (isset($_POST['update_progress'])) {
     // Validate required fields
     if (empty($reporting_period) || $actual_value === null || $actual_value < 0) {
         send_notification($_SESSION['user_id'], 'Reporting period and actual value (non-negative) are required', 'danger');
-        header("Location: ../indicators.php?progress=$indicator_id");
+        header("Location: ../indicators?progress=$indicator_id");
         exit();
     }
     
@@ -171,7 +171,7 @@ if (isset($_POST['update_progress'])) {
         send_notification($_SESSION['user_id'], 'Error updating progress: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../indicators.php");
+    header("Location: ../indicators");
     exit();
 }
 
@@ -210,11 +210,11 @@ if (isset($_POST['delete_indicator']) && in_array($_SESSION['role'], ['Administr
         }
     }
     
-    header("Location: ../indicators.php");
+    header("Location: ../indicators");
     exit();
 }
 
 // If no valid action, redirect to indicators page
-header("Location: ../indicators.php");
+header("Location: ../indicators");
 exit();
 ?>

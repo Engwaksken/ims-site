@@ -14,7 +14,7 @@ if (
     !in_array((string)$_SESSION['role'], ['Administrator'], true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit();
 }
 
@@ -177,7 +177,7 @@ function pgUrl(int $p): string {
         'per_page'       => (int)($_GET['per_page']       ?? 20),
         'page'           => $p,
     ], fn($v) => $v !== '' && $v !== 0 && $v !== '0');
-    return 'manage_application_scores.php' . ($q ? '?'.http_build_query($q) : '');
+    return 'manage_application_scores' . ($q ? '?'.http_build_query($q) : '');
 }
 ?>
 
@@ -262,7 +262,7 @@ function pgUrl(int $p): string {
             <p>Review, edit, and audit all submitted evaluation scores</p>
         </div>
         <div class="hero-actions">
-            <a href="progress-board.php" class="btn btn-primary">
+            <a href="progress-board" class="btn btn-primary">
                 <i class="fas fa-chart-line"></i> Progress Report
             </a>
         </div>
@@ -310,7 +310,7 @@ function pgUrl(int $p): string {
 
     <!-- -- Tab navigation ------------------------------------------- -->
     <nav class="tab-nav" role="tablist">
-        <a href="manage_application_scores.php?<?= e(http_build_query(array_filter(['review_type_id'=>$f_type,'reviewer_id'=>$f_rev,'application_id'=>$f_app,'q'=>$q,'per_page'=>$pp,'page'=>$page],fn($v)=>$v!==''&&$v!==0&&$v!=='0'))) ?>"
+        <a href="manage_application_scores?<?= e(http_build_query(array_filter(['review_type_id'=>$f_type,'reviewer_id'=>$f_rev,'application_id'=>$f_app,'q'=>$q,'per_page'=>$pp,'page'=>$page],fn($v)=>$v!==''&&$v!==0&&$v!=='0'))) ?>"
            class="tab-btn<?= $activeTab==='scores'?' active':'' ?>" role="tab">
             <i class="fas fa-table-list"></i> All Reviews
             <span class="tab-badge"><?= number_format($total_rows) ?></span>
@@ -373,7 +373,7 @@ function pgUrl(int $p): string {
                 </button>
 
                 <?php if ($f_type||$f_rev||$f_app||$q): ?>
-                    <a href="manage_application_scores.php" class="btn btn-sm btn-gray">
+                    <a href="manage_application_scores" class="btn btn-sm btn-gray">
                         <i class="fas fa-times"></i> Clear
                     </a>
                 <?php endif; ?>
@@ -388,23 +388,23 @@ function pgUrl(int $p): string {
                 $tn = '';
                 foreach ($review_types as $rt) if ((int)$rt['review_type_id']===$f_type) { $tn=$rt['name']; break; }
                 $u = http_build_query(array_filter(['reviewer_id'=>$f_rev,'application_id'=>$f_app,'q'=>$q,'per_page'=>$pp],fn($v)=>$v!==''&&$v!==0));
-                echo '<span class="filter-chip">Type: '.e($tn).' <a href="manage_application_scores.php'.($u?'?'.$u:'').'">×</a></span>';
+                echo '<span class="filter-chip">Type: '.e($tn).' <a href="manage_application_scores'.($u?'?'.$u:'').'">×</a></span>';
             }
             if ($f_rev) {
                 $rn = '';
                 foreach ($reviewers as $rv) if ((int)$rv['user_id']===$f_rev) { $rn=$rv['full_name']; break; }
                 $u = http_build_query(array_filter(['review_type_id'=>$f_type,'application_id'=>$f_app,'q'=>$q,'per_page'=>$pp],fn($v)=>$v!==''&&$v!==0));
-                echo '<span class="filter-chip">Reviewer: '.e($rn).' <a href="manage_application_scores.php'.($u?'?'.$u:'').'">×</a></span>';
+                echo '<span class="filter-chip">Reviewer: '.e($rn).' <a href="manage_application_scores'.($u?'?'.$u:'').'">×</a></span>';
             }
             if ($f_app) {
                 $an = '';
                 foreach ($apps_list as $ap) if ((int)$ap['application_id']===$f_app) { $an=$ap['startup_name']; break; }
                 $u = http_build_query(array_filter(['review_type_id'=>$f_type,'reviewer_id'=>$f_rev,'q'=>$q,'per_page'=>$pp],fn($v)=>$v!==''&&$v!==0));
-                echo '<span class="filter-chip">App: '.e($an).' <a href="manage_application_scores.php'.($u?'?'.$u:'').'">×</a></span>';
+                echo '<span class="filter-chip">App: '.e($an).' <a href="manage_application_scores'.($u?'?'.$u:'').'">×</a></span>';
             }
             if ($q) {
                 $u = http_build_query(array_filter(['review_type_id'=>$f_type,'reviewer_id'=>$f_rev,'application_id'=>$f_app,'per_page'=>$pp],fn($v)=>$v!==''&&$v!==0));
-                echo '<span class="filter-chip">Search: "'.e($q).'" <a href="manage_application_scores.php'.($u?'?'.$u:'').'">×</a></span>';
+                echo '<span class="filter-chip">Search: "'.e($q).'" <a href="manage_application_scores'.($u?'?'.$u:'').'">×</a></span>';
             }
             ?>
         </div>
@@ -446,7 +446,7 @@ function pgUrl(int $p): string {
                     <?php foreach ($rows as $i => $row):
                         $pct = (float)$row['overall_score'];
                         $sc  = $pct>=70?'high':($pct>=40?'mid':'low');
-                        $editHref = 'manage_application_scores.php?'.http_build_query(array_filter([
+                        $editHref = 'manage_application_scores?'.http_build_query(array_filter([
                             'edit_review_id' => (int)$row['review_id'],
                             'review_type_id' => $f_type,
                             'reviewer_id'    => $f_rev,
@@ -557,7 +557,7 @@ function pgUrl(int $p): string {
                     &middot; Type: <span class="pill blue"><?= e($editReview['rt_name']) ?></span>
                 </div>
             </div>
-            <a href="manage_application_scores.php?<?= e(http_build_query(array_filter(['review_type_id'=>$f_type,'reviewer_id'=>$f_rev,'application_id'=>$f_app,'q'=>$q,'per_page'=>$pp,'page'=>$page],fn($v)=>$v!==''&&$v!==0&&$v!=='0'))) ?>"
+            <a href="manage_application_scores?<?= e(http_build_query(array_filter(['review_type_id'=>$f_type,'reviewer_id'=>$f_rev,'application_id'=>$f_app,'q'=>$q,'per_page'=>$pp,'page'=>$page],fn($v)=>$v!==''&&$v!==0&&$v!=='0'))) ?>"
                class="btn btn-gray">
                 <i class="fas fa-arrow-left"></i> Back to List
             </a>
@@ -637,7 +637,7 @@ function pgUrl(int $p): string {
                     <button type="submit" class="btn btn-dark">
                         <i class="fas fa-save"></i> Update Review
                     </button>
-                    <a href="manage_application_scores.php?<?= e(http_build_query(array_filter(['review_type_id'=>$f_type,'reviewer_id'=>$f_rev,'application_id'=>$f_app,'q'=>$q,'per_page'=>$pp,'page'=>$page],fn($v)=>$v!==''&&$v!==0&&$v!=='0'))) ?>"
+                    <a href="manage_application_scores?<?= e(http_build_query(array_filter(['review_type_id'=>$f_type,'reviewer_id'=>$f_rev,'application_id'=>$f_app,'q'=>$q,'per_page'=>$pp,'page'=>$page],fn($v)=>$v!==''&&$v!==0&&$v!=='0'))) ?>"
                        class="btn btn-gray">
                         <i class="fas fa-times"></i> Cancel
                     </a>

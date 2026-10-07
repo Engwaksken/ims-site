@@ -31,7 +31,7 @@ try {
         . $e->getMessage();
 
     header(
-        'Location: ../settings.php?tab=google'
+        'Location: ../settings?tab=google'
     );
 
     exit;

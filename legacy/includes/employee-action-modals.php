@@ -7,7 +7,7 @@
             <span class="close" onclick="closeModal('approveEmployeeModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="employee-actions-process.php">
+            <form method="POST" action="employee-actions-process">
                 <input type="hidden" name="employee_id" id="approveEmployeeId">
                 
                 <p style="margin-bottom: 20px;">
@@ -46,7 +46,7 @@
             <span class="close" onclick="closeModal('rejectEmployeeModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="employee-actions-process.php">
+            <form method="POST" action="employee-actions-process">
                 <input type="hidden" name="employee_id" id="rejectEmployeeId">
                 
                 <p style="margin-bottom: 20px;">

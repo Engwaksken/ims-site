@@ -54,7 +54,7 @@ require_once __DIR__ . '/includes/visitor-register-handler.php';
                 <div class="chip"><i class="fas fa-shield-halved"></i>Entry Confirmed</div>
             </div>
 
-            <a href="visitor-register.php" class="btn-again">
+            <a href="visitor-register" class="btn-again">
                 <i class="fas fa-user-plus"></i> Register Another Visitor
             </a>
         </div>

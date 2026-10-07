@@ -20,7 +20,7 @@ if (isset($_POST['add_program'])) {
     // Validate required fields
     if (empty($program_code) || empty($program_name) || empty($donor_id) || empty($start_date) || empty($end_date)) {
         send_notification($_SESSION['user_id'], 'All required fields must be filled', 'danger');
-        header("Location: ../programs.php");
+        header("Location: ../programs");
         exit();
     }
     
@@ -32,14 +32,14 @@ if (isset($_POST['add_program'])) {
     
     if ($check_result->num_rows > 0) {
         send_notification($_SESSION['user_id'], 'program code already exists. Please use a different code.', 'danger');
-        header("Location: ../programs.php");
+        header("Location: ../programs");
         exit();
     }
     
     // Validate dates
     if (strtotime($end_date) < strtotime($start_date)) {
         send_notification($_SESSION['user_id'], 'End date must be after start date', 'danger');
-        header("Location: ../programs.php");
+        header("Location: ../programs");
         exit();
     }
     
@@ -55,7 +55,7 @@ if (isset($_POST['add_program'])) {
         send_notification($_SESSION['user_id'], 'Error adding program: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../programs.php");
+    header("Location: ../programs");
     exit();
 }
 
@@ -76,7 +76,7 @@ if (isset($_POST['edit_program'])) {
     // Validate required fields
     if (empty($program_code) || empty($program_name) || empty($donor_id) || empty($start_date) || empty($end_date)) {
         send_notification($_SESSION['user_id'], 'All required fields must be filled', 'danger');
-        header("Location: ../programs.php?edit=$id");
+        header("Location: ../programs?edit=$id");
         exit();
     }
     
@@ -88,14 +88,14 @@ if (isset($_POST['edit_program'])) {
     
     if ($check_result->num_rows > 0) {
         send_notification($_SESSION['user_id'], 'program code already exists. Please use a different code.', 'danger');
-        header("Location: ../programs.php?edit=$id");
+        header("Location: ../programs?edit=$id");
         exit();
     }
     
     // Validate dates
     if (strtotime($end_date) < strtotime($start_date)) {
         send_notification($_SESSION['user_id'], 'End date must be after start date', 'danger');
-        header("Location: ../programs.php?edit=$id");
+        header("Location: ../programs?edit=$id");
         exit();
     }
     
@@ -110,7 +110,7 @@ if (isset($_POST['edit_program'])) {
         send_notification($_SESSION['user_id'], 'Error updating program: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../programs.php");
+    header("Location: ../programs");
     exit();
 }
 
@@ -140,11 +140,11 @@ if (isset($_POST['delete_program']) && $_SESSION['role'] == 'Administrator') {
         }
     }
     
-    header("Location: ../programs.php");
+    header("Location: ../programs");
     exit();
 }
 
 // If no valid action, redirect to programs page
-header("Location: ../programs.php");
+header("Location: ../programs");
 exit();
 ?>

@@ -235,7 +235,7 @@ unset($_SESSION['success'], $_SESSION['error']);
         </div>
 
         <div class="hero-actions">
-            <a href="manage_procurement.php" class="btn btn-primary">
+            <a href="manage_procurement" class="btn btn-primary">
                 <i class="fas fa-cart-shopping"></i> Manage Procurement
             </a>
 
@@ -281,15 +281,15 @@ unset($_SESSION['success'], $_SESSION['error']);
                             <i class="fas fa-search"></i> Search
                         </button>
 
-                        <a href="procurement_categories.php" class="btn btn-gray">
+                        <a href="procurement_categories" class="btn btn-gray">
                             <i class="fas fa-rotate-left"></i> Reset
                         </a>
 
-                        <a href="procurement_categories.php?search=<?= urlencode($search) ?>&export=csv" class="btn btn-green">
+                        <a href="procurement_categories?search=<?= urlencode($search) ?>&export=csv" class="btn btn-green">
                             <i class="fas fa-file-csv"></i> CSV
                         </a>
 
-                        <a href="procurement_categories.php?search=<?= urlencode($search) ?>&export=pdf" class="btn btn-red">
+                        <a href="procurement_categories?search=<?= urlencode($search) ?>&export=pdf" class="btn btn-red">
                             <i class="fas fa-file-pdf"></i> PDF
                         </a>
                     </div>

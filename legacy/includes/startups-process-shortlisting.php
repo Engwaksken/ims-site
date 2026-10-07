@@ -15,13 +15,13 @@ if (
     !in_array((string)$_SESSION['role'], $allowed_roles, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: ../startups-shortlisting.php');
+    header('Location: ../startups-shortlisting');
     exit();
 }
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
     $_SESSION['error'] = 'Database connection failed.';
-    header('Location: ../startups-shortlisting.php');
+    header('Location: ../startups-shortlisting');
     exit();
 }
 
@@ -30,7 +30,7 @@ $conn->set_charset('utf8mb4');
 $current_user_id = (int)($_SESSION['user_id'] ?? 0);
 $action          = trim((string)($_POST['action'] ?? ''));
 $filters         = trim((string)($_POST['redirect_filters'] ?? ''));
-$redirect        = '../startups-shortlisting.php' . ($filters !== '' ? '?' . $filters : '');
+$redirect        = '../startups-shortlisting' . ($filters !== '' ? '?' . $filters : '');
 
 /* -----------------------------------------------------------------------------
    HELPERS

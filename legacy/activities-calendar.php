@@ -1412,7 +1412,7 @@ function ac_list_page_url(
 
             <?php if (!$googleCalendarConnected && auth_has_role(IMS_ADMIN_ROLES)): ?>
                 <a
-                    href="settings.php?tab=google"
+                    href="settings?tab=google"
                     class="btn btn-gray"
                 >
                     <i class="fas fa-link"></i>
@@ -1422,7 +1422,7 @@ function ac_list_page_url(
 
 
             <a
-                href="workplan.php#wp-builder"
+                href="workplan#wp-builder"
                 class="btn btn-primary"
             >
                 <i class="fas fa-plus"></i>
@@ -1524,7 +1524,7 @@ function ac_list_page_url(
     <!-- FILTERS -->
     <form
         method="GET"
-        action="activities-calendar.php"
+        action="activities-calendar"
         class="filter-bar"
     >
 
@@ -1768,7 +1768,7 @@ function ac_list_page_url(
             </button>
 
             <a
-                href="activities-calendar.php"
+                href="activities-calendar"
                 class="btn btn-gray"
             >
                 <i class="fas fa-times"></i>
@@ -2250,7 +2250,7 @@ function ac_list_page_url(
 
                                             <?php if ($googleCalendarConnected): ?>
                                                 <a
-                                                    href="includes/google-calendar-sync.php?type=activity&id=<?= (int)$activity['activity_id'] ?>&return=<?= rawurlencode('../activities-calendar.php') ?>"
+                                                    href="includes/google-calendar-sync.php?type=activity&id=<?= (int)$activity['activity_id'] ?>&return=<?= rawurlencode('../activities-calendar') ?>"
                                                     class="btn btn-sm btn-soft"
                                                     title="Sync activity to Google Calendar"
                                                 >
@@ -2259,7 +2259,7 @@ function ac_list_page_url(
                                             <?php endif; ?>
 
                                             <a
-                                                href="workplan.php?workplan_id=<?= (int)$activity['workplan_id'] ?>#wp-builder"
+                                                href="workplan?workplan_id=<?= (int)$activity['workplan_id'] ?>#wp-builder"
                                                 class="btn btn-sm btn-gray"
                                                 title="Open workplan"
                                             >

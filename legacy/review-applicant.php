@@ -43,7 +43,7 @@ function review_date(mixed $value): string
     return $ts === false ? '-' : date('d M Y', $ts);
 }
 
-function redirect_with_error(string $message, string $location = 'dashboard.php'): never
+function redirect_with_error(string $message, string $location = 'dashboard'): never
 {
     $_SESSION['error'] = $message;
     header('Location: ' . $location);
@@ -178,7 +178,7 @@ $role = (string)$_SESSION['role'];
 $application_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?: 0;
 
 if ($application_id < 1) {
-    redirect_with_error('No application specified.', 'startups-shortlisting.php');
+    redirect_with_error('No application specified.', 'startups-shortlisting');
 }
 
 $success_msg = (string)($_SESSION['success'] ?? '');
@@ -222,7 +222,7 @@ $can_review_unassigned = in_array($role, $unassigned_allowed_roles, true);
 if (!$is_assigned && !$can_review_unassigned) {
     redirect_with_error(
         'You are not assigned to this application.',
-        'startups-shortlisting.php'
+        'startups-shortlisting'
     );
 }
 
@@ -261,7 +261,7 @@ $app = fetch_one_assoc(
 if (!$app) {
     redirect_with_error(
         'Application not found.',
-        'startups-shortlisting.php'
+        'startups-shortlisting'
     );
 }
 
@@ -1189,7 +1189,7 @@ require_once 'includes/header.php';
                     <?= h($app['status'] ?? 'Draft') ?>
                 </span>
 
-                <a href="startups-shortlisting.php" class="btn btn-secondary">
+                <a href="startups-shortlisting" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i>
                     Back
                 </a>
@@ -1223,7 +1223,7 @@ require_once 'includes/header.php';
                 );
             ?>
                 <a
-                    href="review-applicant.php?id=<?= $application_id ?>&rt=<?= $reviewTypeId ?>"
+                    href="review-applicant?id=<?= $application_id ?>&rt=<?= $reviewTypeId ?>"
                     class="type-tab <?= $active ? 'active' : '' ?> <?= $assigned ? 'assigned' : '' ?>"
                 >
                     <i class="fas fa-layer-group"></i>

@@ -153,7 +153,7 @@ function type_badge(string $type): string {
             <button class="btn btn-primary" onclick="openModal('addIndicatorModal')">
                 <i class="fas fa-plus"></i> Add Indicator
             </button>
-            <a href="export.php?type=indicators" class="btn btn-primary"
+            <a href="export?type=indicators" class="btn btn-primary"
                style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);">
                 <i class="fas fa-download"></i> Export CSV
             </a>
@@ -292,7 +292,7 @@ function type_badge(string $type): string {
 
         <div class="filter-actions">
             <button type="submit" class="btn btn-dark"><i class="fas fa-filter"></i> Filter</button>
-            <a href="indicators.php" class="btn btn-gray"><i class="fas fa-times"></i> Clear</a>
+            <a href="indicators" class="btn btn-gray"><i class="fas fa-times"></i> Clear</a>
         </div>
 
     </form>
@@ -410,7 +410,7 @@ function type_badge(string $type): string {
                                            class="btn btn-sm btn-soft" title="Update Progress">
                                             <i class="fas fa-plus-circle"></i>
                                         </a>
-                                        <a href="indicator-details.php?id=<?= (int)$ind['indicator_id'] ?>"
+                                        <a href="indicator-details?id=<?= (int)$ind['indicator_id'] ?>"
                                            class="btn btn-sm btn-gray" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </a>

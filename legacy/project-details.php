@@ -10,7 +10,7 @@ function h(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8')
 $project_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if (!$project_id) {
     send_notification($_SESSION['user_id'], 'Invalid project ID', 'danger');
-    header("Location: projects.php"); exit();
+    header("Location: projects"); exit();
 }
 
 /* -- Project + donor -------------------------------------------------- */
@@ -23,7 +23,7 @@ $result = $conn->query("
 ");
 if ($result->num_rows === 0) {
     send_notification($_SESSION['user_id'], 'Project not found', 'danger');
-    header("Location: projects.php"); exit();
+    header("Location: projects"); exit();
 }
 $project = $result->fetch_assoc();
 
@@ -159,7 +159,7 @@ $doc_icons = [
                 <span class="<?= $status_badge[$project['status']] ?? 'badge badge-returned' ?>" style="font-size:12px;padding:6px 14px;">
                     <?= h($project['status']) ?>
                 </span>
-                <a href="projects.php" class="btn btn-primary">
+                <a href="projects" class="btn btn-primary">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
                 <button onclick="window.print()" class="btn btn-primary" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);">
@@ -373,11 +373,11 @@ $doc_icons = [
             <div style="display:flex;gap:8px;align-items:center;">
                 <span class="badge badge-available"><?= $total_indicators ?> total</span>
                 <?php if (in_array($_SESSION['role'], ['Administrator', 'MEAL Lead'])): ?>
-                    <a href="indicators.php?project=<?= $project_id ?>" class="btn btn-sm btn-soft">
+                    <a href="indicators?project=<?= $project_id ?>" class="btn btn-sm btn-soft">
                         <i class="fas fa-plus"></i> Add
                     </a>
                 <?php endif; ?>
-                <a href="indicators.php?project=<?= $project_id ?>" class="btn btn-sm btn-gray">
+                <a href="indicators?project=<?= $project_id ?>" class="btn btn-sm btn-gray">
                     View All
                 </a>
             </div>
@@ -485,7 +485,7 @@ $doc_icons = [
         <div class="info-panel">
             <div class="info-panel-head">
                 <h3><i class="fas fa-users"></i> Recent Participants</h3>
-                <a href="participants.php?project=<?= $project_id ?>" class="btn btn-sm btn-gray">View All</a>
+                <a href="participants?project=<?= $project_id ?>" class="btn btn-sm btn-gray">View All</a>
             </div>
             <div class="info-panel-body">
                 <?php if (empty($beneficiaries)): ?>
@@ -518,7 +518,7 @@ $doc_icons = [
     <div class="info-panel">
         <div class="info-panel-head">
             <h3><i class="fas fa-folder-open"></i> Project Documents</h3>
-            <a href="documents.php?project=<?= $project_id ?>" class="btn btn-sm btn-gray">View All</a>
+            <a href="documents?project=<?= $project_id ?>" class="btn btn-sm btn-gray">View All</a>
         </div>
         <div class="info-panel-body">
             <?php if (empty($documents)): ?>

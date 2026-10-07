@@ -375,7 +375,7 @@ check_role(['Administrator', 'Programs Lead', 'MEAL Lead']);
 $opportunity_id = $opportunity_id_raw;
 if (!$opportunity_id) {
     $_SESSION['error'] = "Invalid opportunity ID.";
-    header("Location: application-opportunities.php");
+    header("Location: application-opportunities");
     exit();
 }
 
@@ -385,7 +385,7 @@ $opp_stmt->execute();
 $opp_result = $opp_stmt->get_result();
 if (!$opp_result || $opp_result->num_rows === 0) {
     $_SESSION['error'] = "Opportunity not found.";
-    header("Location: application-opportunities.php");
+    header("Location: application-opportunities");
     exit();
 }
 $opportunity = $opp_result->fetch_assoc();
@@ -897,7 +897,7 @@ if (empty($_SESSION['csrf_token'])) {
                 &nbsp;|&nbsp; <strong><?php echo $import_results['skipped']; ?></strong> skipped.
             <?php endif; ?>
         </p>
-        <a href="manage-applications.php?opportunity_id=<?php echo $opportunity_id; ?>"
+        <a href="manage-applications?opportunity_id=<?php echo $opportunity_id; ?>"
            class="btn btn-success btn-sm">
             <i class="fas fa-eye"></i> View Applications
         </a>
@@ -1009,7 +1009,7 @@ if (empty($_SESSION['csrf_token'])) {
         Sample rows are skipped automatically on import - no need to delete them.
         The importer auto-detects the key row and handles files re-saved from Excel or LibreOffice.
     </p>
-    <a href="application-csv-import.php?opportunity_id=<?php echo $opportunity_id; ?>&action=download_template"
+    <a href="application-csv-import?opportunity_id=<?php echo $opportunity_id; ?>&action=download_template"
        class="btn btn-primary">
         <i class="fas fa-file-csv"></i> Download CSV Template
     </a>
@@ -1075,7 +1075,7 @@ if (empty($_SESSION['csrf_token'])) {
 </div>
 
 <div style="margin-bottom:30px;">
-    <a href="manage-applications.php?opportunity_id=<?php echo $opportunity_id; ?>"
+    <a href="manage-applications?opportunity_id=<?php echo $opportunity_id; ?>"
        class="btn btn-secondary">
         <i class="fas fa-arrow-left"></i> Back to Manage Applications
     </a>

@@ -12,7 +12,7 @@ if (isset($_POST['clear_old_logs']) && $_SESSION['role'] == 'Administrator') {
     $valid_days = [30, 60, 90, 180, 365];
     if (!in_array($days_to_keep, $valid_days)) {
         send_notification($_SESSION['user_id'], 'Invalid days selected', 'danger');
-        header("Location: activity_log.php");
+        header("Location: activity_log");
         exit();
     }
     
@@ -36,7 +36,7 @@ if (isset($_POST['clear_old_logs']) && $_SESSION['role'] == 'Administrator') {
         send_notification($_SESSION['user_id'], 'Error clearing logs: ' . $conn->error, 'danger');
     }
     
-    header("Location: activity_log.php");
+    header("Location: activity_log");
     exit();
 }
 
@@ -109,7 +109,7 @@ if (isset($_GET['export'])) {
     $result = $run_log_query($conn, $query, $where_types, $where_params);
     if (!$result) {
         send_notification($_SESSION['user_id'], 'Could not export logs.', 'danger');
-        header("Location: activity_log.php");
+        header("Location: activity_log");
         exit();
     }
     
@@ -150,6 +150,6 @@ if (isset($_GET['export'])) {
 }
 
 // If no valid action, redirect
-header("Location: activity_log.php");
+header("Location: activity_log");
 exit();
 ?>

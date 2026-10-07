@@ -7,7 +7,7 @@ require_once __DIR__ . '/includes/config.php';
    AUTH GUARD
 ---------------------------------------------------------- */
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -276,7 +276,7 @@ body{background:var(--bg)}
             <p>Create, track, edit drafts, and view submitted or approved activity plans.</p>
         </div>
         <div>
-            <a href="create-activity.php" class="btn btn-white">+ New Activity Plan</a>
+            <a href="create-activity" class="btn btn-white">+ New Activity Plan</a>
         </div>
     </div>
 
@@ -335,7 +335,7 @@ body{background:var(--bg)}
         <div class="spacer"></div>
 
         <?php if ($status_filter !== '' || $year_filter > 0 || $q !== ''): ?>
-            <a href="my-activities.php" class="btn btn-outline">Clear</a>
+            <a href="my-activities" class="btn btn-outline">Clear</a>
         <?php endif; ?>
     </form>
 
@@ -388,14 +388,14 @@ body{background:var(--bg)}
                             <td><?= fmt_date($plan['updated_at']) ?></td>
                             <td>
                                 <div class="actions">
-                                    <a href="view-activity.php?id=<?= (int)$plan['plan_id'] ?>" class="link-btn">View</a>
+                                    <a href="view-activity?id=<?= (int)$plan['plan_id'] ?>" class="link-btn">View</a>
 
                                     <?php if ($can_edit): ?>
-                                        <a href="edit-activity.php?id=<?= (int)$plan['plan_id'] ?>" class="link-btn orange">Edit</a>
+                                        <a href="edit-activity?id=<?= (int)$plan['plan_id'] ?>" class="link-btn orange">Edit</a>
                                     <?php endif; ?>
 
                                     <?php if ((string)$plan['status'] === 'approved'): ?>
-                                        <a href="view-activity.php?id=<?= (int)$plan['plan_id'] ?>#weekly" class="link-btn green">Weekly Progress</a>
+                                        <a href="view-activity?id=<?= (int)$plan['plan_id'] ?>#weekly" class="link-btn green">Weekly Progress</a>
                                     <?php endif; ?>
                                 </div>
                             </td>

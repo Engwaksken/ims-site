@@ -291,11 +291,11 @@ unset($_SESSION['success'], $_SESSION['error']);
                 <button type="button" class="btn btn-primary" onclick="openModal('addAssetModal')">
                     <i class="fas fa-plus-circle"></i> Add Asset
                 </button>
-                <a href="asset_categories.php" class="btn btn-dark">
+                <a href="asset_categories" class="btn btn-dark">
                     <i class="fas fa-tags"></i> Asset Categories
                 </a>
             <?php endif; ?>
-            <a href="asset_maintenance.php" class="btn btn-soft">
+            <a href="asset_maintenance" class="btn btn-soft">
                 <i class="fas fa-screwdriver-wrench"></i> Asset Maintenance
             </a>
         </div>

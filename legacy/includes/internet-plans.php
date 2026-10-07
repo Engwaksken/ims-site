@@ -12,7 +12,7 @@ if (!function_exists('h')) {
 }
 
 function redirectPlans(): never {
-    header('Location: internet_plans.php');
+    header('Location: internet_plans');
     exit;
 }
 

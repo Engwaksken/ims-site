@@ -13,7 +13,7 @@ require_once 'includes/header.php';
 */
 if (empty($_SESSION['user_id'])) {
     $_SESSION['error'] = 'Please log in to view your applications.';
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -844,7 +844,7 @@ foreach ($submitted as $application) {
             </div>
 
             <div class="ma-hero-actions">
-                <a href="opportunities.php" class="ma-btn ma-btn-primary">
+                <a href="opportunities" class="ma-btn ma-btn-primary">
                     <i class="fas fa-search"></i>
                     Browse Opportunities
                 </a>
@@ -945,7 +945,7 @@ foreach ($submitted as $application) {
                 <h3>No Applications Yet</h3>
                 <p>Browse available opportunities and submit your first application.</p>
 
-                <a href="opportunities.php" class="ma-btn ma-btn-dark">
+                <a href="opportunities" class="ma-btn ma-btn-dark">
                     <i class="fas fa-search"></i>
                     Browse Opportunities
                 </a>
@@ -1028,7 +1028,7 @@ foreach ($submitted as $application) {
                                     <div class="ma-card-actions">
                                         <?php if ($open): ?>
                                             <a
-                                                href="submit-application.php?opportunity_id=<?= (int)($draft['opportunity_id'] ?? 0) ?>&draft_id=<?= $draftId ?>"
+                                                href="submit-application?opportunity_id=<?= (int)($draft['opportunity_id'] ?? 0) ?>&draft_id=<?= $draftId ?>"
                                                 class="ma-btn ma-btn-soft"
                                             >
                                                 <i class="fas fa-pen"></i>
@@ -1142,7 +1142,7 @@ foreach ($submitted as $application) {
 
                                     <div class="ma-card-actions">
                                         <a
-                                            href="view-my-application.php?id=<?= $applicationId ?>"
+                                            href="view-my-application?id=<?= $applicationId ?>"
                                             class="ma-btn ma-btn-dark"
                                         >
                                             <i class="fas fa-eye"></i>
@@ -1274,7 +1274,7 @@ ob_end_flush();
             }
 
             window.location.href =
-                'review-application-process.php?action=withdraw&csrf_token=<?= h(csrf_token()) ?>&application_id=' +
+                'review-application-process?action=withdraw&csrf_token=<?= h(csrf_token()) ?>&application_id=' +
                 encodeURIComponent(String(id));
         });
     });
@@ -1292,7 +1292,7 @@ ob_end_flush();
             }
 
             window.location.href =
-                'review-application-process.php?action=delete_draft&csrf_token=<?= h(csrf_token()) ?>&application_id=' +
+                'review-application-process?action=delete_draft&csrf_token=<?= h(csrf_token()) ?>&application_id=' +
                 encodeURIComponent(String(id));
         });
     });

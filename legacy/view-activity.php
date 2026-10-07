@@ -7,7 +7,7 @@ require_once 'includes/config.php';
    AUTH GUARD
 ----------------------------------------------- */
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login');
     exit();
 }
 
@@ -16,7 +16,7 @@ $plan_id = (int)($_GET['id'] ?? 0);
 
 if ($plan_id <= 0) {
     $_SESSION['activity_error'] = 'No activity plan specified.';
-    header('Location: my-activities.php');
+    header('Location: my-activities');
     exit();
 }
 
@@ -86,7 +86,7 @@ $stmt->close();
 
 if (!$plan) {
     $_SESSION['activity_error'] = 'Activity plan not found or access denied.';
-    header('Location: my-activities.php');
+    header('Location: my-activities');
     exit();
 }
 
@@ -285,11 +285,11 @@ body{background:var(--surface)}
 <div class="page-wrap">
 
     <div class="topbar">
-        <a href="my-activities.php" class="back-link"><i class="fa fa-arrow-left"></i> Activity Plans</a>
+        <a href="my-activities" class="back-link"><i class="fa fa-arrow-left"></i> Activity Plans</a>
 
         <div class="topbar-actions">
             <?php if ($is_owner && $status === 'draft'): ?>
-                <a href="edit-activity.php?id=<?= $plan_id ?>" class="btn btn-outline">Edit Plan</a>
+                <a href="edit-activity?id=<?= $plan_id ?>" class="btn btn-outline">Edit Plan</a>
 
                 <form method="POST" action="includes/activity-process.php" style="display:inline">
                     <input type="hidden" name="action" value="submit_activity_plan">

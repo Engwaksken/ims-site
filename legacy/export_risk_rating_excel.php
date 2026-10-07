@@ -12,7 +12,7 @@ if (
     !in_array((string)$_SESSION['role'], $allowed_roles, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit();
 }
 
@@ -279,6 +279,6 @@ try {
 
 } catch (Throwable $e) {
     $_SESSION['error'] = $e->getMessage();
-    header('Location: risk_rating.php?application_id=' . $applicationId);
+    header('Location: risk_rating?application_id=' . $applicationId);
     exit();
 }

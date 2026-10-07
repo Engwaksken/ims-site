@@ -310,7 +310,7 @@ $remainingText    = $device ? formatRemaining($remainingMinutes) : 'N/A';
         <h1>Connection Failed</h1>
         <p><?= h($error) ?></p>
 
-        <a href="internet_portal.php" class="btn">
+        <a href="internet_portal" class="btn">
             <i class="fas fa-redo"></i>
             Try Again
         </a>

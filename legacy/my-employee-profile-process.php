@@ -2,12 +2,12 @@
 require_once __DIR__ . '/includes/config.php';
 
 if (empty($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
-    header("Location: my-profile.php");
+    header("Location: my-profile");
     exit();
 }
 
@@ -17,7 +17,7 @@ $user_id = (int)$_SESSION['user_id'];
    Only process if a form button was actually clicked
 --------------------------------------------------------------- */
 if (!isset($_POST['save_draft']) && !isset($_POST['submit_profile'])) {
-    header("Location: my-profile.php");
+    header("Location: my-profile");
     exit();
 }
 
@@ -93,7 +93,7 @@ if ($is_submit) {
 
     if (!empty($errors)) {
         send_notification($user_id, implode(', ', $errors), 'danger');
-        header("Location: my-profile.php");
+        header("Location: my-profile");
         exit();
     }
 }
@@ -444,5 +444,5 @@ if ($mark_submitted) {
 }
 
 send_notification($user_id, "Profile $status_msg successfully.", 'success');
-header("Location: my-profile.php");
+header("Location: my-profile");
 exit();

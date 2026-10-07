@@ -661,7 +661,7 @@ function ms_page_url(int $page): string
     $query = $_GET;
     $query['page'] = $page;
 
-    return 'milestones.php?' . http_build_query($query);
+    return 'milestones?' . http_build_query($query);
 }
 ?>
 
@@ -923,7 +923,7 @@ function ms_page_url(int $page): string
         <div class="hero-actions">
 
             <a
-                href="workplan.php#wp-builder"
+                href="workplan#wp-builder"
                 class="btn btn-primary"
             >
 
@@ -957,7 +957,7 @@ function ms_page_url(int $page): string
     <div class="milestones-stats">
 
         <a
-            href="milestones.php"
+            href="milestones"
             class="ms-stat-click"
         >
 
@@ -1006,7 +1006,7 @@ function ms_page_url(int $page): string
 
 
         <a
-            href="milestones.php?status=In+Progress"
+            href="milestones?status=In+Progress"
             class="ms-stat-click"
         >
 
@@ -1034,7 +1034,7 @@ function ms_page_url(int $page): string
 
 
         <a
-            href="milestones.php?status=Completed"
+            href="milestones?status=Completed"
             class="ms-stat-click"
         >
 
@@ -1089,7 +1089,7 @@ function ms_page_url(int $page): string
 
 
         <a
-            href="milestones.php?status=Delayed"
+            href="milestones?status=Delayed"
             class="ms-stat-click"
         >
 
@@ -1124,7 +1124,7 @@ function ms_page_url(int $page): string
 
     <form
         method="GET"
-        action="milestones.php"
+        action="milestones"
         class="filter-bar"
     >
 
@@ -1462,7 +1462,7 @@ function ms_page_url(int $page): string
 
 
             <a
-                href="milestones.php"
+                href="milestones"
                 class="btn btn-gray"
             >
 
@@ -2083,7 +2083,7 @@ function ms_page_url(int $page): string
                                     <div class="actions">
 
                                         <a
-                                            href="workplan.php?workplan_id=<?= (int)$milestone['workplan_id'] ?>#wp-calendar"
+                                            href="workplan?workplan_id=<?= (int)$milestone['workplan_id'] ?>#wp-calendar"
                                             class="btn btn-sm btn-soft"
                                             title="Open calendar"
                                         >
@@ -2099,7 +2099,7 @@ function ms_page_url(int $page): string
 
 
                                         <a
-                                            href="workplan.php?workplan_id=<?= (int)$milestone['workplan_id'] ?>#wp-builder"
+                                            href="workplan?workplan_id=<?= (int)$milestone['workplan_id'] ?>#wp-builder"
                                             class="btn btn-sm btn-gray"
                                             title="Edit in workplan"
                                         >

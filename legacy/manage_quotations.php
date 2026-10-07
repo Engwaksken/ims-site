@@ -20,7 +20,7 @@ function e($value): string
 
 function redirect_quotations(int $rfq_id): never
 {
-    header('Location: manage_quotations.php?rfq_id=' . $rfq_id);
+    header('Location: manage_quotations?rfq_id=' . $rfq_id);
     exit;
 }
 
@@ -72,7 +72,7 @@ $rfq_id = (int)($_GET['rfq_id'] ?? 0);
 
 if ($rfq_id <= 0) {
     $_SESSION['error'] = 'Invalid RFQ selected.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -93,7 +93,7 @@ $stmt->close();
 
 if (!$rfq) {
     $_SESSION['error'] = 'RFQ not found.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -341,7 +341,7 @@ $stmt->close();
         </div>
 
         <div class="hero-actions">
-            <a href="manage_rfq.php?procurement_id=<?= (int)$rfq['procurement_id'] ?>" class="btn btn-primary">
+            <a href="manage_rfq?procurement_id=<?= (int)$rfq['procurement_id'] ?>" class="btn btn-primary">
                 <i class="fas fa-arrow-left"></i> Back to RFQ
             </a>
 
@@ -368,7 +368,7 @@ $stmt->close();
         </div>
 
         <div class="actions">
-            <a href="manage_quotation_reviews.php?rfq_id=<?= (int)$rfq_id ?>" class="btn btn-soft">
+            <a href="manage_quotation_reviews?rfq_id=<?= (int)$rfq_id ?>" class="btn btn-soft">
                 <i class="fas fa-user-check"></i> Reviews
             </a>
         </div>
@@ -451,7 +451,7 @@ $stmt->close();
                                 <?php endif; ?>
                             </div>
                             
-                            <a href="manage_quotation_reviews.php?rfq_id=<?= (int)$rfq_id ?>" class="btn btn-soft">
+                            <a href="manage_quotation_reviews?rfq_id=<?= (int)$rfq_id ?>" class="btn btn-soft">
     <i class="fas fa-user-check"></i> Reviews
 </a>
                         </td>

@@ -5,7 +5,7 @@ include 'includes/header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -14,14 +14,14 @@ $user_id = $_SESSION['user_id'];
 // Check if user is an applicant
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Applicant') {
     $_SESSION['error'] = "Access denied. This page is only for applicants.";
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
 // Get application ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     $_SESSION['error'] = "Application ID not provided.";
-    header("Location: my-applications.php");
+    header("Location: my-applications");
     exit();
 }
 
@@ -37,7 +37,7 @@ $result = $conn->query($query);
 
 if ($result->num_rows == 0) {
     $_SESSION['error'] = "Application not found or access denied.";
-    header("Location: my-applications.php");
+    header("Location: my-applications");
     exit();
 }
 
@@ -46,7 +46,7 @@ $application = $result->fetch_assoc();
 // Check if application can be edited (only Pending status)
 if ($application['application_status'] != 'Pending') {
     $_SESSION['error'] = "Only pending applications can be edited.";
-    header("Location: view-application.php?id=$application_id");
+    header("Location: view-application?id=$application_id");
     exit();
 }
 
@@ -455,11 +455,11 @@ $user = $user_result->fetch_assoc();
                     <i class="fas fa-save"></i> Save Changes
                 </button>
                 
-                <a href="view-application.php?id=<?php echo $application_id; ?>" class="btn btn-secondary btn-lg">
+                <a href="view-application?id=<?php echo $application_id; ?>" class="btn btn-secondary btn-lg">
                     <i class="fas fa-times"></i> Cancel
                 </a>
                 
-                <a href="my-applications.php" class="btn btn-info btn-lg">
+                <a href="my-applications" class="btn btn-info btn-lg">
                     <i class="fas fa-arrow-left"></i> Back to Applications
                 </a>
             </div>

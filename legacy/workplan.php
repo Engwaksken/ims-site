@@ -699,7 +699,7 @@ foreach ($calendarEvents as $event) {
         </div>
 
         <div class="hero-actions">
-            <a href="milestones.php" class="btn btn-gray"><i class="fas fa-flag-checkered"></i> Back to Milestones</a>
+            <a href="milestones" class="btn btn-gray"><i class="fas fa-flag-checkered"></i> Back to Milestones</a>
         </div>
     </div>
 
@@ -712,7 +712,7 @@ foreach ($calendarEvents as $event) {
         <div class="wp-load-picker">
             <div class="form-group" style="min-width:320px;">
                 <label class="form-label">Saved Workplans</label>
-                <select class="form-control" onchange="if(this.value){ window.location.href='workplan.php?workplan_id=' + this.value; }">
+                <select class="form-control" onchange="if(this.value){ window.location.href='workplan?workplan_id=' + this.value; }">
                     <option value="">Start a new workplan...</option>
                     <?php foreach ($savedWorkplans as $wp): ?>
                         <option value="<?php echo (int)$wp['id']; ?>" <?php echo ((int)$wp['id'] === $existingWorkplanId) ? 'selected' : ''; ?>>
@@ -1003,7 +1003,7 @@ foreach ($calendarEvents as $event) {
     </div>
 
     <div class="panel workplan-actionbar">
-        <button type="button" class="btn btn-gray" onclick="window.location.href='milestones.php'">Cancel</button>
+        <button type="button" class="btn btn-gray" onclick="window.location.href='milestones'">Cancel</button>
         <button type="button" class="btn btn-primary" id="saveWorkplanBtn" onclick="wpSaveWorkplan()">
             <i class="fas fa-save"></i> <?php echo $existingWorkplan ? 'Update Workplan' : 'Save Workplan'; ?>
         </button>
@@ -2068,7 +2068,7 @@ foreach ($calendarEvents as $event) {
                 if (data && data.success) {
                     showAlert(data.message || 'Workplan saved successfully.', 'success');
                     setTimeout(function () {
-                        window.location.href = 'workplan.php?workplan_id=' + encodeURIComponent(data.workplan_id);
+                        window.location.href = 'workplan?workplan_id=' + encodeURIComponent(data.workplan_id);
                     }, 900);
                 } else {
                     showAlert((data && data.message) || 'Could not save workplan.', 'danger');

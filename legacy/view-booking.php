@@ -7,7 +7,7 @@ include 'includes/header.php';
 require_once __DIR__ . '/includes/auth.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -61,7 +61,7 @@ if ($bookingId <= 0) {
         'Booking ID not provided.';
 
     header(
-        'Location: my-bookings.php'
+        'Location: my-bookings'
     );
 
     exit;
@@ -171,8 +171,8 @@ if (!$booking) {
 
     header(
         $isAdmin
-            ? 'Location: manage-bookings.php'
-            : 'Location: my-bookings.php'
+            ? 'Location: manage-bookings'
+            : 'Location: my-bookings'
     );
 
     exit;
@@ -189,7 +189,7 @@ if (
         "You don't have permission to view this booking.";
 
     header(
-        'Location: my-bookings.php'
+        'Location: my-bookings'
     );
 
     exit;
@@ -197,8 +197,8 @@ if (
 
 $returnUrl =
     $isAdmin
-        ? 'manage-bookings.php'
-        : 'my-bookings.php';
+        ? 'manage-bookings'
+        : 'my-bookings';
 
 $status =
     (string)(

@@ -3,12 +3,12 @@ require_once 'includes/config.php';
 
 // -- Auth guard --
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: create-activity.php");
+    header("Location: create-activity");
     exit();
 }
 
@@ -16,7 +16,7 @@ $uid    = (int)$_SESSION['user_id'];
 $action = $_POST['action'] ?? '';
 
 if ($action !== 'create') {
-    header("Location: create-activity.php");
+    header("Location: create-activity");
     exit();
 }
 
@@ -37,11 +37,11 @@ function safe_int($v): int {
 
 function redirect_error(string $msg): void {
     $_SESSION['activity_error'] = $msg;
-    header("Location: create-activity.php");
+    header("Location: create-activity");
     exit();
 }
 
-function redirect_success(string $msg, string $url = 'my-activities.php'): void {
+function redirect_success(string $msg, string $url = 'my-activities'): void {
     $_SESSION['activity_success'] = $msg;
     header("Location: $url");
     exit();
@@ -288,7 +288,7 @@ try {
         ? "Activity Plan submitted successfully! Your supervisor has been notified."
         : "Activity Plan draft saved. You can continue editing from My Activities.";
 
-    redirect_success($msg, "my-activities.php?saved={$plan_id}");
+    redirect_success($msg, "my-activities?saved={$plan_id}");
 
 } catch (Exception $e) {
     $conn->rollback();

@@ -6,7 +6,7 @@ require_once 'mail-function.php';
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = "Please login to book a space.";
-    header("Location: login.php");
+    header("Location: ../login");
     exit();
 }
 
@@ -78,9 +78,10 @@ function column_exists($conn, $table, $column) {
  * (never taken as a raw redirect target) so a tampered value can't be used
  * to redirect elsewhere.
  */
-function resolve_return_to($default = 'book-space.php') {
-    $allowed = ['book-space.php', 'my-bookings.php'];
-    $requested = $_POST['return_to'] ?? '';
+function resolve_return_to($default = 'book-space') {
+    $allowed = ['book-space', 'my-bookings'];
+    // Accept legacy "page.php" values from forms rendered before the clean-URL change.
+    $requested = preg_replace('/\.php$/', '', (string)($_POST['return_to'] ?? ''));
     return in_array($requested, $allowed, true) ? $requested : $default;
 }
 
@@ -226,7 +227,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'create_booking') {
         $notif_query = "INSERT INTO member_notifications (member_id, notification_type, title, message, link_url) 
                        VALUES ($member_id, 'Booking Confirmed', 'Booking Request Received', 
                                'Your booking request for $space_name on $booking_date has been received and is pending confirmation.', 
-                               '../my-bookings.php')";
+                               '../my-bookings')";
         if (!$conn->query($notif_query)) {
             error_log("Booking #$booking_id: notification insert failed: " . $conn->error);
         }
@@ -275,7 +276,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'create_booking') {
         }
 
         $_SESSION['success'] = "Booking request submitted successfully! Booking ID: #$booking_id. You will be notified once confirmed.";
-        header("Location: ../my-bookings.php");
+        header("Location: ../my-bookings");
     } else {
         error_log("Booking insert failed: " . $conn->error . " | SQL: $insert_query");
         $_SESSION['error'] = "Error creating booking: " . $conn->error;
@@ -462,7 +463,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_booking') {
         $notif_query = "INSERT INTO member_notifications (member_id, notification_type, title, message, link_url) 
                        VALUES ($member_id, 'Booking Confirmed', 'Booking Updated', 
                                'Your booking for {$booking['space_name']} has been updated and is pending confirmation.', 
-                               '../my-bookings.php')";
+                               '../my-bookings')";
         if (!$conn->query($notif_query)) {
             error_log("Booking #$booking_id: update notification insert failed: " . $conn->error);
         }
@@ -529,13 +530,13 @@ if (isset($_GET['cancel_booking'])) {
          FROM members m 
          JOIN users u ON u.user_id = m.user_id 
          WHERE m.user_id = $user_id",
-        '../my-bookings.php',
+        '../my-bookings',
         'Member lookup'
     );
 
     if ($result->num_rows == 0) {
         $_SESSION['error'] = "Member profile not found.";
-        header("Location: ../my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
 
@@ -548,13 +549,13 @@ if (isset($_GET['cancel_booking'])) {
     $booking_result = run_query_or_fail(
         $conn,
         "SELECT * FROM space_bookings WHERE booking_id = $booking_id AND member_id = $member_id",
-        '../my-bookings.php',
+        '../my-bookings',
         'Booking lookup'
     );
 
     if ($booking_result->num_rows == 0) {
         $_SESSION['error'] = "Booking not found or does not belong to you.";
-        header("Location: ../my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
 
@@ -563,7 +564,7 @@ if (isset($_GET['cancel_booking'])) {
     // Check if booking can be cancelled (not already cancelled or completed)
     if (in_array($booking['booking_status'], ['Cancelled', 'Completed', 'No Show'])) {
         $_SESSION['error'] = "This booking cannot be cancelled.";
-        header("Location: ../my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
 
@@ -573,7 +574,7 @@ if (isset($_GET['cancel_booking'])) {
 
     if ($hours_until_booking < 24) {
         $_SESSION['error'] = "Bookings must be cancelled at least 24 hours in advance.";
-        header("Location: ../my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
 
@@ -635,7 +636,7 @@ if (isset($_GET['cancel_booking'])) {
         $_SESSION['error'] = "Error cancelling booking: " . $conn->error;
     }
 
-    header("Location: ../my-bookings.php");
+    header("Location: ../my-bookings");
     exit();
 }
 
@@ -655,13 +656,13 @@ if (isset($_POST['reschedule_booking'])) {
          FROM members m 
          JOIN users u ON u.user_id = m.user_id 
          WHERE m.user_id = $user_id",
-        '../my-bookings.php',
+        '../my-bookings',
         'Member lookup'
     );
 
     if ($result->num_rows == 0) {
         $_SESSION['error'] = "Member profile not found.";
-        header("Location: ../my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
 
@@ -674,13 +675,13 @@ if (isset($_POST['reschedule_booking'])) {
     $booking_result = run_query_or_fail(
         $conn,
         "SELECT * FROM space_bookings WHERE booking_id = $booking_id AND member_id = $member_id",
-        '../my-bookings.php',
+        '../my-bookings',
         'Booking lookup'
     );
 
     if ($booking_result->num_rows == 0) {
         $_SESSION['error'] = "Booking not found or does not belong to you.";
-        header("Location: ../my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
 
@@ -689,7 +690,7 @@ if (isset($_POST['reschedule_booking'])) {
     // Validate new date (not in past)
     if (strtotime($new_date) < strtotime('today')) {
         $_SESSION['error'] = "New booking date cannot be in the past.";
-        header("Location: ../my-bookings.php?id=$booking_id");
+        header("Location: ../my-bookings?id=$booking_id");
         exit();
     }
 
@@ -701,7 +702,7 @@ if (isset($_POST['reschedule_booking'])) {
 
     if ($new_duration <= 0) {
         $_SESSION['error'] = "End time must be after start time.";
-        header("Location: ../my-bookings.php?id=$booking_id");
+        header("Location: ../my-bookings?id=$booking_id");
         exit();
     }
 
@@ -716,13 +717,13 @@ if (isset($_POST['reschedule_booking'])) {
          AND (
              (start_time < '$new_end_time' AND end_time > '$new_start_time')
          )",
-        '../my-bookings.php?id=' . $booking_id,
+        '../my-bookings?id=' . $booking_id,
         'Reschedule conflict check'
     );
 
     if ($conflict_result->num_rows > 0) {
         $_SESSION['error'] = "This space is already booked for the selected time slot. Please choose a different time.";
-        header("Location: ../my-bookings.php?id=$booking_id");
+        header("Location: ../my-bookings?id=$booking_id");
         exit();
     }
 
@@ -800,12 +801,12 @@ if (isset($_POST['reschedule_booking'])) {
         $_SESSION['error'] = "Error rescheduling booking: " . $conn->error;
     }
 
-    header("Location: ../my-bookings.php");
+    header("Location: ../my-bookings");
     exit();
 }
 
 // If no valid action, redirect
 $_SESSION['error'] = "Invalid action.";
-header("Location: ../book-space.php");
+header("Location: ../book-space");
 exit();
 ?>

@@ -33,20 +33,20 @@ if ($kpi_edit_id > 0) {
 
     if (!$editing_kpi) {
         send_notification($current_user_id, 'KPI not found or you do not have permission to edit it', 'danger');
-        header("Location: my-kpis.php");
+        header("Location: my-kpis");
         exit();
     }
 
     if (!in_array($editing_kpi['status'], ['Draft', 'Rejected'], true)) {
         send_notification($current_user_id, 'Only draft or rejected KPIs can be edited', 'warning');
-        header("Location: view-kpi.php?id=" . (int) $editing_kpi['kpi_id']);
+        header("Location: view-kpi?id=" . (int) $editing_kpi['kpi_id']);
         exit();
     }
 }
 
 if (!$user_dept || !$user_dept['department_id']) {
     send_notification($_SESSION['user_id'], 'Please complete your employee profile first', 'warning');
-    header("Location: my-profile.php");
+    header("Location: my-profile");
     exit();
 }
 
@@ -122,7 +122,7 @@ $current_year = date('Y');
     <div class="card-header">
         <h3><i class="fas fa-plus-circle"></i> Create New KPI</h3>
         <div>
-            <a href="my-kpis.php" class="btn btn-secondary">
+            <a href="my-kpis" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to My KPIs
             </a>
         </div>
@@ -135,7 +135,7 @@ $current_year = date('Y');
             <strong>Note:</strong> Create SMART KPIs (Specific, Measurable, Achievable, Relevant, Time-bound) for effective performance tracking.
         </div>
         
-        <form method="POST" action="kpi-process.php" id="kpiForm">
+        <form method="POST" action="kpi-process" id="kpiForm">
             <input type="hidden" name="action" value="create">
             <input type="hidden" name="department_id" value="<?php echo (int) $user_dept['department_id']; ?>">
             
@@ -273,7 +273,7 @@ $current_year = date('Y');
                 <button type="submit" name="submit_kpi" class="btn btn-success" style="padding: 12px 30px; margin-left: 10px;">
                     <i class="fas fa-paper-plane"></i> Submit for Review
                 </button>
-                <a href="my-kpis.php" class="btn btn-danger" style="padding: 12px 30px; margin-left: 10px;">
+                <a href="my-kpis" class="btn btn-danger" style="padding: 12px 30px; margin-left: 10px;">
                     <i class="fas fa-times"></i> Cancel
                 </a>
             </div>

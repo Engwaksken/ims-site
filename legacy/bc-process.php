@@ -2,9 +2,9 @@
 // includes/db.php and includes/functions.php do not exist; use the shared config.
 require_once __DIR__ . '/includes/config.php';
 
-if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit(); }
+if (!isset($_SESSION['user_id'])) { header("Location: login"); exit(); }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || ($_POST['action'] ?? '') !== 'create_bc') {
-    header("Location:employee-competency.php"); exit();
+    header("Location:employee-competency"); exit();
 }
 
 $uid       = (int)$_SESSION['user_id'];
@@ -15,7 +15,7 @@ $status    = $is_submit ? 'submitted' : 'draft';
 function cl(string $v): string { return htmlspecialchars(strip_tags(trim($v)), ENT_QUOTES, 'UTF-8'); }
 function sf($v): float { return (float) filter_var($v, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION); }
 function si($v): int   { return (int) filter_var($v, FILTER_SANITIZE_NUMBER_INT); }
-function err(string $m): void { $_SESSION['bc_form_error'] = $m; header("Location:employee-competency.php"); exit(); }
+function err(string $m): void { $_SESSION['bc_form_error'] = $m; header("Location:employee-competency"); exit(); }
 function ok(string $m, string $url): void { $_SESSION['bc_form_success'] = $m; header("Location: $url"); exit(); }
 
 /* -- Header fields -- */
@@ -134,7 +134,7 @@ try {
     $msg = $is_submit
         ? 'Behavioral Competency Assessment submitted. Your supervisor has been notified.'
         : 'Draft saved. Continue editing from My Appraisals.';
-    ok($msg, "my-appraisals.php?bc={$submission_id}");
+    ok($msg, "my-appraisals?bc={$submission_id}");
 
 } catch (Exception $e) {
     $conn->rollback();

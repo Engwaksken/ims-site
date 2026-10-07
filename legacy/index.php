@@ -15,8 +15,8 @@ if ($isPortalRequest) {
 }
 
 if (isset($_SESSION['user_id'])) {
-    header("Location: dashboard.php");
+    header("Location: dashboard");
 } else {
-    header("Location: login.php");
+    header("Location: login");
 }
 exit();

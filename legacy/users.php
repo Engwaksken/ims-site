@@ -146,7 +146,7 @@ function pageRange(int $cur, int $total): array {
             <p>Manage system accounts, roles, and access permissions</p>
         </div>
         <div class="hero-actions">
-            <a href="user-permissions.php" class="btn btn-primary">
+            <a href="user-permissions" class="btn btn-primary">
                 <i class="fas fa-shield-alt"></i> Manage Roles
             </a>
             <button class="btn btn-dark" onclick="openModal('addUserModal')">
@@ -239,7 +239,7 @@ function pageRange(int $cur, int $total): array {
                 </button>
 
                 <?php if ($search !== '' || $filterRole !== '' || $filterStatus !== ''): ?>
-                    <a href="users.php" class="btn btn-sm btn-gray" title="Clear all filters">
+                    <a href="users" class="btn btn-sm btn-gray" title="Clear all filters">
                         <i class="fas fa-times"></i><span class="btn-label"> Clear</span>
                     </a>
                 <?php endif; ?>
@@ -287,7 +287,7 @@ function pageRange(int $cur, int $total): array {
                             <i class="fas fa-user-slash"></i>
                             No users match your search.
                             <?php if ($search !== '' || $filterRole !== '' || $filterStatus !== ''): ?>
-                                <a href="users.php" style="color:var(--brand-500);margin-left:6px;">Clear filters</a>
+                                <a href="users" style="color:var(--brand-500);margin-left:6px;">Clear filters</a>
                             <?php endif; ?>
                         </td>
                     </tr>

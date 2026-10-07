@@ -65,7 +65,7 @@ $type_labels = [
             <p>Add, arrange and manage questions for this survey.</p>
         </div>
         <div class="hero-actions">
-            <a href="surveys.php" class="btn btn-primary">
+            <a href="surveys" class="btn btn-primary">
                 <i class="fas fa-arrow-left"></i> Back to Surveys
             </a>
         </div>

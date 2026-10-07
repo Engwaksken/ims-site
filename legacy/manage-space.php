@@ -6,7 +6,7 @@ include 'includes/header.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Administrator', 'Operations/Admin'])) {
     $_SESSION['error'] = "Access denied. Administrator or Operations role required.";
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
@@ -396,7 +396,7 @@ if (isset($_GET['edit'])) {
             <button type="submit" class="btn btn-info">
                 <i class="fas fa-filter"></i> Filter
             </button>
-            <a href="manage-space.php" class="btn btn-secondary">
+            <a href="manage-space" class="btn btn-secondary">
                 <i class="fas fa-times"></i> Clear
             </a>
         </div>
@@ -531,7 +531,7 @@ if (isset($_GET['edit'])) {
                         <i class="fas fa-edit"></i> Edit
                     </a>
                     
-                    <a href="view-space-bookings.php?space_id=<?php echo $space['availability_id']; ?>" class="btn btn-info btn-sm">
+                    <a href="view-space-bookings?space_id=<?php echo $space['availability_id']; ?>" class="btn btn-info btn-sm">
                         <i class="fas fa-calendar"></i> Bookings
                     </a>
                     

@@ -5,7 +5,7 @@ include 'includes/header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -339,16 +339,16 @@ while ($row = $years_result->fetch_assoc()) {
 
 <!-- Export Buttons -->
 <div class="export-buttons">
-    <a href="export.php?member_id=<?php echo $member_id; ?>&format=pdf" class="btn btn-danger">
+    <a href="export?member_id=<?php echo $member_id; ?>&format=pdf" class="btn btn-danger">
         <i class="fas fa-file-pdf"></i> Export to PDF
     </a>
-    <a href="export.php?member_id=<?php echo $member_id; ?>&format=excel" class="btn btn-success">
+    <a href="export?member_id=<?php echo $member_id; ?>&format=excel" class="btn btn-success">
         <i class="fas fa-file-excel"></i> Export to Excel
     </a>
-    <a href="export.php?member_id=<?php echo $member_id; ?>&format=csv" class="btn btn-info">
+    <a href="export?member_id=<?php echo $member_id; ?>&format=csv" class="btn btn-info">
         <i class="fas fa-file-csv"></i> Export to CSV
     </a>
-    <a href="my-subscription.php" class="btn btn-secondary">
+    <a href="my-subscription" class="btn btn-secondary">
         <i class="fas fa-arrow-left"></i> Back to Subscription
     </a>
 </div>
@@ -415,7 +415,7 @@ while ($row = $years_result->fetch_assoc()) {
             <button type="submit" class="btn btn-info">
                 <i class="fas fa-filter"></i> Filter
             </button>
-            <a href="payment-history.php" class="btn btn-secondary">
+            <a href="payment-history" class="btn btn-secondary">
                 <i class="fas fa-times"></i> Clear
             </a>
         </div>
@@ -436,7 +436,7 @@ while ($row = $years_result->fetch_assoc()) {
                         You don't have any payment history yet.
                     <?php endif; ?>
                 </p>
-                <a href="payment-history.php" class="btn btn-secondary">
+                <a href="payment-history" class="btn btn-secondary">
                     <i class="fas fa-times"></i> Clear Filters
                 </a>
             </div>
@@ -524,13 +524,13 @@ while ($row = $years_result->fetch_assoc()) {
                     </td>
                     <td>
                         <div style="display: flex; gap: 5px;">
-                            <a href="view-payment.php?id=<?php echo $payment['payment_id']; ?>" 
+                            <a href="view-payment?id=<?php echo $payment['payment_id']; ?>" 
                                class="btn btn-info btn-sm" title="View Details">
                                 <i class="fas fa-eye"></i>
                             </a>
                             
                             <?php if ($payment['payment_status'] == 'Pending'): ?>
-                                <a href="make-payment.php?payment_id=<?php echo $payment['payment_id']; ?>" 
+                                <a href="make-payment?payment_id=<?php echo $payment['payment_id']; ?>" 
                                    class="btn btn-success btn-sm" title="Make Payment">
                                     <i class="fas fa-money-bill"></i>
                                 </a>
@@ -549,7 +549,7 @@ while ($row = $years_result->fetch_assoc()) {
                                     <i class="fas fa-download"></i>
                                 </a>
                             <?php elseif ($payment['payment_status'] != 'Cancelled'): ?>
-                                <a href="generate-invoice.php?payment_id=<?php echo $payment['payment_id']; ?>" 
+                                <a href="generate-invoice?payment_id=<?php echo $payment['payment_id']; ?>" 
                                    class="btn btn-primary btn-sm" title="Generate Invoice">
                                     <i class="fas fa-file-invoice-dollar"></i>
                                 </a>

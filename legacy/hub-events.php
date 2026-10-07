@@ -12,7 +12,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -313,7 +313,7 @@ if (
 
 <div class="hb-tabs">
     <a
-        href="hub-events.php?tab=book"
+        href="hub-events?tab=book"
         class="hb-tab <?= $activeTab === 'book' ? 'active' : '' ?>"
     >
         <i class="fas fa-plus-circle"></i>
@@ -321,7 +321,7 @@ if (
     </a>
 
     <a
-        href="hub-events.php?tab=my-bookings"
+        href="hub-events?tab=my-bookings"
         class="hb-tab <?= $activeTab === 'my-bookings' ? 'active' : '' ?>"
     >
         <i class="fas fa-list"></i>

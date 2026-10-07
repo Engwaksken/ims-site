@@ -204,7 +204,7 @@ $quick_exports = [
             <p>Select a report type, set your parameters, and export in your preferred format.</p>
         </div>
         <div class="hero-actions">
-            <a href="reports.php" class="btn btn-primary"
+            <a href="reports" class="btn btn-primary"
                style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);">
                 <i class="fas fa-arrow-left"></i> Back to Reports
             </a>
@@ -401,7 +401,7 @@ $quick_exports = [
         <div class="panel-body">
             <div class="exports-grid">
                 <?php foreach($quick_exports as $ex): ?>
-                    <a href="export.php?type=<?= $ex['type'] ?>" class="export-item" target="_blank" rel="noopener">
+                    <a href="export?type=<?= $ex['type'] ?>" class="export-item" target="_blank" rel="noopener">
                         <div class="export-icon excel"><i class="fas <?= $ex['icon'] ?>"></i></div>
                         <div class="export-item-body">
                             <div class="export-item-name"><?= $ex['label'] ?></div>

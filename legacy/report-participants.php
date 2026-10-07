@@ -845,7 +845,7 @@ function exportToExcel() {
     <?php if ($district_filter): ?>params.append('district', <?php echo json_encode((string)$district_filter, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>);<?php endif; ?>
     <?php if ($program_filter): ?>params.append('program', '<?php echo (int)$program_filter; ?>');<?php endif; ?>
     <?php if ($project_filter): ?>params.append('project', '<?php echo (int)$project_filter; ?>');<?php endif; ?>
-    window.location.href = 'export.php?' + params.toString();
+    window.location.href = 'export?' + params.toString();
 }
 </script>
 

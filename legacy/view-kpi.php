@@ -8,7 +8,7 @@ $kpi_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if (!$kpi_id) {
     send_notification($_SESSION['user_id'], 'Invalid KPI ID', 'danger');
-    header("Location: my-kpis.php");
+    header("Location: my-kpis");
     exit();
 }
 
@@ -28,7 +28,7 @@ $result = $conn->query($query);
 
 if (!$result || $result->num_rows == 0) {
     send_notification($_SESSION['user_id'], 'KPI not found', 'danger');
-    header("Location: my-kpis.php");
+    header("Location: my-kpis");
     exit();
 }
 
@@ -40,7 +40,7 @@ $is_hr = in_array($_SESSION['role'] ?? '', ['Administrator', 'Programs Lead', 'M
 
 if (!$is_owner && !$is_hr) {
     send_notification($_SESSION['user_id'], 'You do not have permission to view this KPI', 'danger');
-    header("Location: my-kpis.php");
+    header("Location: my-kpis");
     exit();
 }
 
@@ -324,13 +324,13 @@ $avg_achievement = $quarters_completed > 0 ? round($total_achievement / $quarter
 <!-- Action Bar -->
 <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;" class="no-print">
     <div>
-        <a href="<?php echo $is_owner ? 'my-kpis.php' : 'kpi-management.php'; ?>" class="btn btn-secondary">
+        <a href="<?php echo $is_owner ? 'my-kpis' : 'kpi-management'; ?>" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back
         </a>
     </div>
     <div class="action-buttons">
         <?php if ($is_owner && in_array($kpi['status'], ['Draft', 'Rejected'])): ?>
-            <a href="edit-kpi.php?id=<?php echo $kpi_id; ?>" class="btn btn-warning">
+            <a href="edit-kpi?id=<?php echo $kpi_id; ?>" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit KPI
             </a>
         <?php endif; ?>
@@ -640,7 +640,7 @@ $avg_achievement = $quarters_completed > 0 ? round($total_achievement / $quarter
             <span class="close" onclick="closeModal('addCommentModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="kpi-process.php">
+            <form method="POST" action="kpi-process">
                 <input type="hidden" name="action" value="add_comment">
                 <input type="hidden" name="kpi_id" value="<?php echo $kpi_id; ?>">
                 
@@ -690,7 +690,7 @@ $avg_achievement = $quarters_completed > 0 ? round($total_achievement / $quarter
             <span class="close" onclick="closeModal('updateProgressModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="kpi-process.php">
+            <form method="POST" action="kpi-process">
                 <input type="hidden" name="action" value="update_progress">
                 <input type="hidden" name="kpi_id" value="<?php echo $kpi_id; ?>">
                 
@@ -747,7 +747,7 @@ $avg_achievement = $quarters_completed > 0 ? round($total_achievement / $quarter
             <span class="close" onclick="closeModal('approveModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="kpi-process.php">
+            <form method="POST" action="kpi-process">
                 <input type="hidden" name="action" value="approve">
                 <input type="hidden" name="kpi_id" value="<?php echo $kpi_id; ?>">
                 
@@ -781,7 +781,7 @@ $avg_achievement = $quarters_completed > 0 ? round($total_achievement / $quarter
             <span class="close" onclick="closeModal('rejectModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="kpi-process.php">
+            <form method="POST" action="kpi-process">
                 <input type="hidden" name="action" value="reject">
                 <input type="hidden" name="kpi_id" value="<?php echo $kpi_id; ?>">
                 
@@ -817,6 +817,6 @@ function openUpdateProgressModal() {
 }
 
 function exportPDF() {
-    window.location.href = 'export-kpi-pdf.php?id=<?php echo $kpi_id; ?>';
+    window.location.href = 'export-kpi-pdf?id=<?php echo $kpi_id; ?>';
 }
 </script>

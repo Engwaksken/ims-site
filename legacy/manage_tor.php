@@ -17,7 +17,7 @@ function e($value): string {
 }
 
 function redirect_tor(int $procurement_id): never {
-    header('Location: manage_tor.php?procurement_id=' . $procurement_id);
+    header('Location: manage_tor?procurement_id=' . $procurement_id);
     exit;
 }
 
@@ -25,7 +25,7 @@ $procurement_id = (int)($_GET['procurement_id'] ?? 0);
 
 if ($procurement_id <= 0) {
     $_SESSION['error'] = 'Invalid procurement selected.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -44,7 +44,7 @@ $stmt->close();
 
 if (!$procurement) {
     $_SESSION['error'] = 'Procurement not found.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -127,7 +127,7 @@ unset($_SESSION['success'], $_SESSION['error']);
         </div>
 
         <div class="hero-actions">
-            <a href="manage_procurement.php" class="btn btn-primary">
+            <a href="manage_procurement" class="btn btn-primary">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
         </div>

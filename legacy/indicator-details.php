@@ -10,7 +10,7 @@ $indicator_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if (!$indicator_id) {
     send_notification($_SESSION['user_id'], 'Invalid indicator ID', 'danger');
-    header("Location: indicators.php");
+    header("Location: indicators");
     exit();
 }
 
@@ -23,7 +23,7 @@ $result = $conn->query($query);
 
 if ($result->num_rows == 0) {
     send_notification($_SESSION['user_id'], 'Indicator not found', 'danger');
-    header("Location: indicators.php");
+    header("Location: indicators");
     exit();
 }
 
@@ -60,7 +60,7 @@ if ($achievement >= 100) {
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     <div>
-        <a href="indicators.php" class="btn btn-secondary">
+        <a href="indicators" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to Indicators
         </a>
     </div>

@@ -5,7 +5,7 @@ include 'includes/header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -204,7 +204,7 @@ if ($app_id > 0) {
         <div class="form-card">
             <h3><i class="fas fa-envelope"></i> Send us a Message</h3>
             
-            <form method="POST" action="process-support.php" id="supportForm" enctype="multipart/form-data">
+            <form method="POST" action="process-support" id="supportForm" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="submit">
                 <?php if ($app_id): ?>
                 <input type="hidden" name="application_id" value="<?php echo $app_id; ?>">
@@ -281,7 +281,7 @@ if ($app_id > 0) {
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="fas fa-paper-plane"></i> Send Message
                     </button>
-                    <a href="<?php echo $app_id ? 'view-my-application.php?id='.$app_id : 'dashboard.php'; ?>" 
+                    <a href="<?php echo $app_id ? 'view-my-application?id='.$app_id : 'dashboard'; ?>" 
                        class="btn btn-secondary btn-lg">
                         <i class="fas fa-times"></i> Cancel
                     </a>

@@ -7,7 +7,7 @@ $beneficiary_id = isset($_POST['beneficiary_id']) ? intval($_POST['beneficiary_i
 
 if (!$beneficiary_id) {
     send_notification($_SESSION['user_id'], 'Invalid participant ID', 'danger');
-    header("Location: ../participants.php");
+    header("Location: ../participants");
     exit();
 }
 
@@ -19,14 +19,14 @@ if (isset($_POST['add_linkage'])) {
     // Validate that at least one is selected
     if ($link_project_id == 0 && $link_program_id == 0) {
         send_notification($_SESSION['user_id'], 'Please select either a project or program to link', 'warning');
-        header("Location: ../participant-details.php?id=$beneficiary_id");
+        header("Location: ../participant-details?id=$beneficiary_id");
         exit();
     }
     
     // Validate that not both are selected
     if ($link_project_id > 0 && $link_program_id > 0) {
         send_notification($_SESSION['user_id'], 'Please select only one - either project OR program', 'warning');
-        header("Location: ../participant-details.php?id=$beneficiary_id");
+        header("Location: ../participant-details?id=$beneficiary_id");
         exit();
     }
     
@@ -41,7 +41,7 @@ if (isset($_POST['add_linkage'])) {
         $project_check = $conn->query("SELECT project_id, project_name, project_code FROM projects WHERE project_id = $link_project_id");
         if ($project_check->num_rows == 0) {
             send_notification($_SESSION['user_id'], 'Project not found', 'danger');
-            header("Location: ../participant-details.php?id=$beneficiary_id");
+            header("Location: ../participant-details?id=$beneficiary_id");
             exit();
         }
         
@@ -72,7 +72,7 @@ if (isset($_POST['add_linkage'])) {
         $program_check = $conn->query("SELECT id, program_name, program_code FROM programs WHERE id = $link_program_id");
         if ($program_check->num_rows == 0) {
             send_notification($_SESSION['user_id'], 'Program not found', 'danger');
-            header("Location: ../participant-details.php?id=$beneficiary_id");
+            header("Location: ../participant-details?id=$beneficiary_id");
             exit();
         }
         
@@ -97,7 +97,7 @@ if (isset($_POST['add_linkage'])) {
         }
     }
     
-    header("Location: ../participant-details.php?id=$beneficiary_id");
+    header("Location: ../participant-details?id=$beneficiary_id");
     exit();
 }
 
@@ -123,7 +123,7 @@ if (isset($_POST['remove_project_link'])) {
         send_notification($_SESSION['user_id'], 'Error removing project linkage: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../participant-details.php?id=$beneficiary_id");
+    header("Location: ../participant-details?id=$beneficiary_id");
     exit();
 }
 
@@ -149,11 +149,11 @@ if (isset($_POST['remove_program_link'])) {
         send_notification($_SESSION['user_id'], 'Error removing program linkage: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../participant-details.php?id=$beneficiary_id");
+    header("Location: ../participant-details?id=$beneficiary_id");
     exit();
 }
 
 // If no valid action, redirect back to beneficiary details
-header("Location: ../participant-details.php?id=$beneficiary_id");
+header("Location: ../participant-details?id=$beneficiary_id");
 exit();
 ?>

@@ -6,7 +6,7 @@ require_once 'includes/config.php';
 // Check if user is logged in and is Administrator
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Administrator') {
     $_SESSION['error'] = "Unauthorized access. Only administrators can manage opportunities.";
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -76,7 +76,7 @@ if ($action == 'create') {
     // Validate dates
     if (strtotime($deadline) < strtotime($start_date)) {
         $_SESSION['error'] = "Deadline cannot be before start date.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -111,10 +111,10 @@ if ($action == 'create') {
             $_SESSION['success'] = "Opportunity saved as draft. You can publish it when ready.";
         }
         
-        header("Location: view-opportunity.php?id=$opportunity_id");
+        header("Location: view-opportunity?id=$opportunity_id");
     } else {
         $_SESSION['error'] = "Error creating opportunity: " . $conn->error;
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
     }
     exit();
 }
@@ -127,7 +127,7 @@ if ($action == 'update') {
     $check = $conn->query("SELECT * FROM application_opportunities WHERE opportunity_id = $opportunity_id");
     if ($check->num_rows == 0) {
         $_SESSION['error'] = "Opportunity not found.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -177,10 +177,10 @@ if ($action == 'update') {
     if ($conn->query($query)) {
         log_activity($conn, $user_id, 'Update Opportunity', "Updated opportunity: $opportunity_title (ID: $opportunity_id)");
         $_SESSION['success'] = "Opportunity updated successfully!";
-        header("Location: view-opportunity.php?id=$opportunity_id");
+        header("Location: view-opportunity?id=$opportunity_id");
     } else {
         $_SESSION['error'] = "Error updating opportunity: " . $conn->error;
-        header("Location: edit-opportunity.php?id=$opportunity_id");
+        header("Location: edit-opportunity?id=$opportunity_id");
     }
     exit();
 }
@@ -193,7 +193,7 @@ if ($action == 'publish') {
     $check = $conn->query("SELECT * FROM application_opportunities WHERE opportunity_id = $opportunity_id AND status = 'Draft'");
     if ($check->num_rows == 0) {
         $_SESSION['error'] = "Opportunity not found or already published.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -213,7 +213,7 @@ if ($action == 'publish') {
         $_SESSION['error'] = "Error publishing opportunity: " . $conn->error;
     }
     
-    header("Location: application-opportunities.php");
+    header("Location: application-opportunities");
     exit();
 }
 
@@ -225,7 +225,7 @@ if ($action == 'close') {
     $check = $conn->query("SELECT * FROM application_opportunities WHERE opportunity_id = $opportunity_id AND status = 'Published'");
     if ($check->num_rows == 0) {
         $_SESSION['error'] = "Opportunity not found or not published.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -241,7 +241,7 @@ if ($action == 'close') {
         $_SESSION['error'] = "Error closing opportunity: " . $conn->error;
     }
     
-    header("Location: application-opportunities.php");
+    header("Location: application-opportunities");
     exit();
 }
 
@@ -253,7 +253,7 @@ if ($action == 'reopen') {
     $check = $conn->query("SELECT * FROM application_opportunities WHERE opportunity_id = $opportunity_id AND status = 'Closed'");
     if ($check->num_rows == 0) {
         $_SESSION['error'] = "Opportunity not found or not closed.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -269,7 +269,7 @@ if ($action == 'reopen') {
         $_SESSION['error'] = "Error reopening opportunity: " . $conn->error;
     }
     
-    header("Location: application-opportunities.php");
+    header("Location: application-opportunities");
     exit();
 }
 
@@ -281,7 +281,7 @@ if ($action == 'complete') {
     $check = $conn->query("SELECT * FROM application_opportunities WHERE opportunity_id = $opportunity_id");
     if ($check->num_rows == 0) {
         $_SESSION['error'] = "Opportunity not found.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -297,7 +297,7 @@ if ($action == 'complete') {
         $_SESSION['error'] = "Error updating opportunity: " . $conn->error;
     }
     
-    header("Location: application-opportunities.php");
+    header("Location: application-opportunities");
     exit();
 }
 
@@ -309,7 +309,7 @@ if ($action == 'toggle_featured') {
     $check = $conn->query("SELECT * FROM application_opportunities WHERE opportunity_id = $opportunity_id");
     if ($check->num_rows == 0) {
         $_SESSION['error'] = "Opportunity not found.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -327,7 +327,7 @@ if ($action == 'toggle_featured') {
         $_SESSION['error'] = "Error updating opportunity: " . $conn->error;
     }
     
-    header("Location: application-opportunities.php");
+    header("Location: application-opportunities");
     exit();
 }
 
@@ -339,7 +339,7 @@ if ($action == 'delete') {
     $check = $conn->query("SELECT * FROM application_opportunities WHERE opportunity_id = $opportunity_id");
     if ($check->num_rows == 0) {
         $_SESSION['error'] = "Opportunity not found.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -348,7 +348,7 @@ if ($action == 'delete') {
     // Only allow deletion of Draft opportunities
     if ($opportunity['status'] != 'Draft') {
         $_SESSION['error'] = "Only draft opportunities can be deleted. Please close this opportunity instead.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -358,7 +358,7 @@ if ($action == 'delete') {
     
     if ($app_count > 0) {
         $_SESSION['error'] = "Cannot delete opportunity with existing applications. Please close it instead.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -372,7 +372,7 @@ if ($action == 'delete') {
         $_SESSION['error'] = "Error deleting opportunity: " . $conn->error;
     }
     
-    header("Location: application-opportunities.php");
+    header("Location: application-opportunities");
     exit();
 }
 
@@ -385,7 +385,7 @@ if ($action == 'extend_deadline') {
     $check = $conn->query("SELECT * FROM application_opportunities WHERE opportunity_id = $opportunity_id");
     if ($check->num_rows == 0) {
         $_SESSION['error'] = "Opportunity not found.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -394,7 +394,7 @@ if ($action == 'extend_deadline') {
     // Validate new deadline
     if (strtotime($new_deadline) <= strtotime($opportunity['deadline'])) {
         $_SESSION['error'] = "New deadline must be after the current deadline.";
-        header("Location: view-opportunity.php?id=$opportunity_id");
+        header("Location: view-opportunity?id=$opportunity_id");
         exit();
     }
     
@@ -408,7 +408,7 @@ if ($action == 'extend_deadline') {
         $_SESSION['error'] = "Error extending deadline: " . $conn->error;
     }
     
-    header("Location: view-opportunity.php?id=$opportunity_id");
+    header("Location: view-opportunity?id=$opportunity_id");
     exit();
 }
 
@@ -419,7 +419,7 @@ if ($action == 'bulk_action') {
     
     if (empty($selected_ids)) {
         $_SESSION['error'] = "No opportunities selected.";
-        header("Location: application-opportunities.php");
+        header("Location: application-opportunities");
         exit();
     }
     
@@ -483,12 +483,12 @@ if ($action == 'bulk_action') {
             $_SESSION['error'] = "Invalid bulk action.";
     }
     
-    header("Location: application-opportunities.php");
+    header("Location: application-opportunities");
     exit();
 }
 
 // If no valid action
 $_SESSION['error'] = "Invalid action.";
-header("Location: application-opportunities.php");
+header("Location: application-opportunities");
 exit();
 ?>

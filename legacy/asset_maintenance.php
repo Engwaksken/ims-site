@@ -48,7 +48,7 @@ $totalPages = $pageData['totalPages'];
         </div>
 
         <div class="hero-actions">
-            <a href="manage_assets.php" class="btn btn-primary">
+            <a href="manage_assets" class="btn btn-primary">
                 <i class="fas fa-boxes-stacked"></i> Manage Assets
             </a>
 
@@ -131,15 +131,15 @@ $totalPages = $pageData['totalPages'];
                         <i class="fas fa-search"></i> Search
                     </button>
 
-                    <a href="asset_maintenance.php" class="btn btn-gray">
+                    <a href="asset_maintenance" class="btn btn-gray">
                         <i class="fas fa-rotate-left"></i> Reset
                     </a>
 
-                    <a href="asset_maintenance.php?search=<?= urlencode($search) ?>&status=<?= urlencode($status) ?>&export=csv" class="btn btn-green">
+                    <a href="asset_maintenance?search=<?= urlencode($search) ?>&status=<?= urlencode($status) ?>&export=csv" class="btn btn-green">
                         <i class="fas fa-file-csv"></i> CSV
                     </a>
 
-                    <a href="asset_maintenance.php?search=<?= urlencode($search) ?>&status=<?= urlencode($status) ?>&export=pdf" class="btn btn-red">
+                    <a href="asset_maintenance?search=<?= urlencode($search) ?>&status=<?= urlencode($status) ?>&export=pdf" class="btn btn-red">
                         <i class="fas fa-file-pdf"></i> PDF
                     </a>
                 </div>

@@ -154,7 +154,7 @@ $isFiltered = ($search !== '' || $filter_role !== '' || $filter_status !== '');
             <button class="btn btn-primary" onclick="openModal('rolesInfoModal')">
                 <i class="fas fa-info-circle"></i> Role Descriptions
             </button>
-            <a href="users.php" class="btn btn-dark">
+            <a href="users" class="btn btn-dark">
                 <i class="fas fa-users-cog"></i> Manage Users
             </a>
         </div>
@@ -257,7 +257,7 @@ $isFiltered = ($search !== '' || $filter_role !== '' || $filter_status !== '');
                 </button>
 
                 <?php if ($isFiltered): ?>
-                    <a href="user-permissions.php" class="btn btn-sm btn-gray">
+                    <a href="user-permissions" class="btn btn-sm btn-gray">
                         <i class="fas fa-times"></i><span class="btn-label"> Clear</span>
                     </a>
                 <?php endif; ?>
@@ -304,7 +304,7 @@ $isFiltered = ($search !== '' || $filter_role !== '' || $filter_status !== '');
                             <i class="fas fa-user-slash"></i>
                             No users match your search.
                             <?php if ($isFiltered): ?>
-                                <a href="user-permissions.php" style="color:var(--brand-500);margin-left:6px;">Clear filters</a>
+                                <a href="user-permissions" style="color:var(--brand-500);margin-left:6px;">Clear filters</a>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -466,7 +466,7 @@ $isFiltered = ($search !== '' || $filter_role !== '' || $filter_status !== '');
 </div><!-- /.assets-wrap -->
 
 <!-- Hidden forms for JS actions -->
-<form id="statusForm" method="POST" action="user-permissions-process.php" style="display:none;">
+<form id="statusForm" method="POST" action="user-permissions-process" style="display:none;">
     <input type="hidden" name="action" value="toggle_status">
     <input type="hidden" name="user_id" id="statusUserId">
     <input type="hidden" name="new_status" id="statusNewStatus">
@@ -485,7 +485,7 @@ window.addEventListener('click', function (e) {
 });
 
 function viewUserDetails(userId) {
-    fetch('user-permissions-process.php?action=get_user&user_id=' + encodeURIComponent(userId))
+    fetch('user-permissions-process?action=get_user&user_id=' + encodeURIComponent(userId))
         .then(r => r.json())
         .then(data => {
             if (!data.success) return;

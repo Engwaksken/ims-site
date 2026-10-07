@@ -11,7 +11,7 @@ if (file_exists(__DIR__ . '/mail-function.php')) {
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = "Please login to manage your subscription.";
-    header("Location: login.php");
+    header("Location: ../login");
     exit();
 }
 
@@ -65,7 +65,7 @@ function build_invoice_number($member_id, $payment_id) {
     return 'INV-' . str_pad($member_id, 4, '0', STR_PAD_LEFT) . '-' . str_pad($payment_id, 6, '0', STR_PAD_LEFT);
 }
 
-$redirect_back = '../my-subscription.php';
+$redirect_back = '../my-subscription';
 
 // -----------------------------------------------------------------
 // RENEW SUBSCRIPTION
@@ -135,7 +135,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'renew') {
         $notif_query = "INSERT INTO member_notifications (member_id, notification_type, title, message, link_url) 
                        VALUES ($member_id, 'Payment', 'Renewal Invoice Created', 
                                'Your renewal invoice $invoice_number for UGX " . number_format($amount) . " is ready. Complete payment to extend your subscription to " . date('d M Y', $new_end_timestamp) . ".', 
-                               '../make-payment.php?payment_id=$payment_id')";
+                               '../make-payment?payment_id=$payment_id')";
         if (!$conn->query($notif_query)) {
             error_log("Renewal #$payment_id: notification insert failed: " . $conn->error);
         }
@@ -157,7 +157,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'renew') {
         }
 
         $_SESSION['success'] = "Renewal invoice #$invoice_number created. Please complete payment to extend your subscription.";
-        header("Location: ../make-payment.php?payment_id=$payment_id");
+        header("Location: ../make-payment?payment_id=$payment_id");
     } else {
         error_log("Renewal insert failed: " . $conn->error . " | SQL: $insert_query");
         $_SESSION['error'] = "Error creating renewal invoice: " . $conn->error;
@@ -237,7 +237,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'upgrade') {
                        VALUES ($member_id, 'Payment', 'Plan Upgraded', 
                                'Your subscription plan has been upgraded from $old_plan to $new_plan.' . 
                                ($payment_id ? ' A prorated invoice has been created - please review and complete payment.' : ''), 
-                               '../my-subscription.php')";
+                               '../my-subscription')";
         if (!$conn->query($notif_query)) {
             error_log("Upgrade #$member_id: notification insert failed: " . $conn->error);
         }

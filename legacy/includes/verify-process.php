@@ -10,7 +10,7 @@ redirect_if_logged_in();
 // Check if pending verification exists
 if (!isset($_SESSION['pending_user_id']) || !isset($_SESSION['verification_code'])) {
     $_SESSION['login_error'] = 'Session expired. Please login again.';
-    header("Location: ../login.php");
+    header("Location: ../login");
     exit();
 }
 
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['pending_email'], $_SESSION['verification_attempts']);
 
         $_SESSION['login_error'] = 'Too many incorrect verification codes. Please login again.';
-        header("Location: ../login.php");
+        header("Location: ../login");
         exit();
     }
 
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Validation
     if (empty($entered_code)) {
         $_SESSION['verify_error'] = 'Please enter the verification code';
-        header("Location: ../verify.php");
+        header("Location: ../verify");
         exit();
     }
     
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         unset($_SESSION['pending_role']);
         
         $_SESSION['login_error'] = 'Verification code has expired. Please login again.';
-        header("Location: ../login.php");
+        header("Location: ../login");
         exit();
     }
     
@@ -103,12 +103,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Log failed verification attempt
         log_action($_SESSION['pending_user_id'], 'Failed Verification', 'users', $_SESSION['pending_user_id'], 'Failed verification code attempt');
         
-        header("Location: ../verify.php");
+        header("Location: ../verify");
         exit();
     }
 }
 
 // If not POST request, redirect to verify page
-header("Location: ../verify.php");
+header("Location: ../verify");
 exit();
 ?>

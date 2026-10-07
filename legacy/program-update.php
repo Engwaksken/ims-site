@@ -17,6 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     log_action($_SESSION['user_id'], 'Edit program', 'programs', $program_id, 'program updated');
     send_notification($_SESSION['user_id'], 'program updated successfully', 'success');
 
-    header("Location: programs.php");
+    header("Location: programs");
     exit();
 }

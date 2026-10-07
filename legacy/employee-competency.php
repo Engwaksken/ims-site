@@ -4,7 +4,7 @@ $page_title = 'Behavioral Competency Assessment';
 include 'includes/header.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); exit();
+    header("Location: login"); exit();
 }
 
 $uid = (int)$_SESSION['user_id'];
@@ -27,7 +27,7 @@ $profile = $profile_q ? $profile_q->fetch_assoc() : [];
 
 if (!$profile || !$profile['job_title']) {
     send_notification($uid,'Please complete your employee profile first.','warning');
-    header("Location: my-profile.php"); exit();
+    header("Location: my-profile"); exit();
 }
 
 // -- Fetch active competency groups + indicators --
@@ -295,11 +295,11 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
         <button type="button" class="btn btn-print" onclick="generatePreview()">
             <i class="fas fa-eye"></i> Preview & Print
         </button>
-        <a href="my-appraisals.php" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+        <a href="my-appraisals" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
     </div>
 </div>
 
-<form method="POST" action="bc-process.php" id="bcForm">
+<form method="POST" action="bc-process" id="bcForm">
 <input type="hidden" name="action" value="create_bc">
 
 <!-- Personal Info -->
@@ -476,7 +476,7 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
         <button type="submit" name="submit_bc" class="btn btn-success">
             <i class="fas fa-paper-plane"></i> Submit for Review
         </button>
-        <a href="my-appraisals.php" class="btn btn-danger"><i class="fas fa-times"></i> Cancel</a>
+        <a href="my-appraisals" class="btn btn-danger"><i class="fas fa-times"></i> Cancel</a>
     </div>
 </div>
 

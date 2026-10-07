@@ -7,7 +7,7 @@ check_role(['Administrator']);
 
 // State changes are POST-only (CSRF token is enforced globally by config.php).
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
-    header("Location: employees-list.php");
+    header("Location: employees-list");
     exit();
 }
 
@@ -30,7 +30,7 @@ function eap_load_employee(mysqli $conn, int $employee_id): array
 
     if (!$employee) {
         send_notification($_SESSION['user_id'], 'Employee not found', 'danger');
-        header("Location: employees-list.php");
+        header("Location: employees-list");
         exit();
     }
 
@@ -44,7 +44,7 @@ if (isset($_POST['approve_employee'])) {
 
     if ($employee['status'] !== 'Submitted') {
         send_notification($current_user_id, 'Only submitted profiles can be approved', 'warning');
-        header("Location: employees-list.php");
+        header("Location: employees-list");
         exit();
     }
 
@@ -65,7 +65,7 @@ if (isset($_POST['approve_employee'])) {
     }
 
     $stmt->close();
-    header("Location: employees-list.php");
+    header("Location: employees-list");
     exit();
 }
 
@@ -76,7 +76,7 @@ if (isset($_POST['reject_employee'])) {
 
     if ($rejection_reason === '') {
         send_notification($current_user_id, 'Please provide a reason for rejection', 'danger');
-        header("Location: employees-list.php");
+        header("Location: employees-list");
         exit();
     }
 
@@ -84,7 +84,7 @@ if (isset($_POST['reject_employee'])) {
 
     if ($employee['status'] !== 'Submitted') {
         send_notification($current_user_id, 'Only submitted profiles can be rejected', 'warning');
-        header("Location: employees-list.php");
+        header("Location: employees-list");
         exit();
     }
 
@@ -104,10 +104,10 @@ if (isset($_POST['reject_employee'])) {
     }
 
     $stmt->close();
-    header("Location: employees-list.php");
+    header("Location: employees-list");
     exit();
 }
 
 // If no valid action, redirect
-header("Location: employees-list.php");
+header("Location: employees-list");
 exit();

@@ -213,7 +213,7 @@ if ($userId < 1) {
 
 function doc_redirect_back(int $folderId = 0): never
 {
-    $url = '../documents.php';
+    $url = '../documents';
 
     if ($folderId > 0) {
         $url .= '?folder=' . $folderId;
@@ -261,7 +261,7 @@ if ($action === 'create_folder') {
 
         if ($newFolderId > 0) {
             header(
-                'Location: ../documents.php?folder='
+                'Location: ../documents?folder='
                 . $newFolderId
                 . '&upload=1'
             );
@@ -1433,7 +1433,7 @@ if (in_array($action, ['view', 'download'], true)) {
         );
 
     $backUrl =
-        '../documents.php';
+        '../documents';
 
     if ($folderId > 0) {
         $backUrl .=

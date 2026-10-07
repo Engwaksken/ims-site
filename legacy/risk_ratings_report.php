@@ -21,7 +21,7 @@ if (
     !in_array((string)$_SESSION['role'], $allowed_roles, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit();
 }
 
@@ -175,7 +175,7 @@ if (isset($_GET['pdf']) && $_GET['pdf'] === '1') {
     if (!class_exists('Dompdf\Dompdf')) {
         ob_end_clean();
         $_SESSION['error'] = 'DOMPDF is not installed. Run <code>composer require dompdf/dompdf</code> in your project root, then try again.';
-        header('Location: risk_ratings_report.php');
+        header('Location: risk_ratings_report');
         exit();
     }
 
@@ -495,11 +495,11 @@ foreach ($ratings as $rr) {
       </div>
       <div class="d-flex gap-2 flex-wrap align-items-center">
         <?php if ($totalCount > 0): ?>
-          <a href="risk_ratings_report.php?pdf=1" class="btn-pdf">
+          <a href="risk_ratings_report?pdf=1" class="btn-pdf">
             <i class="fas fa-file-pdf"></i> Download PDF Report
           </a>
         <?php endif; ?>
-        <a href="manage_risk_ratings.php" class="btn btn-light border">
+        <a href="manage_risk_ratings" class="btn btn-light border">
           <i class="fas fa-arrow-left me-1"></i> Back
         </a>
       </div>
@@ -570,7 +570,7 @@ foreach ($ratings as $rr) {
           <div style="font-size:15px;font-weight:600;">No generated risk ratings found</div>
           <div style="font-size:13px;color:#9ca3af;margin-top:6px;">
             Only risk ratings with status <strong>Generated</strong> appear here.
-            Go to <a href="manage_risk_ratings.php">Manage Risk Ratings</a> to generate assessments.
+            Go to <a href="manage_risk_ratings">Manage Risk Ratings</a> to generate assessments.
           </div>
         </div>
       <?php else: ?>

@@ -3,7 +3,7 @@ require_once __DIR__ . '/includes/config.php';
 
 // Role names are e.g. 'Administrator' (there is no 'admin' role).
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'] ?? '', ['Administrator', 'HR'], true)) {
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['bc_error'] = 'Group name is required.';
         }
-        header("Location: behavioral-competencies.php"); exit();
+        header("Location: behavioral-competencies"); exit();
     }
 
     if ($act === 'edit_group') {
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->close();
             $_SESSION['bc_success'] = 'Competency group updated.';
         }
-        header("Location: behavioral-competencies.php"); exit();
+        header("Location: behavioral-competencies"); exit();
     }
 
     if ($act === 'delete_group') {
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $stmt->close();
         $_SESSION['bc_success'] = 'Competency group deleted.';
-        header("Location: behavioral-competencies.php"); exit();
+        header("Location: behavioral-competencies"); exit();
     }
 
     if ($act === 'add_indicator') {
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['bc_error'] = 'Indicator text and group are required.';
         }
-        header("Location: behavioral-competencies.php"); exit();
+        header("Location: behavioral-competencies"); exit();
     }
 
     if ($act === 'edit_indicator') {
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->close();
             $_SESSION['bc_success'] = 'Indicator updated.';
         }
-        header("Location: behavioral-competencies.php"); exit();
+        header("Location: behavioral-competencies"); exit();
     }
 
     if ($act === 'delete_indicator') {
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $stmt->close();
         $_SESSION['bc_success'] = 'Indicator deleted.';
-        header("Location: behavioral-competencies.php"); exit();
+        header("Location: behavioral-competencies"); exit();
     }
 
     // AJAX reorder — pure JSON response, no header.php needed

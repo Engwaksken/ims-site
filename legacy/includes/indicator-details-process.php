@@ -9,7 +9,7 @@ $indicator_id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['indica
 
 if (!$indicator_id) {
     send_notification($_SESSION['user_id'], 'Invalid indicator ID', 'danger');
-    header("Location: indicators.php");
+    header("Location: ../indicators");
     exit();
 }
 
@@ -17,7 +17,7 @@ if (!$indicator_id) {
 $check = $conn->query("SELECT indicator_id, target_value FROM indicators WHERE indicator_id = $indicator_id");
 if ($check->num_rows == 0) {
     send_notification($_SESSION['user_id'], 'Indicator not found', 'danger');
-    header("Location: indicators.php");
+    header("Location: ../indicators");
     exit();
 }
 $indicator_data = $check->fetch_assoc();
@@ -35,14 +35,14 @@ if (isset($_POST['update_progress'])) {
     // Validate required fields
     if ($current_value === null || empty($reporting_period)) {
         send_notification($_SESSION['user_id'], 'Current value and reporting period are required', 'danger');
-        header("Location: ../indicator-details.php?id=$indicator_id");
+        header("Location: ../indicator-details?id=$indicator_id");
         exit();
     }
     
     // Validate current value
     if ($current_value < 0) {
         send_notification($_SESSION['user_id'], 'Current value cannot be negative', 'danger');
-        header("Location: ../indicator-details.php?id=$indicator_id");
+        header("Location: ../indicator-details?id=$indicator_id");
         exit();
     }
     
@@ -52,7 +52,7 @@ if (isset($_POST['update_progress'])) {
         $today = strtotime('today');
         if ($recorded_timestamp > $today) {
             send_notification($_SESSION['user_id'], 'Recorded date cannot be in the future', 'danger');
-            header("Location: ../indicator-details.php?id=$indicator_id");
+            header("Location: ../indicator-details?id=$indicator_id");
             exit();
         }
     }
@@ -60,7 +60,7 @@ if (isset($_POST['update_progress'])) {
     // Validate data quality score
     if ($data_quality_score !== null && ($data_quality_score < 1 || $data_quality_score > 5)) {
         send_notification($_SESSION['user_id'], 'Data quality score must be between 1 and 5', 'danger');
-        header("Location: ../indicator-details.php?id=$indicator_id");
+        header("Location: ../indicator-details?id=$indicator_id");
         exit();
     }
     
@@ -89,7 +89,7 @@ if (isset($_POST['update_progress'])) {
         send_notification($_SESSION['user_id'], 'Error updating progress: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../indicator-details.php?id=$indicator_id");
+    header("Location: ../indicator-details?id=$indicator_id");
     exit();
 }
 
@@ -107,7 +107,7 @@ if (isset($_POST['edit_indicator'])) {
     // Validate required fields
     if (empty($indicator_name) || empty($indicator_type) || empty($unit_of_measure) || $target_value <= 0) {
         send_notification($_SESSION['user_id'], 'Indicator name, type, unit of measure, and target value (greater than zero) are required', 'danger');
-        header("Location: ../indicator-details.php?id=$indicator_id");
+        header("Location: ../indicator-details?id=$indicator_id");
         exit();
     }
     
@@ -121,7 +121,7 @@ if (isset($_POST['edit_indicator'])) {
         send_notification($_SESSION['user_id'], 'Error updating indicator: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../indicator-details.php?id=$indicator_id");
+    header("Location: ../indicator-details?id=$indicator_id");
     exit();
 }
 
@@ -137,14 +137,14 @@ if (isset($_POST['add_progress_update'])) {
     // Validate required fields
     if (empty($reporting_period) || $actual_value === null) {
         send_notification($_SESSION['user_id'], 'Reporting period and actual value are required', 'danger');
-        header("Location: ../indicator-details.php?id=$indicator_id");
+        header("Location: ../indicator-details?id=$indicator_id");
         exit();
     }
     
     // Validate actual value
     if ($actual_value < 0) {
         send_notification($_SESSION['user_id'], 'Actual value cannot be negative', 'danger');
-        header("Location: ../indicator-details.php?id=$indicator_id");
+        header("Location: ../indicator-details?id=$indicator_id");
         exit();
     }
     
@@ -154,7 +154,7 @@ if (isset($_POST['add_progress_update'])) {
         $today = strtotime('today');
         if ($recorded_timestamp > $today) {
             send_notification($_SESSION['user_id'], 'Recorded date cannot be in the future', 'danger');
-            header("Location: ../indicator-details.php?id=$indicator_id");
+            header("Location: ../indicator-details?id=$indicator_id");
             exit();
         }
     }
@@ -162,7 +162,7 @@ if (isset($_POST['add_progress_update'])) {
     // Validate data quality score
     if ($data_quality_score !== null && ($data_quality_score < 1 || $data_quality_score > 5)) {
         send_notification($_SESSION['user_id'], 'Data quality score must be between 1 and 5', 'danger');
-        header("Location: ../indicator-details.php?id=$indicator_id");
+        header("Location: ../indicator-details?id=$indicator_id");
         exit();
     }
     
@@ -183,11 +183,11 @@ if (isset($_POST['add_progress_update'])) {
         send_notification($_SESSION['user_id'], 'Error adding progress update: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../indicator-details.php?id=$indicator_id");
+    header("Location: ../indicator-details?id=$indicator_id");
     exit();
 }
 
 // If no valid action, redirect to indicator details
-header("Location: ../indicator-details.php?id=$indicator_id");
+header("Location: ../indicator-details?id=$indicator_id");
 exit();
 ?>

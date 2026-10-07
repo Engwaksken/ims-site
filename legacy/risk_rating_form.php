@@ -13,7 +13,7 @@ if (
     !in_array($_SESSION['role'], $allowed_roles, true)
 ) {
     $_SESSION['error'] = "Access denied.";
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 

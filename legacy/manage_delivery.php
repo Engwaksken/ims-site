@@ -19,7 +19,7 @@ function e($value): string
 
 function redirect_delivery(int $po_id): never
 {
-    header('Location: manage_delivery.php?po_id=' . $po_id);
+    header('Location: manage_delivery?po_id=' . $po_id);
     exit;
 }
 
@@ -27,7 +27,7 @@ $po_id = (int)($_GET['po_id'] ?? 0);
 
 if ($po_id <= 0) {
     $_SESSION['error'] = 'Invalid purchase order selected.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -52,7 +52,7 @@ $stmt->close();
 
 if (!$po) {
     $_SESSION['error'] = 'Purchase order not found.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -201,7 +201,7 @@ $stmt->close();
         </div>
 
         <div class="hero-actions">
-            <a href="manage_procurement.php" class="btn btn-primary">
+            <a href="manage_procurement" class="btn btn-primary">
                 <i class="fas fa-arrow-left"></i> Procurement
             </a>
 

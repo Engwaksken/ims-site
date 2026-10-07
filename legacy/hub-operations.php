@@ -217,43 +217,43 @@ if (isset($_GET['edit_receipt'])) {
     <div class="card-body" style="padding: 0;">
         <div class="tabs">
             <button class="tab <?php echo $active_tab == 'members' ? 'active' : ''; ?>" 
-                    onclick="window.location.href='hub-operations.php?tab=members'">
+                    onclick="window.location.href='hub-operations?tab=members'">
                 <i class="fas fa-users"></i> Members
                 <?php if ($stats['expiring_soon'] > 0): ?>
                     <span class="notification-badge"><?php echo $stats['expiring_soon']; ?></span>
                 <?php endif; ?>
             </button>
             <button class="tab <?php echo $active_tab == 'bookings' ? 'active' : ''; ?>" 
-                    onclick="window.location.href='hub-operations.php?tab=bookings'">
+                    onclick="window.location.href='hub-operations?tab=bookings'">
                 <i class="fas fa-calendar-alt"></i> Bookings
                 <?php if ($stats['pending_bookings'] > 0): ?>
                     <span class="notification-badge"><?php echo $stats['pending_bookings']; ?></span>
                 <?php endif; ?>
             </button>
             <button class="tab <?php echo $active_tab == 'receipts' ? 'active' : ''; ?>" 
-                    onclick="window.location.href='hub-operations.php?tab=receipts'">
+                    onclick="window.location.href='hub-operations?tab=receipts'">
                 <i class="fas fa-receipt"></i> Receipts
                 <?php if ($stats['pending_receipts'] > 0): ?>
                     <span class="notification-badge"><?php echo $stats['pending_receipts']; ?></span>
                 <?php endif; ?>
             </button>
             <button class="tab <?php echo $active_tab == 'feedback' ? 'active' : ''; ?>" 
-                    onclick="window.location.href='hub-operations.php?tab=feedback'">
+                    onclick="window.location.href='hub-operations?tab=feedback'">
                 <i class="fas fa-comment-dots"></i> Feedback
                 <?php if ($stats['new_feedback'] > 0): ?>
                     <span class="notification-badge"><?php echo $stats['new_feedback']; ?></span>
                 <?php endif; ?>
             </button>
             <button class="tab <?php echo $active_tab == 'notifications' ? 'active' : ''; ?>" 
-                    onclick="window.location.href='hub-operations.php?tab=notifications'">
+                    onclick="window.location.href='hub-operations?tab=notifications'">
                 <i class="fas fa-bell"></i> Notifications
             </button>
             <button class="tab <?php echo $active_tab == 'subscriptions' ? 'active' : ''; ?>" 
-                    onclick="window.location.href='hub-operations.php?tab=subscriptions'">
+                    onclick="window.location.href='hub-operations?tab=subscriptions'">
                 <i class="fas fa-dollar"></i> Subscriptions
             </button>
               <!--<button class="tab <?php echo $active_tab == 'analytics' ? 'active' : ''; ?>" 
-                    onclick="window.location.href='hub-operations.php?tab=analytics'">
+                    onclick="window.location.href='hub-operations?tab=analytics'">
                 <i class="fas fa-chart-bar"></i> Analytics
             </button> -->
         </div>
@@ -292,13 +292,13 @@ if (isset($_GET['edit_receipt'])) {
     <div class="card-header">
         <h3><i class="fas fa-users"></i> Members Management</h3>
         <div>
-         <a href="hub-visitors.php" class="btn btn-secondary">
+         <a href="hub-visitors" class="btn btn-secondary">
                 <i class="fas fa-users"></i> Hub Visitors
             </a>
             <button onclick="openModal('addMemberModal')" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add Member
             </button>
-            <button onclick="window.location.href='export.php?type=members'" class="btn btn-success">
+            <button onclick="window.location.href='export?type=members'" class="btn btn-success">
                 <i class="fas fa-download"></i> Export
             </button>
         </div>
@@ -336,7 +336,7 @@ if (isset($_GET['edit_receipt'])) {
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-filter"></i> Filter
                     </button>
-                    <a href="hub-operations.php?tab=members" class="btn btn-secondary">
+                    <a href="hub-operations?tab=members" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Clear
                     </a>
                 </div>
@@ -415,7 +415,7 @@ if (isset($_GET['edit_receipt'])) {
                                 </td>
                                 <td>
                                     <div class="table-actions">
-                                        <a href="view-member.php?id=<?php echo $member['member_id']; ?>" 
+                                        <a href="view-member?id=<?php echo $member['member_id']; ?>" 
                                            class="btn btn-info btn-sm" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </a>
@@ -476,10 +476,10 @@ if (isset($_GET['edit_receipt'])) {
     <div class="card-header">
         <h3><i class="fas fa-calendar-alt"></i> Space Bookings</h3>
         <div>
-        <a href="manage-bookings.php"  class="btn btn-primary">
+        <a href="manage-bookings"  class="btn btn-primary">
                 <i class="fas fa-calendar-check"></i> Manage Booking
             </a> 
-            <button onclick="window.location.href='export.php?type=bookings'" class="btn btn-success">
+            <button onclick="window.location.href='export?type=bookings'" class="btn btn-success">
                 <i class="fas fa-download"></i> Export
             </button>
         </div>
@@ -517,7 +517,7 @@ if (isset($_GET['edit_receipt'])) {
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-filter"></i> Filter
                     </button>
-                    <a href="hub-operations.php?tab=bookings" class="btn btn-secondary">
+                    <a href="hub-operations?tab=bookings" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Clear
                     </a>
                 </div>
@@ -594,7 +594,7 @@ if (isset($_GET['edit_receipt'])) {
                                 </td>
                                 <td>
                                     <div class="table-actions">
-                                        <a href="view-booking.php?id=<?php echo $booking['booking_id']; ?>" 
+                                        <a href="view-booking?id=<?php echo $booking['booking_id']; ?>" 
                                            class="btn btn-info btn-sm" title="View">
                                             <i class="fas fa-eye"></i>
                                         </a>
@@ -685,7 +685,7 @@ if (isset($_GET['edit_receipt'])) {
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-filter"></i> Filter
                     </button>
-                    <a href="hub-operations.php?tab=receipts" class="btn btn-secondary">
+                    <a href="hub-operations?tab=receipts" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Clear
                     </a>
                 </div>
@@ -844,7 +844,7 @@ if (isset($_GET['edit_receipt'])) {
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-filter"></i> Filter
                     </button>
-                    <a href="hub-operations.php?tab=feedback" class="btn btn-secondary">
+                    <a href="hub-operations?tab=feedback" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Clear
                     </a>
                 </div>
@@ -933,12 +933,12 @@ if (isset($_GET['edit_receipt'])) {
                                 </td>
                                 <td>
                                     <div class="table-actions">
-                                        <a href="view-feedback.php?id=<?php echo $feedback['feedback_id']; ?>" 
+                                        <a href="view-feedback?id=<?php echo $feedback['feedback_id']; ?>" 
                                            class="btn btn-info btn-sm" title="View">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <?php if ($feedback['feedback_status'] != 'Closed'): ?>
-                                            <a href="respond-feedback.php?id=<?php echo $feedback['feedback_id']; ?>" 
+                                            <a href="respond-feedback?id=<?php echo $feedback['feedback_id']; ?>" 
                                                class="btn btn-success btn-sm" title="Respond">
                                                 <i class="fas fa-reply"></i>
                                             </a>
@@ -1468,13 +1468,13 @@ new Chart(revenueTrendCtx, {
     <div class="card-header">
         <h3><i class="fas fa-credit-card"></i> Subscription Payments</h3>
         <div>
-        <a href="manage-space.php"  class="btn btn-secondary">
+        <a href="manage-space"  class="btn btn-secondary">
                 <i class="fas fa-building"></i> Manage Spaces
             </a>
             <button onclick="openModal('addSubscriptionModal')" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add Payment
             </button>
-            <button onclick="window.location.href='export.php?type=subscriptions'" class="btn btn-success">
+            <button onclick="window.location.href='export?type=subscriptions'" class="btn btn-success">
                 <i class="fas fa-download"></i> Export
             </button>
         </div>
@@ -1508,7 +1508,7 @@ new Chart(revenueTrendCtx, {
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-filter"></i> Filter
                     </button>
-                    <a href="hub-operations.php?tab=subscriptions" class="btn btn-secondary">
+                    <a href="hub-operations?tab=subscriptions" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Clear
                     </a>
                 </div>

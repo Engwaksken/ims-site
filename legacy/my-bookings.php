@@ -5,7 +5,7 @@ include 'includes/header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -650,7 +650,7 @@ $bank_details = [
             <button type="submit" class="btn btn-info">
                 <i class="fas fa-filter"></i> Filter
             </button>
-            <a href="my-bookings.php" class="btn btn-secondary">
+            <a href="my-bookings" class="btn btn-secondary">
                 <i class="fas fa-times"></i> Clear
             </a>
         </div>
@@ -836,7 +836,7 @@ $bank_details = [
                 <input type="hidden" name="space_id" id="space_id">
                 <input type="hidden" name="total_amount" id="total_amount_hidden" value="0">
                 <input type="hidden" name="booking_id" id="field_booking_id" disabled>
-                <input type="hidden" name="return_to" value="my-bookings.php">
+                <input type="hidden" name="return_to" value="my-bookings">
 
                 <div id="editModeNote" class="mo-alert-warning" style="display:none;">
                     <i class="fas fa-info-circle"></i> Saving changes will reset this booking to <strong>Pending</strong>
@@ -1092,7 +1092,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectable: true,
         selectMirror: true,
         events: function(info, successCallback, failureCallback) {
-            fetch('get-bookings.php?start=' + info.startStr + '&end=' + info.endStr)
+            fetch('get-bookings?start=' + info.startStr + '&end=' + info.endStr)
                 .then(response => response.json())
                 .then(data => successCallback(data))
                 .catch(error => failureCallback(error));
@@ -1316,7 +1316,7 @@ function loadExistingBookings() {
     const panel = document.getElementById('existingBookingsPanel');
     const list = document.getElementById('existingBookingsList');
 
-    fetch('get-bookings.php?start=' + date + '&end=' + date + '&space_name=' + encodeURIComponent(spaceNameForOverlapCheck))
+    fetch('get-bookings?start=' + date + '&end=' + date + '&space_name=' + encodeURIComponent(spaceNameForOverlapCheck))
         .then(response => response.json())
         .then(events => {
             existingBookingsForSpace = events
@@ -1428,7 +1428,7 @@ function updateBookingAmount() {
     params.set('start_time', startTime);
     params.set('end_time', endTime);
 
-    fetch('get-quote.php?' + params.toString())
+    fetch('get-quote?' + params.toString())
         .then(response => response.json().catch(() => {
             throw new Error('Server did not return valid JSON (HTTP ' + response.status + ') - check the Network tab for the raw response from get-quote.php.');
         }))

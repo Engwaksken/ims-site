@@ -22,7 +22,7 @@ if (
     !in_array((string)$_SESSION['role'], $allowedRoles, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: ../dashboard.php');
+    header('Location: ../dashboard');
     exit();
 }
 
@@ -83,7 +83,7 @@ function normalizeRiskLabel(float $score): string
 
 function redirectToRating(int $applicationId, int $reviewTypeId = 0): never
 {
-    $url = '../risk_rating.php?application_id=' . $applicationId;
+    $url = '../risk_rating?application_id=' . $applicationId;
     if ($reviewTypeId > 0) {
         $url .= '&review_type_id=' . $reviewTypeId;
     }

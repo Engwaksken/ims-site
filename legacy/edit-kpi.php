@@ -15,7 +15,7 @@ if ($kpi_edit_id > 0) {
     exit();
 }
 
-header('Location: my-kpis.php');
+header('Location: my-kpis');
 exit();
 
 // ---------------------------------------------------------------------
@@ -27,7 +27,7 @@ include 'includes/header.php';
 // Check if user is logged in and has appropriate access
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = "Please login to access this page.";
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -38,14 +38,14 @@ $user_role = $_SESSION['role'];
 $allowed_roles = ['Administrator', 'Programs Lead', 'MEAL Lead','staff'];
 if (!in_array($user_role, $allowed_roles)) {
     $_SESSION['error'] = "Access denied. You don't have permission to edit KPIs.";
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
 // Get KPI ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     $_SESSION['error'] = "KPI ID not provided.";
-    header("Location: kpi-management.php");
+    header("Location: kpi-management");
     exit();
 }
 
@@ -64,7 +64,7 @@ $result = $conn->query($query);
 
 if ($result->num_rows == 0) {
     $_SESSION['error'] = "KPI not found.";
-    header("Location: kpi-management.php");
+    header("Location: kpi-management");
     exit();
 }
 
@@ -487,11 +487,11 @@ if ($kpi['target_value'] > 0) {
                     <i class="fas fa-save"></i> Update KPI
                 </button>
                 
-                <a href="view-kpi.php?id=<?php echo $kpi_id; ?>" class="btn btn-secondary btn-lg">
+                <a href="view-kpi?id=<?php echo $kpi_id; ?>" class="btn btn-secondary btn-lg">
                     <i class="fas fa-times"></i> Cancel
                 </a>
                 
-                <a href="kpi-management.php" class="btn btn-info btn-lg">
+                <a href="kpi-management" class="btn btn-info btn-lg">
                     <i class="fas fa-arrow-left"></i> Back to KPI List
                 </a>
                 

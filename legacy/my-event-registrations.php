@@ -4,7 +4,7 @@ include 'includes/header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -340,18 +340,18 @@ $stats['pending_payment'] = $conn->query("SELECT COUNT(*) as count FROM event_re
 <!-- View Tabs -->
 <div class="view-tabs">
     <button class="view-tab <?php echo $view == 'upcoming' ? 'active' : ''; ?>" 
-            onclick="window.location.href='my-event-registrations.php?view=upcoming'">
+            onclick="window.location.href='my-event-registrations?view=upcoming'">
         <i class="fas fa-arrow-right"></i> Upcoming Events
     </button>
     <button class="view-tab <?php echo $view == 'past' ? 'active' : ''; ?>" 
-            onclick="window.location.href='my-event-registrations.php?view=past'">
+            onclick="window.location.href='my-event-registrations?view=past'">
         <i class="fas fa-history"></i> Past Events
     </button>
     <button class="view-tab <?php echo $view == 'all' ? 'active' : ''; ?>" 
-            onclick="window.location.href='my-event-registrations.php?view=all'">
+            onclick="window.location.href='my-event-registrations?view=all'">
         <i class="fas fa-list"></i> All Registrations
     </button>
-    <button class="view-tab" onclick="window.location.href='hub-events.php'">
+    <button class="view-tab" onclick="window.location.href='hub-events'">
         <i class="fas fa-plus-circle"></i> Browse Events
     </button>
 </div>
@@ -375,7 +375,7 @@ $stats['pending_payment'] = $conn->query("SELECT COUNT(*) as count FROM event_re
             <button type="submit" class="btn btn-info">
                 <i class="fas fa-filter"></i> Filter
             </button>
-            <a href="my-event-registrations.php?view=<?php echo htmlspecialchars($view); ?>" class="btn btn-secondary">
+            <a href="my-event-registrations?view=<?php echo htmlspecialchars($view); ?>" class="btn btn-secondary">
                 <i class="fas fa-times"></i> Clear
             </a>
         </div>
@@ -398,7 +398,7 @@ $stats['pending_payment'] = $conn->query("SELECT COUNT(*) as count FROM event_re
                         No registrations match your filter criteria.
                     <?php endif; ?>
                 </p>
-                <a href="hub-events.php" class="btn btn-primary">
+                <a href="hub-events" class="btn btn-primary">
                     <i class="fas fa-calendar-alt"></i> Browse Events
                 </a>
             </div>

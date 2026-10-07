@@ -733,25 +733,25 @@ if (!in_array($active_tab, $allowed_tabs, true)) {
 
 <!-- Settings Navigation -->
 <div class="settings-tabs">
-    <a href="settings.php?tab=general" class="settings-tab <?php echo $active_tab == 'general' ? 'active' : ''; ?>">
+    <a href="settings?tab=general" class="settings-tab <?php echo $active_tab == 'general' ? 'active' : ''; ?>">
         <i class="fas fa-cog"></i> General
     </a>
-    <a href="settings.php?tab=powerbi" class="settings-tab <?php echo $active_tab == 'powerbi' ? 'active' : ''; ?>">
+    <a href="settings?tab=powerbi" class="settings-tab <?php echo $active_tab == 'powerbi' ? 'active' : ''; ?>">
         <i class="fas fa-chart-line"></i> Power BI
     </a>
-    <a href="settings.php?tab=email" class="settings-tab <?php echo $active_tab == 'email' ? 'active' : ''; ?>">
+    <a href="settings?tab=email" class="settings-tab <?php echo $active_tab == 'email' ? 'active' : ''; ?>">
         <i class="fas fa-envelope"></i> Email
     </a>
-    <a href="settings.php?tab=google" class="settings-tab <?php echo $active_tab == 'google' ? 'active' : ''; ?>">
+    <a href="settings?tab=google" class="settings-tab <?php echo $active_tab == 'google' ? 'active' : ''; ?>">
         <i class="fab fa-google"></i> Google Calendar
     </a>
-    <a href="settings.php?tab=workspace" class="settings-tab <?php echo $active_tab == 'workspace' ? 'active' : ''; ?>">
+    <a href="settings?tab=workspace" class="settings-tab <?php echo $active_tab == 'workspace' ? 'active' : ''; ?>">
         <i class="fas fa-building"></i> Workspace Gmail
     </a>
-    <a href="settings.php?tab=backup" class="settings-tab <?php echo $active_tab == 'backup' ? 'active' : ''; ?>">
+    <a href="settings?tab=backup" class="settings-tab <?php echo $active_tab == 'backup' ? 'active' : ''; ?>">
         <i class="fas fa-database"></i> Backup
     </a>
-    <a href="settings.php?tab=system" class="settings-tab <?php echo $active_tab == 'system' ? 'active' : ''; ?>">
+    <a href="settings?tab=system" class="settings-tab <?php echo $active_tab == 'system' ? 'active' : ''; ?>">
         <i class="fas fa-server"></i> System Info
     </a>
 </div>

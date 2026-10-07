@@ -322,7 +322,7 @@ function dl_can_access(mysqli $conn, string $relative, int $userId): bool
 |--------------------------------------------------------------------------
 */
 
-require_login('login.php');
+require_login('login');
 
 $relative = ims_upload_relative('uploads/' . (string) ($_GET['path'] ?? ''));
 

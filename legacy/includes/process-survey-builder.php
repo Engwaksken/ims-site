@@ -20,7 +20,7 @@ function clean(mixed $v): string {
 
 function redirectWithMsg(int $surveyId, string $type, string $msg): void {
     $_SESSION['builder_' . $type] = $msg;
-    header("Location: ../survey-builder.php?id={$surveyId}");
+    header("Location: ../survey-builder?id={$surveyId}");
     exit;
 }
 

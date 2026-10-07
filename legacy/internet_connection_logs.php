@@ -500,7 +500,7 @@ $baseLink .= $baseLink === '?' ? '' : '&';
 
             <button class="btn" type="submit">Apply</button>
 
-            <a href="internet_connection_logs.php" class="btn secondary">Clear</a>
+            <a href="internet_connection_logs" class="btn secondary">Clear</a>
         </div>
     </form>
 

@@ -1,5 +1,5 @@
 -- ============================================================================
--- IMS: sidebar entry for the Notifications page (legacy/notifications.php)
+-- IMS: sidebar entry for the Notifications page (/notifications)
 -- ============================================================================
 -- Idempotent: safe to run more than once.
 --   * menu_items.page is UNIQUE, so INSERT IGNORE never duplicates the item and
@@ -10,8 +10,15 @@
 -- notifications. Remove roles later from Menu Permissions if wanted.
 -- ============================================================================
 
-INSERT IGNORE INTO menu_items (page, icon, label, category, sort_order, is_active)
-VALUES ('notifications.php', 'fa-bell', 'Notifications', 'General', 1, 1);
+-- Stored without .php (clean URLs). Skipped if the item already exists in
+-- either form, so re-running after 2026_10_08_menu_items_clean_urls.sql
+-- never creates a duplicate.
+INSERT INTO menu_items (page, icon, label, category, sort_order, is_active)
+SELECT 'notifications', 'fa-bell', 'Notifications', 'General', 1, 1
+FROM DUAL
+WHERE NOT EXISTS (
+    SELECT 1 FROM menu_items WHERE page IN ('notifications', 'notifications.php')
+);
 
 INSERT IGNORE INTO menu_role_permissions (menu_id, role)
 SELECT mi.menu_id, r.role
@@ -38,4 +45,4 @@ CROSS JOIN (
     UNION ALL SELECT 'Procurement Officer'
     UNION ALL SELECT 'Program Officer'
 ) AS r
-WHERE mi.page = 'notifications.php';
+WHERE mi.page IN ('notifications', 'notifications.php');

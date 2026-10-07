@@ -39,14 +39,14 @@ $opportunity_id = (int)($_GET['id'] ?? 0);
 
 if ($opportunity_id < 1) {
     $_SESSION['error'] = 'Invalid opportunity ID.';
-    header('Location: application-opportunities.php');
+    header('Location: application-opportunities');
     exit;
 }
 
 $stmt = $conn->prepare('SELECT * FROM application_opportunities WHERE opportunity_id = ? LIMIT 1');
 if (!$stmt) {
     $_SESSION['error'] = 'Unable to load the opportunity.';
-    header('Location: application-opportunities.php');
+    header('Location: application-opportunities');
     exit;
 }
 
@@ -57,7 +57,7 @@ $stmt->close();
 
 if (!$opportunity) {
     $_SESSION['error'] = 'Opportunity not found.';
-    header('Location: application-opportunities.php');
+    header('Location: application-opportunities');
     exit;
 }
 
@@ -143,8 +143,8 @@ $allowed_types = ['Incubation', 'Acceleration', 'Funding', 'Mentorship', 'Traini
 
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:relative">
         <span class="badge <?= h($badge_class) ?>"><?= h($status) ?></span>
-        <a href="view-opportunity.php?id=<?= $opportunity_id ?>" class="btn btn-white btn-sm"><i class="fas fa-eye"></i> View</a>
-        <a href="application-opportunities.php" class="btn btn-white btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
+        <a href="view-opportunity?id=<?= $opportunity_id ?>" class="btn btn-white btn-sm"><i class="fas fa-eye"></i> View</a>
+        <a href="application-opportunities" class="btn btn-white btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
     </div>
 </div>
 
@@ -418,9 +418,9 @@ $allowed_types = ['Incubation', 'Acceleration', 'Funding', 'Mentorship', 'Traini
                 </div>
 
                 <div class="eo-info-links">
-                    <a class="eo-info-link" href="view-opportunity.php?id=<?= $opportunity_id ?>"><i class="fas fa-eye"></i> View Opportunity</a>
-                    <a class="eo-info-link" href="manage-applications.php?opportunity_id=<?= $opportunity_id ?>"><i class="fas fa-file-alt"></i> Manage Applications</a>
-                    <a class="eo-info-link" href="application-opportunities.php"><i class="fas fa-list"></i> All Opportunities</a>
+                    <a class="eo-info-link" href="view-opportunity?id=<?= $opportunity_id ?>"><i class="fas fa-eye"></i> View Opportunity</a>
+                    <a class="eo-info-link" href="manage-applications?opportunity_id=<?= $opportunity_id ?>"><i class="fas fa-file-alt"></i> Manage Applications</a>
+                    <a class="eo-info-link" href="application-opportunities"><i class="fas fa-list"></i> All Opportunities</a>
                 </div>
             </div>
         </div>
@@ -429,7 +429,7 @@ $allowed_types = ['Incubation', 'Acceleration', 'Funding', 'Mentorship', 'Traini
     <div class="eo-save-bar">
         <div class="eo-save-status" id="saveStatus">All changes saved</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <a href="view-opportunity.php?id=<?= $opportunity_id ?>" class="btn btn-secondary btn-sm"><i class="fas fa-times"></i> Cancel</a>
+            <a href="view-opportunity?id=<?= $opportunity_id ?>" class="btn btn-secondary btn-sm"><i class="fas fa-times"></i> Cancel</a>
             <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i> Save Changes</button>
         </div>
     </div>

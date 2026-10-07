@@ -16,14 +16,14 @@ $allowed_roles = [
 ];
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], $allowed_roles, true)) {
     $_SESSION['error'] = "Access denied.";
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
 $review_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($review_id <= 0) {
     $_SESSION['error'] = "No review specified.";
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
@@ -53,7 +53,7 @@ $st = $conn->prepare("
 ");
 if (!$st) {
     $_SESSION['error'] = "Database error: " . $conn->error;
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 $st->bind_param("i", $review_id);
@@ -63,14 +63,14 @@ $st->close();
 
 if (!$review) {
     $_SESSION['error'] = "Review not found.";
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
 /* Reviewers may only view their own reviews */
 if ($viewer_role === 'Reviewer' && (int)$review['reviewer_id'] !== $viewer_id) {
     $_SESSION['error'] = "You can only view your own reviews.";
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
@@ -95,7 +95,7 @@ $cr = $conn->prepare("
 ");
 if (!$cr) {
     $_SESSION['error'] = "Database error: " . $conn->error;
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 $cr->bind_param("i", $review_id);
@@ -412,11 +412,11 @@ require_once 'includes/header.php';
         <button onclick="window.print()" class="btn btn-ghost">
             <i class="fas fa-print"></i> Print
         </button>
-        <a href="manage-reviewers.php?tab=status" class="btn btn-ghost">
+        <a href="manage-reviewers?tab=status" class="btn btn-ghost">
             <i class="fas fa-arrow-left"></i> Back
         </a>
         <?php if (in_array($viewer_role, ['Administrator','Programs Lead','MEAL Lead'], true)): ?>
-            <a href="review-applicant.php?id=<?= $review_id ?>" class="btn btn-white">
+            <a href="review-applicant?id=<?= $review_id ?>" class="btn btn-white">
                 <i class="fas fa-edit"></i> Edit Review
             </a>
         <?php endif; ?>
@@ -746,13 +746,13 @@ require_once 'includes/header.php';
         </div>
         <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
             <!-- FIX: "View Application" and "Edit Review" now point to different pages -->
-            <a href="view-application.php?id=<?= (int)$review['application_id'] ?>"
+            <a href="view-application?id=<?= (int)$review['application_id'] ?>"
                class="btn"
                style="background:#eff6ff;color:#ff9800;border:1.5px solid #bfdbfe;justify-content:center;">
                 <i class="fas fa-file-alt"></i> View Full Application
             </a>
             <?php if (in_array($viewer_role, ['Administrator','Programs Lead','MEAL Lead'], true)): ?>
-            <a href="review-applicant.php?id=<?= $review_id ?>"
+            <a href="review-applicant?id=<?= $review_id ?>"
                class="btn"
                style="background:#f0fdf4;color:#16a34a;border:1.5px solid #bbf7d0;justify-content:center;">
                 <i class="fas fa-edit"></i> Edit / Update Review

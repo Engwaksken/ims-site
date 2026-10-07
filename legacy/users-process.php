@@ -17,14 +17,14 @@ if (isset($_POST['add_user'])) {
     // Validate required fields
     if (empty($username) || empty($full_name) || empty($email) || empty($role) || empty($password)) {
         send_notification($_SESSION['user_id'], 'All required fields must be filled', 'danger');
-        header("Location: ../users.php");
+        header("Location: ../users");
         exit();
     }
     
     // Validate password length
     if (strlen($password) < 6) {
         send_notification($_SESSION['user_id'], 'Password must be at least 6 characters', 'danger');
-        header("Location: ../users.php");
+        header("Location: ../users");
         exit();
     }
     
@@ -36,7 +36,7 @@ if (isset($_POST['add_user'])) {
     
     if ($check_result->num_rows > 0) {
         send_notification($_SESSION['user_id'], 'Username already exists. Please choose a different username.', 'danger');
-        header("Location: ../users.php");
+        header("Location: ../users");
         exit();
     }
     
@@ -48,7 +48,7 @@ if (isset($_POST['add_user'])) {
     
     if ($check_result->num_rows > 0) {
         send_notification($_SESSION['user_id'], 'Email already exists. Please use a different email.', 'danger');
-        header("Location: ../users.php");
+        header("Location: ../users");
         exit();
     }
     
@@ -67,7 +67,7 @@ if (isset($_POST['add_user'])) {
         send_notification($_SESSION['user_id'], 'Error adding user: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../users.php");
+    header("Location: ../users");
     exit();
 }
 
@@ -84,7 +84,7 @@ if (isset($_POST['edit_user'])) {
     // Validate required fields
     if (empty($username) || empty($full_name) || empty($email) || empty($role)) {
         send_notification($_SESSION['user_id'], 'All required fields must be filled', 'danger');
-        header("Location: ../users.php?edit=$user_id");
+        header("Location: ../users?edit=$user_id");
         exit();
     }
     
@@ -96,7 +96,7 @@ if (isset($_POST['edit_user'])) {
     
     if ($check_result->num_rows > 0) {
         send_notification($_SESSION['user_id'], 'Username already exists. Please choose a different username.', 'danger');
-        header("Location: ../users.php?edit=$user_id");
+        header("Location: ../users?edit=$user_id");
         exit();
     }
     
@@ -108,7 +108,7 @@ if (isset($_POST['edit_user'])) {
     
     if ($check_result->num_rows > 0) {
         send_notification($_SESSION['user_id'], 'Email already exists. Please use a different email.', 'danger');
-        header("Location: ../users.php?edit=$user_id");
+        header("Location: ../users?edit=$user_id");
         exit();
     }
     
@@ -119,7 +119,7 @@ if (isset($_POST['edit_user'])) {
         // Validate password length
         if (strlen($password) < 6) {
             send_notification($_SESSION['user_id'], 'Password must be at least 6 characters', 'danger');
-            header("Location: ../users.php?edit=$user_id");
+            header("Location: ../users?edit=$user_id");
             exit();
         }
         
@@ -139,7 +139,7 @@ if (isset($_POST['edit_user'])) {
         send_notification($_SESSION['user_id'], 'Error updating user: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../users.php");
+    header("Location: ../users");
     exit();
 }
 
@@ -150,7 +150,7 @@ if (isset($_POST['delete_user'])) {
     // Prevent deleting yourself
     if ($user_id == $_SESSION['user_id']) {
         send_notification($_SESSION['user_id'], 'Cannot delete your own account', 'danger');
-        header("Location: ../users.php");
+        header("Location: ../users");
         exit();
     }
     
@@ -167,11 +167,11 @@ if (isset($_POST['delete_user'])) {
         send_notification($_SESSION['user_id'], 'Error deleting user: ' . $conn->error, 'danger');
     }
     
-    header("Location: ../users.php");
+    header("Location: ../users");
     exit();
 }
 
 // If no valid action, redirect to users page
-header("Location: ../users.php");
+header("Location: ../users");
 exit();
 ?>

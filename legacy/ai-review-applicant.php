@@ -9,7 +9,7 @@ function h($v): string {
     return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
 }
 
-function redirectWithError(string $msg, string $url = 'startups-shortlisting.php'): void {
+function redirectWithError(string $msg, string $url = 'startups-shortlisting'): void {
     $_SESSION['error'] = $msg;
     header("Location: {$url}");
     exit;
@@ -31,7 +31,7 @@ if (
     empty($_SESSION['role']) ||
     !in_array((string)$_SESSION['role'], $allowedRoles, true)
 ) {
-    redirectWithError('Access denied.', 'dashboard.php');
+    redirectWithError('Access denied.', 'dashboard');
 }
 
 $application_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -252,10 +252,10 @@ require_once 'includes/header.php';
         </div>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <a href="review-applicant.php?id=<?= (int)$application_id ?>" class="btn btn-secondary">
+            <a href="review-applicant?id=<?= (int)$application_id ?>" class="btn btn-secondary">
                 <i class="fas fa-star-half-alt"></i> Manual Review
             </a>
-            <a href="startups-shortlisting.php" class="btn btn-secondary">
+            <a href="startups-shortlisting" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
         </div>

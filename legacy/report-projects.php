@@ -168,7 +168,7 @@ while ($d = $donorRes->fetch_assoc()) {
             <input type="date" name="to_date" class="form-control" value="<?= htmlspecialchars($to_date); ?>">
 
             <button class="btn btn-info"><i class="fas fa-filter"></i> Apply</button>
-            <a href="report-projects.php" class="btn btn-secondary">Clear</a>
+            <a href="report-projects" class="btn btn-secondary">Clear</a>
         </form>
 
         <!-- Summary -->

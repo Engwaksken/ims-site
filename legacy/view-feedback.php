@@ -5,7 +5,7 @@ include 'includes/header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -14,7 +14,7 @@ $user_id = $_SESSION['user_id'];
 // Get feedback ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     $_SESSION['error'] = "Feedback ID not provided.";
-    header("Location: my-feedback.php");
+    header("Location: my-feedback");
     exit();
 }
 
@@ -50,7 +50,7 @@ $result = $conn->query($query);
 
 if ($result->num_rows == 0) {
     $_SESSION['error'] = "Feedback not found.";
-    header("Location: my-feedback.php");
+    header("Location: my-feedback");
     exit();
 }
 
@@ -60,7 +60,7 @@ $feedback = $result->fetch_assoc();
 // (strict: a non-member user must not match feedback whose member_id is NULL)
 if (!$is_admin && ((int)$member_id <= 0 || (int)$feedback['member_id'] !== (int)$member_id)) {
     $_SESSION['error'] = "You don't have permission to view this feedback.";
-    header("Location: my-feedback.php");
+    header("Location: my-feedback");
     exit();
 }
 

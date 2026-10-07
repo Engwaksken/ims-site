@@ -11,7 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../login");
     exit();
 }
 
@@ -19,14 +19,14 @@ check_role(['Administrator', 'Programs Lead', 'MEAL Lead', 'Operations/Admin']);
 
 /* -- Only handle POST ------------------------------------------------- */
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['generate_report'])) {
-    header("Location: ../generate-report.php");
+    header("Location: ../generate-report");
     exit();
 }
 
 /* -- Helper ----------------------------------------------------------- */
 function bail(string $msg): never {
     send_notification($_SESSION['user_id'], $msg, 'danger');
-    header("Location: ../generate-report.php");
+    header("Location: ../generate-report");
     exit();
 }
 
@@ -92,7 +92,7 @@ log_action(
 /* -- Build the view-report URL (shared by HTML, PDF and Excel) -------- */
 $scheme    = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $host      = $_SERVER['HTTP_HOST'];
-$base_path = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/');
+$base_path = preg_replace('#/legacy$#', '', rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/'));
 
 $query_params = array_filter([
     'type'       => $report_type,
@@ -104,10 +104,10 @@ $query_params = array_filter([
 ]);
 
 $report_url = $scheme . '://' . $host . $base_path
-            . '/view-report.php?' . http_build_query($query_params);
+            . '/view-report?' . http_build_query($query_params);
 
 /* ----------------------------------------------------------------------
-   PDF  — include view-report.php directly (no cURL, no loopback)
+   PDF  ï¿½ include view-report.php directly (no cURL, no loopback)
    ---------------------------------------------------------------------- */
 if ($format === 'pdf') {
 
@@ -323,9 +323,9 @@ tr, .panel, .card  { page-break-inside: avoid !important; }
     <h1>' . htmlspecialchars($report_label) . '</h1>
     <p>'
         . htmlspecialchars($scope_label)
-        . ' &nbsp;·&nbsp; Period: ' . htmlspecialchars($start_date) . ' — ' . htmlspecialchars($end_date)
-        . ' &nbsp;·&nbsp; Generated: ' . date('d M Y H:i')
-        . ' &nbsp;·&nbsp; By: ' . htmlspecialchars($_SESSION['username'] ?? 'System')
+        . ' &nbsp;ï¿½&nbsp; Period: ' . htmlspecialchars($start_date) . ' ï¿½ ' . htmlspecialchars($end_date)
+        . ' &nbsp;ï¿½&nbsp; Generated: ' . date('d M Y H:i')
+        . ' &nbsp;ï¿½&nbsp; By: ' . htmlspecialchars($_SESSION['username'] ?? 'System')
     . '</p>
 </div>
 <hr class="pdf-meta-divider">';
@@ -389,5 +389,5 @@ $redirect_params = http_build_query(array_filter([
     'format'     => $format,
 ], fn($v) => $v !== null && $v !== ''));
 
-header("Location: ../view-report.php?{$redirect_params}");
+header("Location: ../view-report?{$redirect_params}");
 exit();

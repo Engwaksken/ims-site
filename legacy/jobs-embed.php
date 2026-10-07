@@ -434,9 +434,9 @@ body {
             if (!empty($j['apply_url'])) {
                 $applyHref = e($j['apply_url']);
             } elseif ($applyBase !== '') {
-                $applyHref = e($applyBase) . '/apply-job.php?job_id=' . (int)$j['job_id'];
+                $applyHref = e($applyBase) . '/apply-job?job_id=' . (int)$j['job_id'];
             } else {
-                $applyHref = 'apply-job.php?job_id=' . (int)$j['job_id'];
+                $applyHref = 'apply-job?job_id=' . (int)$j['job_id'];
             }
 
             $toList   = fn($txt) => array_filter(array_map('trim', preg_split('/\r?\n/', $txt ?? '')));

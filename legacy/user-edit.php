@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         exit;
     }
     ?>
-    <form id="editUserForm" action="user-edit.php?id=<?= $user_id ?>" method="POST">
+    <form id="editUserForm" action="user-edit?id=<?= $user_id ?>" method="POST">
 
         <div class="form-group">
             <label>Username</label>

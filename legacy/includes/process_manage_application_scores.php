@@ -12,14 +12,14 @@ if (
     !in_array((string)$_SESSION['role'], ['Administrator'], true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: dashboard.php');
+    header('Location: ../dashboard');
     exit();
 }
 
 function redirectBack(string $message, bool $success = false): never
 {
     $_SESSION[$success ? 'success' : 'error'] = $message;
-    header('Location: manage_application_scores.php');
+    header('Location: ../manage_application_scores');
     exit();
 }
 

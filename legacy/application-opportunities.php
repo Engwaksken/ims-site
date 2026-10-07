@@ -172,7 +172,7 @@ $total_apps = array_sum(array_map(fn($o) => (int)$o['total_applications'], $oppo
             <select name="type" class="form-control"><option value="">All Types</option><?php foreach($allowed_types as $type): ?><option value="<?= h($type) ?>" <?= $filter_type===$type?'selected':'' ?>><?= h($type) ?></option><?php endforeach; ?></select>
             <select name="status" class="form-control"><option value="">All Statuses</option><?php foreach($allowed_statuses as $status): ?><option value="<?= h($status) ?>" <?= $filter_status===$status?'selected':'' ?>><?= h($status) ?></option><?php endforeach; ?></select>
             <button class="btn btn-primary btn-sm"><i class="fas fa-filter"></i> Filter</button>
-            <?php if ($filter_status !== '' || $filter_type !== '' || $filter_cohort > 0): ?><a href="application-opportunities.php" class="btn btn-secondary btn-sm">Clear</a><?php endif; ?>
+            <?php if ($filter_status !== '' || $filter_type !== '' || $filter_cohort > 0): ?><a href="application-opportunities" class="btn btn-secondary btn-sm">Clear</a><?php endif; ?>
         </form>
     </div>
 
@@ -203,13 +203,13 @@ $total_apps = array_sum(array_map(fn($o) => (int)$o['total_applications'], $oppo
                     </div>
                     <?php if ($desc): ?><p class="opp-desc"><?= h($desc) ?></p><?php endif; ?>
                     <div class="opp-actions">
-                        <a href="view-opportunity.php?id=<?= (int)$opp['opportunity_id'] ?>" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> View</a>
-                        <a href="manage-applications.php?opportunity_id=<?= (int)$opp['opportunity_id'] ?>" class="btn btn-info btn-sm"><i class="fas fa-file-alt"></i> Applications</a>
+                        <a href="view-opportunity?id=<?= (int)$opp['opportunity_id'] ?>" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> View</a>
+                        <a href="manage-applications?opportunity_id=<?= (int)$opp['opportunity_id'] ?>" class="btn btn-info btn-sm"><i class="fas fa-file-alt"></i> Applications</a>
                         <?php if($status==='Draft'): ?><button type="button" onclick="publishOpportunity(<?= (int)$opp['opportunity_id'] ?>)" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Publish</button><?php endif; ?>
                         <?php if($status==='Published'): ?><button type="button" onclick="closeOpportunity(<?= (int)$opp['opportunity_id'] ?>)" class="btn btn-warning btn-sm"><i class="fas fa-lock"></i> Close</button><?php endif; ?>
                         <?php if($status==='Closed'): ?><a href="includes/opportunity-process.php?action=reopen&id=<?= (int)$opp['opportunity_id'] ?>&csrf_token=<?= h(csrf_token()) ?>" class="btn btn-success btn-sm" onclick="return confirm('Reopen this opportunity?')"><i class="fas fa-unlock"></i> Reopen</a><?php endif; ?>
                         <?php if($status!=='Completed'): ?><a href="includes/opportunity-process.php?action=complete&id=<?= (int)$opp['opportunity_id'] ?>&csrf_token=<?= h(csrf_token()) ?>" class="btn btn-dark btn-sm" onclick="return confirm('Mark as completed?')"><i class="fas fa-flag-checkered"></i> Complete</a><?php endif; ?>
-                        <a href="edit-opportunity.php?id=<?= (int)$opp['opportunity_id'] ?>" class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                        <a href="edit-opportunity?id=<?= (int)$opp['opportunity_id'] ?>" class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i> Edit</a>
                         <a href="includes/opportunity-process.php?action=toggle_featured&id=<?= (int)$opp['opportunity_id'] ?>&csrf_token=<?= h(csrf_token()) ?>" class="btn btn-light btn-sm"><i class="fas fa-star"></i> <?= !empty($opp['is_featured'])?'Unfeature':'Feature' ?></a>
                         <?php if($status==='Draft'): ?><a href="includes/opportunity-process.php?action=delete&id=<?= (int)$opp['opportunity_id'] ?>&csrf_token=<?= h(csrf_token()) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this draft opportunity?')"><i class="fas fa-trash"></i> Delete</a><?php endif; ?>
                     </div>

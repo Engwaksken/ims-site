@@ -96,9 +96,19 @@ function isBootstrapModal(el) {
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
+        modal._returnFocus = document.activeElement;
         modal.classList.add('show');
+        modal.removeAttribute('aria-hidden');
         document.body.style.overflow = 'hidden';
         scheduleTableWrap(); // tables inside the modal are measurable now
+
+        // Move focus into the dialog: first form field, else the close button.
+        const field = modal.querySelector(
+            'input:not([type="hidden"]):not([disabled]):not([readonly]), select:not([disabled]), textarea:not([disabled]), .modal-close, button'
+        );
+        if (field) {
+            window.setTimeout(() => field.focus(), 60);
+        }
     }
 }
 
@@ -108,7 +118,14 @@ function closeModal(modal) {
     }
     if (modal) {
         modal.classList.remove('show');
-        document.body.style.overflow = '';
+        if (!document.querySelector('.modal.show')) {
+            document.body.style.overflow = '';
+        }
+        const opener = modal._returnFocus;
+        modal._returnFocus = null;
+        if (opener && typeof opener.focus === 'function' && document.contains(opener)) {
+            opener.focus();
+        }
     }
 }
 

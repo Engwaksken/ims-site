@@ -118,7 +118,7 @@ $valid_types = [
 
 if (!$report_type || !in_array($report_type, $valid_types, true)) {
     if (!$pdf_mode) {
-        header('Location: generate-report.php');
+        header('Location: generate-report');
         exit;
     }
 
@@ -1024,7 +1024,7 @@ endif;
             </div>
 
             <div class="hero-actions no-print" style="display:flex;gap:8px;flex-wrap:wrap;">
-                <a href="generate-report.php" class="btn btn-primary" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);">
+                <a href="generate-report" class="btn btn-primary" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
                 <button onclick="window.print()" class="btn btn-primary" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);">

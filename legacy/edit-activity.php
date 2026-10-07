@@ -7,7 +7,7 @@ require_once 'includes/config.php';
    AUTH GUARD
 ---------------------------------------------------------- */
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -16,7 +16,7 @@ $plan_id = (int)($_GET['id'] ?? 0);
 
 if ($plan_id <= 0) {
     $_SESSION['activity_error'] = 'No activity plan specified.';
-    header('Location: my-activities.php');
+    header('Location: my-activities');
     exit();
 }
 
@@ -50,13 +50,13 @@ $stmt->close();
 
 if (!$plan) {
     $_SESSION['activity_error'] = 'Activity plan not found or access denied.';
-    header('Location: my-activities.php');
+    header('Location: my-activities');
     exit();
 }
 
 if (!in_array(($plan['status'] ?? 'draft'), ['draft', 'rejected'], true)) {
     $_SESSION['activity_error'] = 'Only draft or rejected activity plans can be edited.';
-    header('Location: view-activity.php?id=' . $plan_id);
+    header('Location: view-activity?id=' . $plan_id);
     exit();
 }
 
@@ -209,7 +209,7 @@ textarea.form-control{min-height:90px;resize:vertical}
 <div class="page-wrap">
 
     <div class="topbar">
-        <a href="view-activity.php?id=<?= $plan_id ?>">? Back to Activity Plan</a>
+        <a href="view-activity?id=<?= $plan_id ?>">? Back to Activity Plan</a>
     </div>
 
     <div class="hero">
@@ -269,7 +269,7 @@ textarea.form-control{min-height:90px;resize:vertical}
         </div>
 
         <div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap">
-            <a href="view-activity.php?id=<?= $plan_id ?>" class="btn btn-outline">Cancel</a>
+            <a href="view-activity?id=<?= $plan_id ?>" class="btn btn-outline">Cancel</a>
             <button type="submit" class="btn btn-outline">Save Draft</button>
             <button type="submit" name="submit_plan" value="1" class="btn btn-green" onclick="return confirm('Submit this activity plan for review?')">Save & Submit</button>
         </div>

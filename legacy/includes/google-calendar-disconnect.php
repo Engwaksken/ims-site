@@ -44,7 +44,7 @@ $_SESSION['success'] =
     'Google Calendar disconnected successfully.';
 
 header(
-    'Location: ../settings.php?tab=google'
+    'Location: ../settings?tab=google'
 );
 
 exit;

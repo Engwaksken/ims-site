@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 function redirect_maintenance(): never
 {
-    header('Location: asset_maintenance.php');
+    header('Location: asset_maintenance');
     exit;
 }
 

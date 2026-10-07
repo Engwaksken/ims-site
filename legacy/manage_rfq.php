@@ -22,7 +22,7 @@ $procurement_id = (int)($_GET['procurement_id'] ?? 0);
 
 if ($procurement_id <= 0) {
     $_SESSION['error'] = 'Invalid procurement request selected.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -44,13 +44,13 @@ $stmt->close();
 
 if (!$procurement) {
     $_SESSION['error'] = 'Procurement request not found.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
 if ($procurement['status'] !== 'Approved' && $procurement['status'] !== 'RFQ Created') {
     $_SESSION['error'] = 'RFQ can only be created for approved procurement requests.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($existing) {
             $_SESSION['error'] = 'RFQ already exists for this procurement request.';
-            header('Location: manage_rfq.php?procurement_id=' . $procurement_id);
+            header('Location: manage_rfq?procurement_id=' . $procurement_id);
             exit;
         }
 
@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->close();
         }
 
-        header('Location: manage_rfq.php?procurement_id=' . $procurement_id);
+        header('Location: manage_rfq?procurement_id=' . $procurement_id);
         exit;
     }
 }
@@ -150,7 +150,7 @@ $stmt->close();
         </div>
 
         <div class="hero-actions">
-            <a href="manage_procurement.php" class="btn btn-primary">
+            <a href="manage_procurement" class="btn btn-primary">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
         </div>
@@ -202,11 +202,11 @@ $stmt->close();
                 <p><strong>Created:</strong> <?= date('d M Y H:i', strtotime($rfq['created_at'])) ?></p>
 
                 <div class="actions">
-                    <a href="manage_suppliers.php?rfq_id=<?= (int)$rfq['rfq_id'] ?>" class="btn btn-soft">
+                    <a href="manage_suppliers?rfq_id=<?= (int)$rfq['rfq_id'] ?>" class="btn btn-soft">
                         <i class="fas fa-users"></i> Invite Suppliers
                     </a>
 
-                    <a href="manage_quotations.php?rfq_id=<?= (int)$rfq['rfq_id'] ?>" class="btn btn-dark">
+                    <a href="manage_quotations?rfq_id=<?= (int)$rfq['rfq_id'] ?>" class="btn btn-dark">
                         <i class="fas fa-scale-balanced"></i> Quotations
                     </a>
                 </div>

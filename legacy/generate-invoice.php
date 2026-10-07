@@ -9,7 +9,7 @@ use Dompdf\Options;
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -21,7 +21,7 @@ $is_admin = in_array($_SESSION['role'], ['Administrator', 'Operations/Admin']);
 // Get payment ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     $_SESSION['error'] = "Payment ID not provided.";
-    header("Location: payment-history.php");
+    header("Location: payment-history");
     exit();
 }
 
@@ -66,7 +66,7 @@ $result = $conn->query($query);
 
 if (!$result || $result->num_rows == 0) {
     $_SESSION['error'] = "Payment not found or access denied.";
-    header("Location: payment-history.php");
+    header("Location: payment-history");
     exit();
 }
 

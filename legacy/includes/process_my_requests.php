@@ -11,7 +11,7 @@ date_default_timezone_set('Africa/Nairobi');
 
 function redirect_my_requests(): never
 {
-    header('Location: ../my_requests.php');
+    header('Location: ../my_requests');
     exit;
 }
 

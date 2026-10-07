@@ -8,7 +8,7 @@ require_once 'config.php';
 function redirect(string $msg, bool $success = true, string $extra = ''): never
 {
     $_SESSION[$success ? 'success' : 'error'] = $msg;
-    header('Location: ../hub-visitors.php' . ($extra ? "?$extra" : ''));
+    header('Location: ../hub-visitors' . ($extra ? "?$extra" : ''));
     exit();
 }
 

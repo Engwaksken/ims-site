@@ -202,7 +202,7 @@ if (!empty($scoreRows)) {
 function tabUrl(int $rid, int $tabId, string $q = '', int $pg = 1): string {
     $p = ['reviewer_id' => $rid, 'tab' => $tabId, 'page' => $pg];
     if ($q !== '') $p['search'] = $q;
-    return 'manage_reviewer_scores.php?' . http_build_query($p);
+    return 'manage_reviewer_scores?' . http_build_query($p);
 }
 function pgUrl(int $rid, int $tabId, int $pg, string $q): string {
     return tabUrl($rid, $tabId, $q, $pg);
@@ -370,7 +370,7 @@ foreach ($reviewTypes as $rt) {
         <div class="hero-actions" style="font-size:13px;opacity:.85;line-height:1.8;text-align:right;position:relative;z-index:1;">
             <div>Reviewer ID: <strong>#<?= $reviewerId ?></strong></div>
             <div>Email: <strong><?= e($reviewer['email'] ?? '-') ?></strong></div>
-            <a href="progress-board.php" class="btn btn-primary" style="margin-top:6px;">
+            <a href="progress-board" class="btn btn-primary" style="margin-top:6px;">
                 <i class="fas fa-arrow-left"></i> Back to Report
             </a>
         </div>

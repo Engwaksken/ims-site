@@ -18,7 +18,7 @@ if (
     !in_array((string)($_SESSION['role'] ?? ''), $allowed_roles, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit();
 }
 
@@ -612,7 +612,7 @@ function build_page_url(int $pageNo): string
         'per_page'       => $per_page,
     ], fn($v) => $v !== '' && $v !== 0 && $v !== '0'));
 
-    return 'startups-shortlisting.php' . ($qs ? '?' . $qs : '');
+    return 'startups-shortlisting' . ($qs ? '?' . $qs : '');
 }
 ?>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -630,7 +630,7 @@ function build_page_url(int $pageNo): string
                 <p>Review scores by review type, compare applicants, and make shortlisting decisions.</p>
             </div>
             <div class="sl-hero-right">
-                <a href="manage-reviewers.php?tab=status" class="btn-ghost-hero">
+                <a href="manage-reviewers?tab=status" class="btn-ghost-hero">
                     <i class="fas fa-user-check"></i> Reviewer Status
                 </a>
             </div>
@@ -665,7 +665,7 @@ function build_page_url(int $pageNo): string
             </div>
         </div>
 
-        <form method="GET" action="startups-shortlisting.php" id="filter-form">
+        <form method="GET" action="startups-shortlisting" id="filter-form">
             <div class="sl-toolbar">
                 <select name="opportunity_id" onchange="this.form.submit()">
                     <option value="">All Opportunities</option>
@@ -720,7 +720,7 @@ function build_page_url(int $pageNo): string
                 <div class="toolbar-gap"></div>
 
                 <?php if ($filter_opp || $filter_review_type || $filter_rec || $filter_status !== 'all' || $q !== '' || $per_page !== 10): ?>
-                    <a href="startups-shortlisting.php" class="btn-sl btn-outline btn-sm">
+                    <a href="startups-shortlisting" class="btn-sl btn-outline btn-sm">
                         <i class="fas fa-times"></i> Clear
                     </a>
                 <?php endif; ?>
@@ -868,7 +868,7 @@ function build_page_url(int $pageNo): string
 
                         <div class="card-actions">
                             <?php if ($rtid > 0): ?>
-                                <a href="review-applicant.php?id=<?= $aid ?>&rt=<?= $rtid ?>" class="btn-sl btn-amber btn-sm">
+                                <a href="review-applicant?id=<?= $aid ?>&rt=<?= $rtid ?>" class="btn-sl btn-amber btn-sm">
                                     <i class="fas fa-star-half-alt"></i> Review Applicant
                                 </a>
                             <?php else: ?>
@@ -877,12 +877,12 @@ function build_page_url(int $pageNo): string
                                 </button>
                             <?php endif; ?>
 
-                            <a href="view-application.php?id=<?= $aid ?>" class="btn-sl btn-outline btn-sm">
+                            <a href="view-application?id=<?= $aid ?>" class="btn-sl btn-outline btn-sm">
                                 <i class="fas fa-eye"></i> View Application
                             </a>
 
                             <?php if ($rtid > 0): ?>
-                                <a href="risk_rating.php?id=<?= $aid ?>&rt=<?= $rtid ?>" class="btn-sl btn-amber btn-sm">
+                                <a href="risk_rating?id=<?= $aid ?>&rt=<?= $rtid ?>" class="btn-sl btn-amber btn-sm">
                                     <i class="fas fa-chart-line"></i> Risk Rating
                                 </a>
                             <?php endif; ?>
@@ -893,11 +893,11 @@ function build_page_url(int $pageNo): string
                             
                             
                             
-<a href="ai-review-applicant.php?id=<?= $aid ?>&rt=<?= $rtid ?>" class="btn btn-primary">
+<a href="ai-review-applicant?id=<?= $aid ?>&rt=<?= $rtid ?>" class="btn btn-primary">
     <i class="fas fa-robot"></i> AI Review
 </a>
 
-<a href="ai-review-comparison.php?id=<?= $aid ?>&rt=<?= $rtid ?>" class="btn btn-secondary">
+<a href="ai-review-comparison?id=<?= $aid ?>&rt=<?= $rtid ?>" class="btn btn-secondary">
     <i class="fas fa-robot"></i> AI Vs Human Review
 </a>
                         </div>

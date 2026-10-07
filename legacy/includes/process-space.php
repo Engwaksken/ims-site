@@ -6,7 +6,7 @@ require_once 'config.php';
 // Check if user is logged in and has admin/operations access
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Administrator', 'Operations/Admin'])) {
     $_SESSION['error'] = "Access denied.";
-    header("Location: ../manage-space.php");
+    header("Location: ../manage-space");
     exit();
 }
 
@@ -29,7 +29,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'add') {
     // Validate required fields
     if (empty($space_type) || empty($space_name) || $capacity < 1) {
         $_SESSION['error'] = "Space type, name, and capacity are required.";
-        header("Location: ../manage-space.php");
+        header("Location: ../manage-space");
         exit();
     }
     
@@ -76,7 +76,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'add') {
         $_SESSION['error'] = "Error adding space: " . $conn->error;
     }
     
-    header("Location: ../manage-space.php");
+    header("Location: ../manage-space");
     exit();
 }
 
@@ -98,7 +98,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'edit') {
     // Validate required fields
     if (empty($space_type) || empty($space_name) || $capacity < 1) {
         $_SESSION['error'] = "Space type, name, and capacity are required.";
-        header("Location: ../manage-space.php?edit=$availability_id");
+        header("Location: ../manage-space?edit=$availability_id");
         exit();
     }
     
@@ -106,7 +106,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'edit') {
     $check = $conn->query("SELECT space_image FROM space_availability WHERE availability_id = $availability_id");
     if ($check->num_rows == 0) {
         $_SESSION['error'] = "Space not found.";
-        header("Location: ../manage-space.php");
+        header("Location: ../manage-space");
         exit();
     }
     
@@ -162,7 +162,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'edit') {
         $_SESSION['error'] = "Error updating space: " . $conn->error;
     }
     
-    header("Location: ../manage-space.php");
+    header("Location: ../manage-space");
     exit();
 }
 
@@ -192,7 +192,7 @@ if (isset($_GET['toggle_availability'])) {
         $_SESSION['error'] = "Error updating availability: " . $conn->error;
     }
     
-    header("Location: ../manage-space.php");
+    header("Location: ../manage-space");
     exit();
 }
 
@@ -208,7 +208,7 @@ if (isset($_GET['delete_space']) && $_SESSION['role'] == 'Administrator') {
     
     if ($result->num_rows == 0) {
         $_SESSION['error'] = "Space not found.";
-        header("Location: ../manage-space.php");
+        header("Location: ../manage-space");
         exit();
     }
     
@@ -232,12 +232,12 @@ if (isset($_GET['delete_space']) && $_SESSION['role'] == 'Administrator') {
         $_SESSION['error'] = "Error deleting space: " . $conn->error;
     }
     
-    header("Location: ../manage-space.php");
+    header("Location: ../manage-space");
     exit();
 }
 
 // If no valid action, redirect
 $_SESSION['error'] = "Invalid action.";
-header("Location: ../manage-space.php");
+header("Location: ../manage-space");
 exit();
 ?>

@@ -6,7 +6,7 @@ require_once 'includes/config.php';
 require_once 'includes/jobs.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -31,7 +31,7 @@ include 'includes/header.php';
             <p>Create, edit, and manage job postings. Toggle featured / urgent or copy the embed code.</p>
         </div>
         <div class="jm-hdr-actions">
-            <a href="jobs-listings.php" target="_blank" class="jm-btn jm-btn-ghost">
+            <a href="jobs-listings" target="_blank" class="jm-btn jm-btn-ghost">
                 <i class="fas fa-external-link-alt"></i> View Listings
             </a>
             <button class="jm-btn jm-btn-primary" onclick="openCreateModal()">
@@ -211,7 +211,7 @@ include 'includes/header.php';
                     <td>
                         <div class="jm-acts">
                             <button class="jm-act jm-act-view" title="View listing"
-                                    onclick="window.open('jobs-listings.php#job-<?= $j['job_id'] ?>','_blank')">
+                                    onclick="window.open('jobs-listings#job-<?= $j['job_id'] ?>','_blank')">
                                 <i class="fas fa-eye"></i>
                             </button>
                             <button class="jm-act jm-act-edit" title="Edit"

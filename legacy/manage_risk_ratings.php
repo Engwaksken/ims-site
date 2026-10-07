@@ -28,7 +28,7 @@ if (
     !in_array((string)$_SESSION['role'], $allowed_roles, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit();
 }
 
@@ -110,7 +110,7 @@ if (
 
     if ($deleteId <= 0) {
         $_SESSION['error'] = 'Invalid risk rating ID.';
-        header('Location: manage_risk_ratings.php');
+        header('Location: manage_risk_ratings');
         exit();
     }
 
@@ -186,7 +186,7 @@ if (
         'page'           => ((int)($_POST['page'] ?? 1) > 1) ? (int)$_POST['page'] : '',
     ], static fn($v) => $v !== '' && $v !== null && $v !== 0));
 
-    header('Location: manage_risk_ratings.php' . ($qs ? '?' . $qs : ''));
+    header('Location: manage_risk_ratings' . ($qs ? '?' . $qs : ''));
     exit();
 }
 
@@ -492,7 +492,7 @@ function buildSigArea(string $prefix, bool $canSign, array $allowedRoles, string
             <button type="button" class="btn btn-light border" onclick="closeDeleteModal()">
                 <i class="fas fa-times me-1"></i> Cancel
             </button>
-            <form method="post" action="manage_risk_ratings.php" id="deleteForm" style="display:inline">
+            <form method="post" action="manage_risk_ratings" id="deleteForm" style="display:inline">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="rr_id" id="deleteRrId" value="">
                 <input type="hidden" name="search" value="<?= h($search) ?>">
@@ -643,17 +643,17 @@ function buildSigArea(string $prefix, bool $canSign, array $allowedRoles, string
                 <div class="sub">Due diligence risk assessments for all startups</div>
             </div>
             <div class="d-flex gap-2 flex-wrap">
-                <a href="risk_ratings_report.php" class="btn btn-success">
+                <a href="risk_ratings_report" class="btn btn-success">
                     <i class="fas fa-file-pdf me-1"></i> Generate Risk Report
                 </a>
-                <a href="startups-shortlisting.php" class="btn btn-light border">
+                <a href="startups-shortlisting" class="btn btn-light border">
                     <i class="fas fa-arrow-left me-1"></i> Back to Shortlisting
                 </a>
             </div>
         </div>
 
         <div class="mrr-stats">
-            <a href="risk_ratings_report.php" class="stat-card-link" title="View full Risk Ratings Report">
+            <a href="risk_ratings_report" class="stat-card-link" title="View full Risk Ratings Report">
                 <div class="stat-card c-blue">
                     <div class="sl">Total <i class="fas fa-external-link-alt link-icon"></i></div>
                     <div class="sv"><?= number_format((int)($stats['total'] ?? 0)) ?></div>
@@ -690,7 +690,7 @@ function buildSigArea(string $prefix, bool $canSign, array $allowedRoles, string
         </div>
 
         <div class="mrr-filters">
-            <form method="get" action="manage_risk_ratings.php">
+            <form method="get" action="manage_risk_ratings">
                 <div class="fg">
                     <label>Search</label>
                     <input type="text" name="search" class="fg-search" placeholder="Startup, email, contact..." value="<?= h($search) ?>">
@@ -733,7 +733,7 @@ function buildSigArea(string $prefix, bool $canSign, array $allowedRoles, string
                         <button type="submit" class="btn btn-primary" style="height:38px;border-radius:10px;">
                             <i class="fas fa-search me-1"></i> Filter
                         </button>
-                        <a href="manage_risk_ratings.php" class="btn btn-light border" style="height:38px;border-radius:10px;display:inline-flex;align-items:center;">
+                        <a href="manage_risk_ratings" class="btn btn-light border" style="height:38px;border-radius:10px;display:inline-flex;align-items:center;">
                             <i class="fas fa-times me-1"></i> Clear
                         </a>
                     </div>
@@ -748,7 +748,7 @@ function buildSigArea(string $prefix, bool $canSign, array $allowedRoles, string
                     <span class="count-pill"><?= number_format($totalRows) ?> record<?= $totalRows !== 1 ? 's' : '' ?></span>
                 </div>
                 <?php if ($search !== '' || $filterStatus !== '' || $filterRating !== '' || $filterOpportunity > 0): ?>
-                    <a href="manage_risk_ratings.php" class="btn btn-sm btn-light border">
+                    <a href="manage_risk_ratings" class="btn btn-sm btn-light border">
                         <i class="fas fa-filter me-1"></i> Filtered - Clear
                     </a>
                 <?php endif; ?>
@@ -880,7 +880,7 @@ function buildSigArea(string $prefix, bool $canSign, array $allowedRoles, string
 
                                     <td>
                                         <div class="action-btns">
-                                            <a href="risk_rating.php?application_id=<?= (int)$rr['application_id'] ?>" class="abtn abtn-edit" title="Edit Risk Rating">
+                                            <a href="risk_rating?application_id=<?= (int)$rr['application_id'] ?>" class="abtn abtn-edit" title="Edit Risk Rating">
                                                 <i class="fas fa-edit"></i>
                                             </a>
 

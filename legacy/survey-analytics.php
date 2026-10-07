@@ -86,7 +86,7 @@ $text_types  = ['text', 'textarea', 'date'];
             <div class="live-pill">
                 <span class="live-dot"></span> Live
             </div>
-            <a href="surveys.php" class="btn btn-primary">
+            <a href="surveys" class="btn btn-primary">
                 <i class="fas fa-arrow-left"></i> Back to Surveys
             </a>
         </div>
@@ -133,7 +133,7 @@ $text_types  = ['text', 'textarea', 'date'];
             <div class="empty-state-icon"><i class="fas fa-chart-pie"></i></div>
             <h3>No questions found</h3>
             <p>Add questions to this survey in the builder to see analytics here.</p>
-            <a href="survey-builder.php?id=<?= $surveyId ?>" class="btn btn-primary">
+            <a href="survey-builder?id=<?= $surveyId ?>" class="btn btn-primary">
                 <i class="fas fa-tools"></i> Go to Builder
             </a>
         </div>

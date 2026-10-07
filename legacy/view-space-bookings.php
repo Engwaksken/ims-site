@@ -4,7 +4,7 @@ include 'includes/header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -16,7 +16,7 @@ $is_member = isset($_SESSION['role']) && $_SESSION['role'] === 'Member';
 
 if (!$is_admin && !$is_member) {
     $_SESSION['error'] = "Access denied.";
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
@@ -384,7 +384,7 @@ if ($is_admin) {
                 <button type="submit" class="btn btn-info">
                     <i class="fas fa-search"></i> Filter
                 </button>
-                <a href="view-space-bookings.php" class="btn btn-secondary">
+                <a href="view-space-bookings" class="btn btn-secondary">
                     <i class="fas fa-times"></i> Clear
                 </a>
             </div>
@@ -451,10 +451,10 @@ if ($is_admin) {
 <!-- Quick Actions -->
 <?php if ($is_member): ?>
 <div style="text-align: center; margin-top: 30px;">
-    <a href="book-space.php" class="btn btn-success btn-lg">
+    <a href="book-space" class="btn btn-success btn-lg">
         <i class="fas fa-plus"></i> Book a Space
     </a>
-    <a href="my-bookings.php" class="btn btn-info btn-lg">
+    <a href="my-bookings" class="btn btn-info btn-lg">
         <i class="fas fa-list"></i> My Bookings
     </a>
 </div>
@@ -462,10 +462,10 @@ if ($is_admin) {
 
 <?php if ($is_admin): ?>
 <div style="text-align: center; margin-top: 30px;">
-    <a href="hub-operations.php?tab=bookings" class="btn btn-primary btn-lg">
+    <a href="hub-operations?tab=bookings" class="btn btn-primary btn-lg">
         <i class="fas fa-cog"></i> Manage Bookings
     </a>
-    <a href="manage-space.php" class="btn btn-info btn-lg">
+    <a href="manage-space" class="btn btn-info btn-lg">
         <i class="fas fa-door-open"></i> Manage Spaces
     </a>
 </div>
@@ -597,7 +597,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         },
         eventClick: function(info) {
-            window.location.href = 'view-booking.php?id=' + info.event.id;
+            window.location.href = 'view-booking?id=' + info.event.id;
         },
         datesSet: function(dateInfo) {
             // Update month display
@@ -756,7 +756,7 @@ function loadListView() {
                             </div>
                         </div>
                         <div style="margin-top: 15px;">
-                            <a href="view-booking.php?id=${booking.booking_id}" class="btn btn-info btn-sm">
+                            <a href="view-booking?id=${booking.booking_id}" class="btn btn-info btn-sm">
                                 <i class="fas fa-eye"></i> View Details
                             </a>
                         </div>

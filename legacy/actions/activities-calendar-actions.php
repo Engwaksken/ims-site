@@ -25,7 +25,7 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
 
 $conn->set_charset('utf8mb4');
 
-function redirect_with_message(string $message, string $type = 'danger', string $location = '../activities-calendar.php'): void
+function redirect_with_message(string $message, string $type = 'danger', string $location = '../activities-calendar'): void
 {
     if (function_exists('send_notification') && isset($_SESSION['user_id'])) {
         send_notification((int)$_SESSION['user_id'], $message, $type);
@@ -201,7 +201,7 @@ $userId = (int)($_SESSION['user_id'] ?? 0);
 $userRole = (string)($_SESSION['role'] ?? '');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../activities-calendar.php');
+    header('Location: ../activities-calendar');
     exit();
 }
 
@@ -337,10 +337,10 @@ if (isset($_POST['add_activity'])) {
 */
 if (isset($_POST['edit_activity'])) {
     $activityId = (int)post_string('activity_id', '0');
-    $editLocation = "../activities-calendar.php?edit={$activityId}";
+    $editLocation = "../activities-calendar?edit={$activityId}";
 
     if ($activityId <= 0 || !activity_exists($conn, $activityId)) {
-        redirect_with_message('Invalid activity selected.', 'danger', '../activities-calendar.php');
+        redirect_with_message('Invalid activity selected.', 'danger', '../activities-calendar');
     }
 
     $entityId = null;
@@ -448,5 +448,5 @@ if (isset($_POST['delete_activity'])) {
     redirect_with_message('Activity deleted successfully.', 'success');
 }
 
-header('Location: ../activities-calendar.php');
+header('Location: ../activities-calendar');
 exit();

@@ -4,14 +4,14 @@ require_once 'config.php';
 
 if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'Administrator') {
     $_SESSION['error'] = "Access denied.";
-    header("Location: ../progress-board.php");
+    header("Location: ../progress-board");
     exit();
 }
 
 $application_id = (int)($_POST['application_id'] ?? 0);
 if ($application_id <= 0) {
     $_SESSION['error'] = "Invalid application.";
-    header("Location: ../progress-board.php");
+    header("Location: ../progress-board");
     exit();
 }
 
@@ -33,7 +33,7 @@ $stmt = $conn->prepare($sql);
 if (!$stmt) {
     error_log("Shortlist prepare failed: " . $conn->error);
     $_SESSION['error'] = "System error. Please try again.";
-    header("Location: ../progress-board.php");
+    header("Location: ../progress-board");
     exit();
 }
 
@@ -43,12 +43,12 @@ if (!$stmt->execute()) {
     error_log("Shortlist execute failed: " . $stmt->error);
     $_SESSION['error'] = "Failed to shortlist application.";
     $stmt->close();
-    header("Location: ../progress-board.php");
+    header("Location: ../progress-board");
     exit();
 }
 
 $stmt->close();
 $_SESSION['success'] = "Application shortlisted for Phase 2.";
 
-header("Location: ../progress-board.php");
+header("Location: ../progress-board");
 exit;

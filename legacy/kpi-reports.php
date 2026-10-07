@@ -417,7 +417,7 @@ $needs_attention = array_slice($needs_attention, 0, 5);
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-filter"></i> Apply Filters
                 </button>
-                <a href="kpi-reports.php" class="btn btn-secondary" style="margin-left: 10px;">
+                <a href="kpi-reports" class="btn btn-secondary" style="margin-left: 10px;">
                     <i class="fas fa-times"></i> Clear
                 </a>
             </div>
@@ -772,7 +772,7 @@ new Chart(targetActualCtx, {
 });
 
 function exportReport() {
-    window.location.href = 'export-kpi-report-pdf.php?year=<?php echo $filter_year; ?>&department=<?php echo $filter_department; ?>&user=<?php echo $filter_user; ?>';
+    window.location.href = 'export-kpi-report-pdf?year=<?php echo $filter_year; ?>&department=<?php echo $filter_department; ?>&user=<?php echo $filter_user; ?>';
 }
 </script>
 

@@ -33,8 +33,8 @@ if (
 ) {
     $returnTo =
         $type === 'activity'
-            ? '../activities-calendar.php'
-            : '../events.php';
+            ? '../activities-calendar'
+            : '../events';
 }
 
 if ($id < 1) {

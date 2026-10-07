@@ -35,7 +35,7 @@ $currentFolder = $currentFolderId > 0
 
 if ($currentFolderId > 0 && !$currentFolder) {
     $_SESSION['error'] = 'Folder not found or you do not have permission to view it.';
-    header('Location: documents.php');
+    header('Location: documents');
     exit;
 }
 
@@ -1358,11 +1358,11 @@ $autoOpenUpload = (
 </div>
 
 <div class="doc-breadcrumbs">
-    <a href="documents.php"><i class="fas fa-house"></i> Documents</a>
+    <a href="documents"><i class="fas fa-house"></i> Documents</a>
 
     <?php foreach ($folderPath as $crumb): ?>
         <i class="fas fa-chevron-right"></i>
-        <a href="documents.php?folder=<?= (int)$crumb['folder_id'] ?>">
+        <a href="documents?folder=<?= (int)$crumb['folder_id'] ?>">
             <?= h($crumb['folder_name']) ?>
         </a>
     <?php endforeach; ?>
@@ -1397,7 +1397,7 @@ $autoOpenUpload = (
     </div>
 <?php endif; ?>
 
-<form method="GET" action="documents.php" class="doc-filter-row">
+<form method="GET" action="documents" class="doc-filter-row">
     <?php if ($currentFolderId > 0): ?>
         <input type="hidden" name="folder" value="<?= $currentFolderId ?>">
     <?php endif; ?>
@@ -1443,7 +1443,7 @@ $autoOpenUpload = (
         </button>
 
         <a
-            href="<?= $currentFolderId > 0 ? 'documents.php?folder=' . $currentFolderId : 'documents.php' ?>"
+            href="<?= $currentFolderId > 0 ? 'documents?folder=' . $currentFolderId : 'documents' ?>"
             class="btn btn-secondary btn-sm"
         >
             Clear
@@ -1511,7 +1511,7 @@ $autoOpenUpload = (
                 "program_id" => (int)($folder["program_id"] ?? 0),
                 "parent_folder_id" => (int)($folder["parent_folder_id"] ?? 0),
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>'
-            ondblclick="window.location.href='documents.php?folder=<?= $folderId ?>'"
+            ondblclick="window.location.href='documents?folder=<?= $folderId ?>'"
             oncontextmenu="docShowContextMenu(event, this)"
         >
             <div class="doc-drive-icon">
@@ -3418,7 +3418,7 @@ $autoOpenUpload = (
             docHideContextMenu();
 
             if (action === 'open' && type === 'folder') {
-                window.location.href = 'documents.php?folder=' + id;
+                window.location.href = 'documents?folder=' + id;
                 return;
             }
 

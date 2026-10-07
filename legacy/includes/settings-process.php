@@ -22,7 +22,7 @@ $userId = (int)($_SESSION['user_id'] ?? 0);
 
 function settings_redirect(string $tab): never
 {
-    header('Location: ../settings.php?tab=' . rawurlencode($tab));
+    header('Location: ../settings?tab=' . rawurlencode($tab));
     exit;
 }
 

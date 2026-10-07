@@ -8,7 +8,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 
 if (empty($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 

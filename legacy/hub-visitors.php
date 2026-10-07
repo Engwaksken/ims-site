@@ -8,8 +8,9 @@ require_once __DIR__ . '/includes/auth.php';
 check_role(IMS_STAFF_ROLES);
 // Build shareable public registration URL
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-$base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
-$register_url = rtrim($base_url, '/') . '/visitor-register.php';
+// Pages are served from /legacy/ internally but publicly live at the site root.
+$base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . preg_replace('#/legacy$#', '', rtrim(str_replace('\\', '/', dirname($_SERVER['PHP_SELF'])), '/'));
+$register_url = rtrim($base_url, '/') . '/visitor-register';
 
 // Get filter parameters
 $filter_date    = isset($_GET['date'])    ? sanitize_input($_GET['date'])    : '';
@@ -231,7 +232,7 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
             <button onclick="openModal('qrModal')" class="btn btn-warning">
                 <i class="fas fa-qrcode"></i> Share Form
             </button>
-            <button onclick="window.location.href='export.php?type=hub_visitors'" class="btn btn-success">
+            <button onclick="window.location.href='export?type=hub_visitors'" class="btn btn-success">
                 <i class="fas fa-download"></i> Export
             </button>
         </div>
@@ -266,7 +267,7 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-info"><i class="fas fa-filter"></i> Filter</button>
-                    <a href="hub-visitors.php" class="btn btn-secondary"><i class="fas fa-times"></i> Clear</a>
+                    <a href="hub-visitors" class="btn btn-secondary"><i class="fas fa-times"></i> Clear</a>
                 </div>
             </div>
         </form>
@@ -310,7 +311,7 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
                             <i class="fas fa-inbox" style="font-size:48px;color:#bdc3c7;margin-bottom:15px;display:block;"></i>
                             <p style="color:#7f8c8d;font-size:16px;">No visitors found</p>
                             <?php if ($filter_date || $filter_purpose || $filter_month || $search): ?>
-                                <a href="hub-visitors.php" class="btn btn-primary">
+                                <a href="hub-visitors" class="btn btn-primary">
                                     <i class="fas fa-times"></i> Clear Filters
                                 </a>
                             <?php endif; ?>

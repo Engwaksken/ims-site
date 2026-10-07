@@ -306,7 +306,7 @@ $stats = [
                 <i class="fas fa-plus-circle"></i> New Request
             </button>
             <?php if ($isManager): ?>
-                <a href="procurement_categories.php" class="btn btn-dark">
+                <a href="procurement_categories" class="btn btn-dark">
                     <i class="fas fa-tags"></i> Categories
                 </a>
             <?php endif; ?>
@@ -477,7 +477,7 @@ $stats = [
                                         <?php endif; ?>
 
                                         <!-- TOR -->
-                                        <a class="btn btn-sm btn-gray" href="manage_tor.php?procurement_id=<?= $pid ?>">
+                                        <a class="btn btn-sm btn-gray" href="manage_tor?procurement_id=<?= $pid ?>">
                                             <i class="fas fa-file-alt"></i>
                                         </a>
 
@@ -509,24 +509,24 @@ $stats = [
 
                                         <!-- RFQ -->
                                         <?php if ($isManager && in_array($req['status'],['Approved','RFQ Created','PO Created'],true)): ?>
-                                            <a class="btn btn-sm btn-soft" href="manage_rfq.php?procurement_id=<?= $pid ?>">
+                                            <a class="btn btn-sm btn-soft" href="manage_rfq?procurement_id=<?= $pid ?>">
                                                 <i class="fas fa-file-signature"></i>
                                             </a>
                                         <?php endif; ?>
 
                                         <!-- Suppliers / Quotations -->
                                         <?php if ($isManager && !empty($req['rfq_id'])): ?>
-                                            <a class="btn btn-sm btn-dark" href="manage_suppliers.php?rfq_id=<?= (int)$req['rfq_id'] ?>" title="Suppliers">
+                                            <a class="btn btn-sm btn-dark" href="manage_suppliers?rfq_id=<?= (int)$req['rfq_id'] ?>" title="Suppliers">
                                                 <i class="fas fa-users"></i>
                                             </a>
-                                            <a class="btn btn-sm btn-gray" href="manage_quotations.php?rfq_id=<?= (int)$req['rfq_id'] ?>" title="Quotations">
+                                            <a class="btn btn-sm btn-gray" href="manage_quotations?rfq_id=<?= (int)$req['rfq_id'] ?>" title="Quotations">
                                                 <i class="fas fa-scale-balanced"></i>
                                             </a>
                                         <?php endif; ?>
 
                                         <!-- Delivery -->
                                         <?php if ($isManager && !empty($req['po_id'])): ?>
-                                            <a class="btn btn-sm btn-green" href="manage_delivery.php?po_id=<?= (int)$req['po_id'] ?>" title="Delivery">
+                                            <a class="btn btn-sm btn-green" href="manage_delivery?po_id=<?= (int)$req['po_id'] ?>" title="Delivery">
                                                 <i class="fas fa-truck"></i>
                                             </a>
                                         <?php endif; ?>

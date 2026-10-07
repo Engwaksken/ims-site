@@ -14,13 +14,13 @@ if (
     !in_array((string)$_SESSION['role'], $allowed_roles, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: ../manage-reviewers.php');
+    header('Location: ../manage-reviewers');
     exit();
 }
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
     $_SESSION['error'] = 'Database connection not available.';
-    header('Location: ../manage-reviewers.php');
+    header('Location: ../manage-reviewers');
     exit();
 }
 
@@ -45,7 +45,7 @@ function redirectTo(string $tab = 'assign', array $params = []): never
     }
 
     $query = http_build_query($clean);
-    header('Location: ../manage-reviewers.php' . ($query ? '?' . $query : ''));
+    header('Location: ../manage-reviewers' . ($query ? '?' . $query : ''));
     exit();
 }
 
@@ -90,6 +90,8 @@ function appBaseUrl(): string
     $dir    = str_replace('\\', '/', dirname($script));
 
     $baseDir = rtrim(dirname($dir), '/\\');
+    // Pages are served from /legacy/ internally but publicly live at the site root.
+    $baseDir = preg_replace('#/legacy$#', '', $baseDir);
     if ($baseDir === '.' || $baseDir === DIRECTORY_SEPARATOR) {
         $baseDir = '';
     }
@@ -97,7 +99,7 @@ function appBaseUrl(): string
     return rtrim($scheme . '://' . $host . $baseDir, '/');
 }
 
-function buildLoginUrl(string $fallback = 'dashboard.php'): string
+function buildLoginUrl(string $fallback = 'dashboard'): string
 {
     $base = appBaseUrl();
     return $base . '/' . ltrim($fallback, '/');
@@ -105,7 +107,7 @@ function buildLoginUrl(string $fallback = 'dashboard.php'): string
 
 function buildReviewListUrl(): string
 {
-    return appBaseUrl() . '/manage-reviewers.php?tab=status';
+    return appBaseUrl() . '/manage-reviewers?tab=status';
 }
 
 function sendPlainEmail(string $to, string $subject, string $body): bool
@@ -294,7 +296,7 @@ try {
         }
         $insert->close();
 
-        $loginUrl  = buildLoginUrl('dashboard.php');
+        $loginUrl  = buildLoginUrl('dashboard');
         $reviewUrl = buildReviewListUrl();
 
         $emailsSent = 0;
@@ -398,7 +400,7 @@ try {
         $sent = 0;
         $fail = 0;
 
-        $loginUrl  = buildLoginUrl('dashboard.php');
+        $loginUrl  = buildLoginUrl('dashboard');
         $reviewUrl = buildReviewListUrl();
 
         foreach ($assignment_ids as $aid) {

@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
 
     // Render edit form
     ?>
-    <form id="editProjectForm" action="project-edit.php" method="POST">
+    <form id="editProjectForm" action="project-edit" method="POST">
         <input type="hidden" name="project_id" value="<?= $project['project_id']; ?>">
         <?php include __DIR__.'/project-form-fields.php'; ?>
         <button type="submit" class="btn btn-primary">Update Project</button>

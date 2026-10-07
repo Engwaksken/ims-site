@@ -9,7 +9,7 @@ date_default_timezone_set('Africa/Nairobi');
 
 function redirect_to_assets(): never
 {
-    header('Location: manage_assets.php');
+    header('Location: manage_assets');
     exit;
 }
 

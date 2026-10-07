@@ -30,7 +30,7 @@ if (isset($_POST['add_participant'])) {
     // Validate required fields
     if (empty($first_name) || empty($last_name) || empty($gender)) {
         send_notification($_SESSION['user_id'], 'First name, last name, and gender are required', 'danger');
-        $redirect = $context_return_project ? "../participants.php?project=$context_return_project" : ($context_return_program ? "../participants.php?program=$context_return_program" : "../participants.php");
+        $redirect = $context_return_project ? "../participants?project=$context_return_project" : ($context_return_program ? "../participants?program=$context_return_program" : "../participants");
         header("Location: $redirect");
         exit();
     }
@@ -41,7 +41,7 @@ if (isset($_POST['add_participant'])) {
         $today = strtotime('today');
         if ($dob_timestamp > $today) {
             send_notification($_SESSION['user_id'], 'Date of birth cannot be in the future', 'danger');
-            $redirect = $context_return_project ? "../participants.php?project=$context_return_project" : ($context_return_program ? "../participants.php?program=$context_return_program" : "../participants.php");
+            $redirect = $context_return_project ? "../participants?project=$context_return_project" : ($context_return_program ? "../participants?program=$context_return_program" : "../participants");
             header("Location: $redirect");
             exit();
         }
@@ -56,7 +56,7 @@ if (isset($_POST['add_participant'])) {
         
         if ($check_result->num_rows > 0) {
             send_notification($_SESSION['user_id'], 'A Participant with this name and phone number already exists', 'warning');
-            $redirect = $context_return_project ? "../participants.php?project=$context_return_project" : ($context_return_program ? "../participants.php?program=$context_return_program" : "../participants.php");
+            $redirect = $context_return_project ? "../participants?project=$context_return_project" : ($context_return_program ? "../participants?program=$context_return_program" : "../participants");
             header("Location: $redirect");
             exit();
         }
@@ -124,7 +124,7 @@ if (isset($_POST['add_participant'])) {
         send_notification($_SESSION['user_id'], 'Error adding participant: ' . $conn->error, 'danger');
     }
     
-    $redirect = $context_return_project ? "../participants.php?project=$context_return_project" : ($context_return_program ? "../participants.php?program=$context_return_program" : "../participants.php");
+    $redirect = $context_return_project ? "../participants?project=$context_return_project" : ($context_return_program ? "../participants?program=$context_return_program" : "../participants");
     header("Location: $redirect");
     exit();
 }
@@ -153,7 +153,7 @@ if (isset($_POST['edit_beneficiary'])) {
     // Validate required fields
     if (empty($first_name) || empty($last_name) || empty($gender)) {
         send_notification($_SESSION['user_id'], 'First name, last name, and gender are required', 'danger');
-        $redirect = $context_return_project ? "../participants.php?project=$context_return_project&edit=$beneficiary_id" : ($context_return_program ? "../participants.php?program=$context_return_program&edit=$beneficiary_id" : "../participants.php?edit=$beneficiary_id");
+        $redirect = $context_return_project ? "../participants?project=$context_return_project&edit=$beneficiary_id" : ($context_return_program ? "../participants?program=$context_return_program&edit=$beneficiary_id" : "../participants?edit=$beneficiary_id");
         header("Location: $redirect");
         exit();
     }
@@ -164,7 +164,7 @@ if (isset($_POST['edit_beneficiary'])) {
         $today = strtotime('today');
         if ($dob_timestamp > $today) {
             send_notification($_SESSION['user_id'], 'Date of birth cannot be in the future', 'danger');
-            $redirect = $context_return_project ? "../participants.php?project=$context_return_project&edit=$beneficiary_id" : ($context_return_program ? "../participants.php?program=$context_return_program&edit=$beneficiary_id" : "../participants.php?edit=$beneficiary_id");
+            $redirect = $context_return_project ? "../participants?project=$context_return_project&edit=$beneficiary_id" : ($context_return_program ? "../participants?program=$context_return_program&edit=$beneficiary_id" : "../participants?edit=$beneficiary_id");
             header("Location: $redirect");
             exit();
         }
@@ -182,11 +182,11 @@ if (isset($_POST['edit_beneficiary'])) {
     
     // Check if should redirect to details page
     if (isset($_POST['redirect_to_details']) && $_POST['redirect_to_details'] == '1') {
-        header("Location: ../participant-details.php?id=$beneficiary_id");
+        header("Location: ../participant-details?id=$beneficiary_id");
         exit();
     }
     
-    $redirect = $context_return_project ? "../participants.php?project=$context_return_project" : ($context_return_program ? "../participants.php?program=$context_return_program" : "../participants.php");
+    $redirect = $context_return_project ? "../participants?project=$context_return_project" : ($context_return_program ? "../participants?program=$context_return_program" : "../participants");
     header("Location: $redirect");
     exit();
 }
@@ -198,7 +198,7 @@ if (isset($_POST['upload_csv'])) {
     
     if (!isset($_FILES['csv_file']) || $_FILES['csv_file']['error'] != UPLOAD_ERR_OK) {
         send_notification($_SESSION['user_id'], 'Please select a valid CSV file', 'danger');
-        $redirect = $project_id ? "../participants.php?project=$project_id" : ($program_id ? "../participants.php?program=$program_id" : "../participants.php");
+        $redirect = $project_id ? "../participants?project=$project_id" : ($program_id ? "../participants?program=$program_id" : "../participants");
         header("Location: $redirect");
         exit();
     }
@@ -209,7 +209,7 @@ if (isset($_POST['upload_csv'])) {
     $file_ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     if ($file_ext != 'csv') {
         send_notification($_SESSION['user_id'], 'Only CSV files are allowed', 'danger');
-        $redirect = $project_id ? "../participants.php?project=$project_id" : ($program_id ? "../participants.php?program=$program_id" : "../participants.php");
+        $redirect = $project_id ? "../participants?project=$project_id" : ($program_id ? "../participants?program=$program_id" : "../participants");
         header("Location: $redirect");
         exit();
     }
@@ -218,7 +218,7 @@ if (isset($_POST['upload_csv'])) {
     $handle = fopen($file['tmp_name'], 'r');
     if ($handle === false) {
         send_notification($_SESSION['user_id'], 'Error reading CSV file', 'danger');
-        $redirect = $project_id ? "../participants.php?project=$project_id" : ($program_id ? "../participants.php?program=$program_id" : "../participants.php");
+        $redirect = $project_id ? "../participants?project=$project_id" : ($program_id ? "../participants?program=$program_id" : "../participants");
         header("Location: $redirect");
         exit();
     }
@@ -404,7 +404,7 @@ if (isset($_POST['upload_csv'])) {
         send_notification($_SESSION['user_id'], "CSV import failed:<br>$error_summary", 'danger');
     }
     
-    $redirect = $project_id ? "../participants.php?project=$project_id" : ($program_id ? "../participants.php?program=$program_id" : "../participants.php");
+    $redirect = $project_id ? "../participants?project=$project_id" : ($program_id ? "../participants?program=$program_id" : "../participants");
     header("Location: $redirect");
     exit();
 }
@@ -443,7 +443,7 @@ if (isset($_POST['delete_beneficiary']) && $_SESSION['role'] == 'Administrator')
         }
     }
     
-    $redirect = $context_return_project ? "../participants.php?project=$context_return_project" : ($context_return_program ? "../participants.php?program=$context_return_program" : "../participants.php");
+    $redirect = $context_return_project ? "../participants?project=$context_return_project" : ($context_return_program ? "../participants?program=$context_return_program" : "../participants");
     header("Location: $redirect");
     exit();
 }
@@ -451,7 +451,7 @@ if (isset($_POST['delete_beneficiary']) && $_SESSION['role'] == 'Administrator')
 // If no valid action, redirect to beneficiaries page
 $project_id = !empty($_GET['project']) ? intval($_GET['project']) : 0;
 $program_id = !empty($_GET['program']) ? intval($_GET['program']) : 0;
-$redirect = $project_id ? "../participants.php?project=$project_id" : ($program_id ? "../participants.php?program=$program_id" : "../participants.php");
+$redirect = $project_id ? "../participants?project=$project_id" : ($program_id ? "../participants?program=$program_id" : "../participants");
 header("Location: $redirect");
 exit();
 ?>

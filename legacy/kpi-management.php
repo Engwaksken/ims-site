@@ -284,62 +284,50 @@ foreach ($departments as $dept) {
 <!-- Statistics -->
 <div class="stats-grid">
     <div class="stat-card">
-        <div class="stat-icon blue">
-            <i class="fas fa-bullseye"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $total_kpis; ?></h4>
-            <p>Total KPIs (<?php echo $filter_year; ?>)</p>
+        <div class="stat-icon bg-primary"><i class="fas fa-bullseye" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Total KPIs (<?php echo $filter_year; ?>)</span>
+            <span class="stat-value"><?php echo $total_kpis; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon" style="background: #3498DB;">
-            <i class="fas fa-paper-plane"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $submitted; ?></h4>
-            <p>Pending Review</p>
+        <div class="stat-icon bg-blue"><i class="fas fa-paper-plane" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Pending Review</span>
+            <span class="stat-value"><?php echo $submitted; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon orange">
-            <i class="fas fa-eye"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $under_review; ?></h4>
-            <p>Under Review</p>
+        <div class="stat-icon bg-amber"><i class="fas fa-eye" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Under Review</span>
+            <span class="stat-value"><?php echo $under_review; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon green">
-            <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $approved; ?></h4>
-            <p>Approved</p>
+        <div class="stat-icon bg-green"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Approved</span>
+            <span class="stat-value"><?php echo $approved; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon" style="background: #E74C3C;">
-            <i class="fas fa-times-circle"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $rejected; ?></h4>
-            <p>Rejected</p>
+        <div class="stat-icon bg-red"><i class="fas fa-times-circle" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Rejected</span>
+            <span class="stat-value"><?php echo $rejected; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon purple">
-            <i class="fas fa-chart-line"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $avg_achievement; ?>%</h4>
-            <p>Avg Achievement</p>
+        <div class="stat-icon bg-purple"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Avg Achievement</span>
+            <span class="stat-value"><?php echo $avg_achievement; ?>%</span>
         </div>
     </div>
 </div>
@@ -364,7 +352,7 @@ foreach ($departments as $dept) {
             <button onclick="exportAllKPIs()" class="btn btn-success">
                 <i class="fas fa-file-excel"></i> Export All
             </button>
-            <button onclick="window.location.href='kpi-reports.php'" class="btn btn-info">
+            <button onclick="window.location.href='kpi-reports'" class="btn btn-info">
                 <i class="fas fa-chart-bar"></i> Analytics
             </button>
         </div>
@@ -423,7 +411,7 @@ foreach ($departments as $dept) {
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-filter"></i> Filter
                 </button>
-                <a href="kpi-management.php" class="btn btn-secondary">
+                <a href="kpi-management" class="btn btn-secondary">
                     <i class="fas fa-times"></i> Clear
                 </a>
             </div>
@@ -521,7 +509,7 @@ foreach ($departments as $dept) {
                         <?php endif; ?>
                         
                         <div class="kpi-item-actions">
-                            <a href="view-kpi.php?id=<?php echo $kpi['kpi_id']; ?>" class="btn btn-info btn-sm">
+                            <a href="view-kpi?id=<?php echo $kpi['kpi_id']; ?>" class="btn btn-info btn-sm">
                                 <i class="fas fa-eye"></i> View
                             </a>
                             
@@ -583,7 +571,7 @@ foreach ($departments as $dept) {
             <span class="close" onclick="closeModal('quickApproveModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="kpi-process.php">
+            <form method="POST" action="kpi-process">
                 <input type="hidden" name="action" value="approve">
                 <input type="hidden" name="kpi_id" id="quickApproveId">
                 
@@ -615,7 +603,7 @@ foreach ($departments as $dept) {
             <span class="close" onclick="closeModal('quickRejectModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="kpi-process.php">
+            <form method="POST" action="kpi-process">
                 <input type="hidden" name="action" value="reject">
                 <input type="hidden" name="kpi_id" id="quickRejectId">
                 

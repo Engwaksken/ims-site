@@ -22,7 +22,7 @@ $rfq_id = (int)($_GET['rfq_id'] ?? 0);
 
 if ($rfq_id <= 0) {
     $_SESSION['error'] = 'Invalid RFQ selected.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -43,13 +43,13 @@ $stmt->close();
 
 if (!$rfq) {
     $_SESSION['error'] = 'RFQ not found.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
 function redirect_suppliers(int $rfq_id): never
 {
-    header('Location: manage_suppliers.php?rfq_id=' . $rfq_id);
+    header('Location: manage_suppliers?rfq_id=' . $rfq_id);
     exit;
 }
 
@@ -216,7 +216,7 @@ $stmt->close();
         </div>
 
         <div class="hero-actions">
-            <a href="manage_rfq.php?procurement_id=<?= (int)$rfq['procurement_id'] ?>" class="btn btn-primary">
+            <a href="manage_rfq?procurement_id=<?= (int)$rfq['procurement_id'] ?>" class="btn btn-primary">
                 <i class="fas fa-arrow-left"></i> Back to RFQ
             </a>
 

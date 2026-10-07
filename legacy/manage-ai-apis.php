@@ -21,7 +21,7 @@ if (
     !in_array((string)$_SESSION['role'], $adminRoles, true)
 ) {
     $_SESSION['error'] = 'Access denied. Admin only.';
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit;
 }
 
@@ -140,7 +140,7 @@ body.modal-open{
         </div>
 
         <div class="opp-hero-actions">
-            <a href="startups-shortlisting.php" class="btn btn-white btn-sm">
+            <a href="startups-shortlisting" class="btn btn-white btn-sm">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
             <button type="button" class="btn btn-white btn-sm js-open-api-modal">

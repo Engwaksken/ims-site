@@ -304,62 +304,50 @@ $stats = [
 <!-- Statistics -->
 <div class="stats-grid">
     <div class="stat-card">
-        <div class="stat-icon blue">
-            <i class="fas fa-users"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo number_format($stats['total']); ?></h4>
-            <p>Total Employees</p>
+        <div class="stat-icon bg-primary"><i class="fas fa-users" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Total Employees</span>
+            <span class="stat-value"><?php echo number_format($stats['total']); ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon green">
-            <i class="fas fa-user-check"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $stats['staff']; ?></h4>
-            <p>Staff Members</p>
+        <div class="stat-icon bg-teal"><i class="fas fa-user-check" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Staff Members</span>
+            <span class="stat-value"><?php echo $stats['staff']; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon orange">
-            <i class="fas fa-user-tie"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $stats['consultants']; ?></h4>
-            <p>Consultants</p>
+        <div class="stat-icon bg-amber"><i class="fas fa-user-tie" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Consultants</span>
+            <span class="stat-value"><?php echo $stats['consultants']; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon purple">
-            <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $stats['approved']; ?></h4>
-            <p>Approved Profiles</p>
+        <div class="stat-icon bg-green"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Approved Profiles</span>
+            <span class="stat-value"><?php echo $stats['approved']; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon" style="background: #3498DB; color: #fff;">
-            <i class="fas fa-male" aria-hidden="true"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $stats['male']; ?></h4>
-            <p>Male</p>
+        <div class="stat-icon bg-blue"><i class="fas fa-male" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Male</span>
+            <span class="stat-value"><?php echo $stats['male']; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon" style="background: #E91E63; color: #fff;">
-            <i class="fas fa-female" aria-hidden="true"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $stats['female']; ?></h4>
-            <p>Female</p>
+        <div class="stat-icon bg-purple"><i class="fas fa-female" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Female</span>
+            <span class="stat-value"><?php echo $stats['female']; ?></span>
         </div>
     </div>
 </div>
@@ -368,10 +356,10 @@ $stats = [
     <div class="card-header">
         <h3><i class="fas fa-address-book" aria-hidden="true"></i> Employee Directory</h3>
         <div class="card-header-actions">
-            <a href="kpi-management.php" class="btn btn-primary">
+            <a href="kpi-management" class="btn btn-primary">
                 <i class="fas fa-bullseye"></i> Employee KPIs
             </a>
-            <a href="employee-reports.php" class="btn btn-info">
+            <a href="employee-reports" class="btn btn-info">
                 <i class="fas fa-chart-bar"></i> Reports
             </a>
         </div>
@@ -426,7 +414,7 @@ $stats = [
                 <button type="submit" class="btn btn-info">
                     <i class="fas fa-filter" aria-hidden="true"></i> Filter
                 </button>
-                <a href="employees-list.php" class="btn btn-secondary">
+                <a href="employees-list" class="btn btn-secondary">
                     <i class="fas fa-times" aria-hidden="true"></i> Clear
                 </a>
             </div>
@@ -532,7 +520,7 @@ $stats = [
                         </div>
                         
                         <div class="employee-actions">
-                            <a href="employee-profile-view.php?id=<?php echo (int) $emp['employee_id']; ?>" 
+                            <a href="employee-profile-view?id=<?php echo (int) $emp['employee_id']; ?>" 
                                class="btn btn-primary btn-sm">
                                 <i class="fas fa-eye"></i> View Profile
                             </a>

@@ -5,19 +5,19 @@ function redirect_by_role(string $role): void
 {
     switch ($role) {
         case 'Member':
-            header("Location: ../member-dashboard.php");
+            header("Location: ../member-dashboard");
             break;
 
         case 'Applicant':
-            header("Location: ../applicant-dashboard.php");
+            header("Location: ../applicant-dashboard");
             break;
 
         case 'job_seeker':
-            header("Location: ../job-seeker-dashboard.php");
+            header("Location: ../job-seeker-dashboard");
             break;
 
         default:
-            header("Location: ../dashboard.php");
+            header("Location: ../dashboard");
             break;
     }
     exit();
@@ -37,7 +37,7 @@ function require_login(): void
 {
     if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
         $_SESSION['login_error'] = 'Please login to continue.';
-        header("Location: ../login.php");
+        header("Location: ../login");
         exit();
     }
 }

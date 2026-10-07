@@ -522,7 +522,7 @@ if (!function_exists('current_request_path')) {
 if (!function_exists('login_url')) {
     function login_url(): string
     {
-        return APP_URL . '/login.php';
+        return APP_URL . '/login';
     }
 }
 
@@ -535,7 +535,7 @@ if (!function_exists('login_url')) {
 if (!function_exists('dashboard_url')) {
     function dashboard_url(): string
     {
-        return APP_URL . '/dashboard.php';
+        return APP_URL . '/dashboard';
     }
 }
 

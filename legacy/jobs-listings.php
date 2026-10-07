@@ -251,7 +251,7 @@ $page_title = 'Career Opportunities';
             ($j['is_urgent']   ? ' urgent'   : '')
           );
 
-          $applyHref   = !empty($j['apply_url']) ? e($j['apply_url']) : 'apply-job.php?job_id=' . (int)$j['job_id'];
+          $applyHref   = !empty($j['apply_url']) ? e($j['apply_url']) : 'apply-job?job_id=' . (int)$j['job_id'];
           $applyTarget = !empty($j['apply_url']) ? '_blank' : '_self';
         ?>
         <div class="<?= $classes ?>"

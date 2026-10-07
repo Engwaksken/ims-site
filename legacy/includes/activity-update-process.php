@@ -3,12 +3,12 @@ require_once __DIR__ . '/config.php';
 
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../login");
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: ../my-activities.php");
+    header("Location: ../my-activities");
     exit();
 }
 
@@ -16,7 +16,7 @@ $uid    = (int)$_SESSION['user_id'];
 $action = $_POST['action'] ?? '';
 
 if ($action !== 'update') {
-    header("Location: ../my-activities.php");
+    header("Location: ../my-activities");
     exit();
 }
 
@@ -39,12 +39,12 @@ function safe_int($v): int
 function redirect_error(string $msg, int $plan_id = 0): void
 {
     $_SESSION['activity_error'] = $msg;
-    $url = $plan_id > 0 ? "../edit-activity.php?id={$plan_id}" : "../my-activities.php";
+    $url = $plan_id > 0 ? "../edit-activity?id={$plan_id}" : "../my-activities";
     header("Location: {$url}");
     exit();
 }
 
-function redirect_success(string $msg, string $url = '../my-activities.php'): void
+function redirect_success(string $msg, string $url = '../my-activities'): void
 {
     $_SESSION['activity_success'] = $msg;
     header("Location: {$url}");
@@ -388,7 +388,7 @@ try {
                     $sup_id,
                     "{$emp_name} has submitted an updated Activity Plan \"{$plan_title}\" for your review.",
                     'info',
-                    "view-activity.php?id={$plan_id}"
+                    "view-activity?id={$plan_id}"
                 );
             }
         }
@@ -398,7 +398,7 @@ try {
         ? "Activity Plan updated and submitted successfully! Your supervisor has been notified."
         : "Activity Plan draft updated successfully.";
 
-    redirect_success($msg, "../view-activity.php?id={$plan_id}");
+    redirect_success($msg, "../view-activity?id={$plan_id}");
 
 } catch (Throwable $e) {
     $conn->rollback();

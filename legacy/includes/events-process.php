@@ -12,7 +12,7 @@ function clean_post(string $key): string {
 }
 
 function redirect_events(string $query = ''): never {
-    $url = '../events.php';
+    $url = '../events';
     if ($query !== '') {
         $url .= '?' . ltrim($query, '?');
     }

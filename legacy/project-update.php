@@ -17,6 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     log_action($_SESSION['user_id'], 'Edit Project', 'projects', $project_id, 'Project updated');
     send_notification($_SESSION['user_id'], 'Project updated successfully', 'success');
 
-    header("Location: projects.php");
+    header("Location: projects");
     exit();
 }

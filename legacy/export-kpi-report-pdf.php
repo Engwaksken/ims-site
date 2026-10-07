@@ -22,7 +22,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/auth.php';
 
-require_login('login.php');
+require_login('login');
 
 $session_user_id = (int)($_SESSION['user_id'] ?? 0);
 $is_hr = auth_has_role(['Administrator', 'Programs Lead', 'MEAL Lead', 'Operations/Admin', 'HR']);
@@ -206,7 +206,7 @@ foreach ([__DIR__ . '/vendor/autoload.php', dirname(__DIR__) . '/vendor/autoload
 
 if (!class_exists(\Dompdf\Dompdf::class)) {
     $_SESSION['error'] = 'PDF export is not available on this server.';
-    header('Location: kpi-reports.php');
+    header('Location: kpi-reports');
     exit;
 }
 

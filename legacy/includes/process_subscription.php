@@ -9,7 +9,7 @@ $conn = db_connect();
 
 if (!$conn instanceof mysqli) {
     $_SESSION['error'] = 'Database connection failed.';
-    header('Location: ../internet_subscriptions.php');
+    header('Location: ../internet_subscriptions');
     exit;
 }
 
@@ -18,14 +18,14 @@ $conn->set_charset('utf8mb4');
 function sub_redirect_error(string $msg): never
 {
     $_SESSION['error'] = $msg;
-    header('Location: ../internet_subscriptions.php');
+    header('Location: ../internet_subscriptions');
     exit;
 }
 
 function sub_redirect_success(string $msg): never
 {
     $_SESSION['success'] = $msg;
-    header('Location: ../internet_subscriptions.php');
+    header('Location: ../internet_subscriptions');
     exit;
 }
 

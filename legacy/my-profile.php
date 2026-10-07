@@ -128,7 +128,7 @@ if ($employee):
         <?php endif; ?>
     </div>
     <?php if ($st === 'Approved'): ?>
-    <a href="employee-profile-view.php" class="btn btn-sm btn-success">
+    <a href="employee-profile-view" class="btn btn-sm btn-success">
         <i class="fas fa-eye"></i> View Profile
     </a>
     <?php endif; ?>
@@ -145,7 +145,7 @@ if ($employee):
 <?php endif; ?>
 
 
-<form method="POST" action="my-employee-profile-process.php" enctype="multipart/form-data" id="employeeForm">
+<form method="POST" action="my-employee-profile-process" enctype="multipart/form-data" id="employeeForm">
     <?php if ($employee): ?>
         <input type="hidden" name="employee_id" value="<?= $employee['employee_id'] ?>">
     <?php endif; ?>

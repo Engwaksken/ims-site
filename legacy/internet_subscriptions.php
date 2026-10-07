@@ -296,7 +296,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
 
     <div class="header-actions">
     
-    <a href="internet_connection_logs.php" class="btn-add-device">  <i class="fas fa-bars"></i> Connection Logs </a>
+    <a href="internet_connection_logs" class="btn-add-device">  <i class="fas fa-bars"></i> Connection Logs </a>
         <button type="button" class="btn-add-device" id="openAddDeviceBtn">
             <i class="fas fa-laptop-medical"></i>
             Add Device

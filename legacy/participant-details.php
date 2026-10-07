@@ -9,7 +9,7 @@ $beneficiary_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if (!$beneficiary_id) {
     send_notification($_SESSION['user_id'], 'Invalid participant ID', 'danger');
-    header("Location: participants.php");
+    header("Location: participants");
     exit();
 }
 
@@ -19,7 +19,7 @@ $result = $conn->query($query);
 
 if ($result->num_rows == 0) {
     send_notification($_SESSION['user_id'], 'Participant not found', 'danger');
-    header("Location: participants.php");
+    header("Location: participants");
     exit();
 }
 
@@ -117,7 +117,7 @@ $uganda_districts = ['Abim', 'Adjumani', 'Agago', 'Alebtong', 'Amolatar', 'Amuda
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     <div>
-        <a href="participants.php" class="btn btn-secondary">
+        <a href="participants" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to Participants
         </a>
     </div>
@@ -372,7 +372,7 @@ $uganda_districts = ['Abim', 'Adjumani', 'Agago', 'Alebtong', 'Amolatar', 'Amuda
                 <?php endif; ?>
                 
                 <div style="margin-top: 15px;">
-                    <a href="program-details.php?id=<?php echo $program['id']; ?>" class="btn btn-info btn-sm">
+                    <a href="program-details?id=<?php echo $program['id']; ?>" class="btn btn-info btn-sm">
                         <i class="fas fa-eye"></i> View Program Details
                     </a>
                 </div>
@@ -456,7 +456,7 @@ $uganda_districts = ['Abim', 'Adjumani', 'Agago', 'Alebtong', 'Amolatar', 'Amuda
                 <?php endif; ?>
                 
                 <div style="margin-top: 15px;">
-                    <a href="project-details.php?id=<?php echo $project['project_id']; ?>" class="btn btn-info btn-sm">
+                    <a href="project-details?id=<?php echo $project['project_id']; ?>" class="btn btn-info btn-sm">
                         <i class="fas fa-eye"></i> View Project Details
                     </a>
                 </div>

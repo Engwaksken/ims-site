@@ -7,7 +7,7 @@ require_once 'includes/auth.php';
 $application_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if (!$application_id) {
-    header("Location: submit-application.php");
+    header("Location: submit-application");
     exit();
 }
 
@@ -18,7 +18,7 @@ $isStaffViewer = !empty($_SESSION['user_id'])
     && defined('IMS_STAFF_ROLES')
     && in_array((string)($_SESSION['role'] ?? ''), IMS_STAFF_ROLES, true);
 if ((int)($_SESSION['application_id'] ?? 0) !== $application_id && !$isStaffViewer) {
-    header("Location: submit-application.php");
+    header("Location: submit-application");
     exit();
 }
 
@@ -30,7 +30,7 @@ $query = "SELECT a.*, o.opportunity_title, o.opportunity_type, o.deadline, o.ann
 $result = $conn->query($query);
 
 if ($result->num_rows == 0) {
-    header("Location: submit-application.php");
+    header("Location: submit-application");
     exit();
 }
 

@@ -40,7 +40,7 @@ final class Router
     {
         foreach ($middleware as $mw) {
             if ($mw === 'auth') Auth::requireLogin();
-            elseif ($mw === 'guest' && Auth::check()) redirect('/dashboard.php');
+            elseif ($mw === 'guest' && Auth::check()) redirect('/dashboard');
             elseif (str_starts_with($mw, 'role:')) Auth::requireRole(array_map('trim', explode(',', substr($mw, 5))));
         }
     }

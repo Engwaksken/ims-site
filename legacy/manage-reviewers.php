@@ -8,7 +8,7 @@ require_once 'includes/header.php';
 $allowed_roles = ['Administrator', 'MEAL Lead', 'Programs Lead', 'Program Director'];
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], $allowed_roles, true)) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit();
 }
 
@@ -245,8 +245,8 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
         <p>Assign reviewers to applications with a review type, monitor progress, and manage scoring criteria.</p>
     </div>
     <div class="hero-actions">
-        <a href="progress-board.php" class="btn btn-primary"><i class="fas fa-chart-line"></i> Progress Report</a>
-        <a href="manage_application_scores.php" class="btn btn-dark"><i class="fas fa-star-half-stroke"></i> Scores</a>
+        <a href="progress-board" class="btn btn-primary"><i class="fas fa-chart-line"></i> Progress Report</a>
+        <a href="manage_application_scores" class="btn btn-dark"><i class="fas fa-star-half-stroke"></i> Scores</a>
     </div>
 </div>
 
@@ -622,7 +622,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
                         <td>
                             <div class="tbl-actions">
                                 <?php if ($is_rev): ?>
-                                    <a href="view-review.php?id=<?= (int)$a['review_id'] ?>" class="btn btn-sm btn-green" title="View review">
+                                    <a href="view-review?id=<?= (int)$a['review_id'] ?>" class="btn btn-sm btn-green" title="View review">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 <?php else: ?>
@@ -669,7 +669,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
                 <?= $edit_rt ? 'Edit Review Type' : 'Add Review Type' ?>
             </h3>
             <?php if ($edit_rt): ?>
-                <a href="manage-reviewers.php?tab=review_types" class="btn btn-gray btn-sm"><i class="fas fa-times"></i> Cancel</a>
+                <a href="manage-reviewers?tab=review_types" class="btn btn-gray btn-sm"><i class="fas fa-times"></i> Cancel</a>
             <?php endif; ?>
         </div>
         <div class="panel-body">
@@ -709,7 +709,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
                         <i class="fas fa-save"></i> <?= $edit_rt ? 'Save Changes' : 'Add Review Type' ?>
                     </button>
                     <?php if ($edit_rt): ?>
-                        <a href="manage-reviewers.php?tab=review_types" class="btn btn-gray"><i class="fas fa-times"></i> Cancel</a>
+                        <a href="manage-reviewers?tab=review_types" class="btn btn-gray"><i class="fas fa-times"></i> Cancel</a>
                     <?php endif; ?>
                 </div>
             </form>
@@ -756,7 +756,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
                     <td class="note"><?= h($rt['created_by_name'] ?? '-') ?></td>
                     <td style="text-align:center;">
                         <div class="tbl-actions" style="justify-content:center;">
-                            <a href="manage-reviewers.php?tab=review_types&edit_review_type=<?= (int)$rt['review_type_id'] ?>" class="btn-icon" title="Edit"><i class="fas fa-pen"></i></a>
+                            <a href="manage-reviewers?tab=review_types&edit_review_type=<?= (int)$rt['review_type_id'] ?>" class="btn-icon" title="Edit"><i class="fas fa-pen"></i></a>
                             <?= af('toggle_review_type','style="display:inline;"') ?>
                                 <input type="hidden" name="review_type_id" value="<?= (int)$rt['review_type_id'] ?>">
                                 <button type="submit" class="btn-icon toggle-off" title="Toggle status"><i class="fas fa-power-off"></i></button>
@@ -792,7 +792,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
                 <?= $edit_criteria ? 'Edit Criterion' : 'Add Scoring Criteria' ?>
             </h3>
             <?php if ($edit_criteria): ?>
-                <a href="manage-reviewers.php?tab=criteria" class="btn btn-gray btn-sm"><i class="fas fa-times"></i> Cancel</a>
+                <a href="manage-reviewers?tab=criteria" class="btn btn-gray btn-sm"><i class="fas fa-times"></i> Cancel</a>
             <?php endif; ?>
         </div>
         <div class="panel-body">
@@ -850,7 +850,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
             </div>
             <div style="margin-top:16px;display:flex;gap:10px;">
                 <button type="submit" class="btn btn-dark"><i class="fas fa-save"></i> Update Criterion</button>
-                <a href="manage-reviewers.php?tab=criteria" class="btn btn-gray"><i class="fas fa-times"></i> Cancel</a>
+                <a href="manage-reviewers?tab=criteria" class="btn btn-gray"><i class="fas fa-times"></i> Cancel</a>
             </div>
         </form>
 
@@ -913,7 +913,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
 
         <!-- Filter bar -->
         <div style="padding:12px 20px;border-bottom:1px solid var(--ink-50);">
-            <form method="GET" action="manage-reviewers.php" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <form method="GET" action="manage-reviewers" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                 <input type="hidden" name="tab" value="criteria">
                 <div class="criteria-search-wrap">
                     <i class="fas fa-search criteria-search-icon"></i>
@@ -931,7 +931,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
                     <?php endforeach; ?>
                 </select>
                 <button type="submit" class="btn btn-sm btn-dark"><i class="fas fa-filter"></i> Filter</button>
-                <a href="manage-reviewers.php?tab=criteria" class="btn btn-sm btn-gray"><i class="fas fa-undo"></i> Reset</a>
+                <a href="manage-reviewers?tab=criteria" class="btn btn-sm btn-gray"><i class="fas fa-undo"></i> Reset</a>
             </form>
         </div>
 
@@ -1001,7 +1001,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
                         </td>
                         <td style="text-align:center;">
                             <div class="tbl-actions" style="justify-content:center;">
-                                <a href="manage-reviewers.php?tab=criteria&edit_criteria=<?= (int)$c['criteria_id'] ?>" class="btn-icon" title="Edit"><i class="fas fa-pen"></i></a>
+                                <a href="manage-reviewers?tab=criteria&edit_criteria=<?= (int)$c['criteria_id'] ?>" class="btn-icon" title="Edit"><i class="fas fa-pen"></i></a>
                                 <?= af('delete_criteria','style="display:inline;" onsubmit="return confirm(\'Delete this criterion?\')"') ?>
                                     <input type="hidden" name="criteria_id" value="<?= (int)$c['criteria_id'] ?>">
                                     <button type="submit" class="btn-icon del" title="Delete"><i class="fas fa-trash-alt"></i></button>
@@ -1024,7 +1024,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
                         <span class="pg-link disabled">...</span>
                     <?php else:
                         $pp = array_merge($crit_base, ['criteria_page'=>(int)$pn]); ?>
-                        <a href="manage-reviewers.php?<?= http_build_query($pp) ?>"
+                        <a href="manage-reviewers?<?= http_build_query($pp) ?>"
                            class="pg-link<?= (int)$pn===$criteria_page?' active':'' ?>"><?= $pn ?></a>
                     <?php endif; ?>
                 <?php endforeach; ?>

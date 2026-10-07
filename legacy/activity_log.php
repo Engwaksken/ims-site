@@ -249,7 +249,7 @@ $stats = $stats_result->fetch_assoc();
                 <button type="submit" class="btn btn-info">
                     <i class="fas fa-filter"></i> Filter
                 </button>
-                <a href="activity_log.php" class="btn btn-secondary">
+                <a href="activity_log" class="btn btn-secondary">
                     <i class="fas fa-times"></i> Clear
                 </a>
             </div>
@@ -384,7 +384,7 @@ $stats = $stats_result->fetch_assoc();
             <span class="close" onclick="closeModal('clearLogsModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="activity-log-process.php">
+            <form method="POST" action="activity-log-process">
                 <p style="margin-bottom: 20px;">
                     Delete activity logs older than a specified number of days to keep the database clean.
                 </p>
@@ -425,6 +425,6 @@ function exportLogs() {
     params.set('export', '1');
     
     // Redirect to export
-    window.location.href = 'activity-log-process.php?' + params.toString();
+    window.location.href = 'activity-log-process?' + params.toString();
 }
 </script>

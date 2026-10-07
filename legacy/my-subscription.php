@@ -3,7 +3,7 @@ $page_title = 'My Subscription';
 include 'includes/header.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -433,7 +433,7 @@ $stats['days_member'] = ceil((time() - $registration_date) / (60 * 60 * 24));
             <i class="fas fa-cog"></i> Auto-Renew Settings
         </button>
 
-        <a href="payment-history.php" class="btn btn-secondary">
+        <a href="payment-history" class="btn btn-secondary">
             <i class="fas fa-history"></i> Full Payment History
         </a>
     </div>
@@ -541,11 +541,11 @@ $stats['days_member'] = ceil((time() - $registration_date) / (60 * 60 * 24));
                                 <td>
                                     <div class="actions">
                                         <?php if (($payment['payment_status'] ?? '') == 'Pending'): ?>
-                                            <a href="make-payment.php?payment_id=<?php echo (int) $payment['payment_id']; ?>" class="btn btn-success btn-sm">
+                                            <a href="make-payment?payment_id=<?php echo (int) $payment['payment_id']; ?>" class="btn btn-success btn-sm">
                                                 <i class="fas fa-money-bill"></i> Pay
                                             </a>
 
-                                            <a href="upload-receipt.php?payment_id=<?php echo (int) $payment['payment_id']; ?>" class="btn btn-info btn-sm">
+                                            <a href="upload-receipt?payment_id=<?php echo (int) $payment['payment_id']; ?>" class="btn btn-info btn-sm">
                                                 <i class="fas fa-upload"></i> Upload
                                             </a>
                                         <?php endif; ?>
@@ -569,7 +569,7 @@ $stats['days_member'] = ceil((time() - $registration_date) / (60 * 60 * 24));
 
             <?php if (count($payments) >= 10): ?>
                 <div style="text-align: center; margin-top: 20px;">
-                    <a href="payment-history.php" class="btn btn-primary">
+                    <a href="payment-history" class="btn btn-primary">
                         <i class="fas fa-list"></i> View All Payments
                     </a>
                 </div>

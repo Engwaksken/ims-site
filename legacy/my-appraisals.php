@@ -3,7 +3,7 @@ $page_title = 'My Appraisals';
 include 'includes/header.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -358,13 +358,13 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
         <p>Track your performance appraisals, activity plans, and behavioral assessments.</p>
     </div>
     <div class="hero-actions">
-        <a href="performance-appraisal.php" class="btn btn-ghost">
+        <a href="performance-appraisal" class="btn btn-ghost">
             <i class="fas fa-plus"></i> New Appraisal
         </a>
-        <a href="create-activity.php" class="btn btn-ghost">
+        <a href="create-activity" class="btn btn-ghost">
             <i class="fas fa-tasks"></i> New Activity Plan
         </a>
-        <a href="employee-competency.php" class="btn btn-ghost">
+        <a href="employee-competency" class="btn btn-ghost">
             <i class="fas fa-brain"></i> New BC Assessment
         </a>
     </div>
@@ -444,7 +444,7 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
                 <div style="font-size:13px; color:var(--muted);">
                     <?php echo $total_appraisals; ?> appraisal<?php echo $total_appraisals !== 1 ? 's' : ''; ?> recorded
                 </div>
-                <a href="performance-appraisal.php" class="btn btn-primary btn-sm">
+                <a href="performance-appraisal" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus"></i> New Appraisal
                 </a>
             </div>
@@ -454,7 +454,7 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
                 <div class="empty-icon"><i class="fas fa-clipboard-check"></i></div>
                 <h4>No appraisals yet</h4>
                 <p>Start by creating your first performance appraisal to track KRAs and KPIs.</p>
-                <a href="performance-appraisal.php" class="btn btn-primary">
+                <a href="performance-appraisal" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Create First Appraisal
                 </a>
             </div>
@@ -513,7 +513,7 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
                     </td>
                     <td class="td-c">
                         <div class="row-actions">
-                            <a href="view-appraisal.php?id=<?php echo $ap['appraisal_id']; ?>"
+                            <a href="view-appraisal?id=<?php echo $ap['appraisal_id']; ?>"
                                class="btn btn-outline btn-xs" title="View">
                                 <i class="fas fa-eye"></i>
                             </a>
@@ -547,7 +547,7 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
                 <div style="font-size:13px; color:var(--muted);">
                     <?php echo $total_activities; ?> plan<?php echo $total_activities !== 1 ? 's' : ''; ?> recorded
                 </div>
-                <a href="create-activity.php" class="btn btn-success btn-sm">
+                <a href="create-activity" class="btn btn-success btn-sm">
                     <i class="fas fa-plus"></i> New Activity Plan
                 </a>
             </div>
@@ -559,7 +559,7 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
                 </div>
                 <h4>No activity plans yet</h4>
                 <p>Create an activity plan to define your activities, key results, and weekly tracking targets.</p>
-                <a href="create-activity.php" class="btn btn-success">
+                <a href="create-activity" class="btn btn-success">
                     <i class="fas fa-plus"></i> Create First Activity Plan
                 </a>
             </div>
@@ -618,12 +618,12 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
                     </td>
                     <td class="td-c">
                         <div class="row-actions">
-                            <a href="view-activity.php?id=<?php echo $act['plan_id']; ?>"
+                            <a href="view-activity?id=<?php echo $act['plan_id']; ?>"
                                class="btn btn-outline btn-xs" title="View">
                                 <i class="fas fa-eye"></i>
                             </a>
                             <?php if ($act['status'] === 'draft'): ?>
-                            <a href="edit-activity.php?id=<?php echo $act['plan_id']; ?>"
+                            <a href="edit-activity?id=<?php echo $act['plan_id']; ?>"
                                class="btn btn-outline btn-xs" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
@@ -650,7 +650,7 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
                 <div style="font-size:13px; color:var(--muted);">
                     <?php echo $total_bc; ?> assessment<?php echo $total_bc !== 1 ? 's' : ''; ?> recorded
                 </div>
-                <a href="employee-competency.php" class="btn btn-sm" style="background:var(--warning-lt);color:var(--warning);border-color:var(--warning);border-width:1.5px;font-weight:600">
+                <a href="employee-competency" class="btn btn-sm" style="background:var(--warning-lt);color:var(--warning);border-color:var(--warning);border-width:1.5px;font-weight:600">
                     <i class="fas fa-plus"></i> New BC Assessment
                 </a>
             </div>
@@ -662,7 +662,7 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
                 </div>
                 <h4>No BC assessments yet</h4>
                 <p>Complete a behavioral competency assessment to evaluate yourself against key behaviors.</p>
-                <a href="employee-competency.php" class="btn" style="background:var(--warning);color:#fff;">
+                <a href="employee-competency" class="btn" style="background:var(--warning);color:#fff;">
                     <i class="fas fa-plus"></i> Start BC Assessment
                 </a>
             </div>

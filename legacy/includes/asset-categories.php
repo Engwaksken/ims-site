@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 function redirect_categories(): never
 {
-    header('Location: asset_categories.php');
+    header('Location: asset_categories');
     exit;
 }
 

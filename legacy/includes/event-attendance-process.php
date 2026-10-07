@@ -10,7 +10,7 @@ function clean_value($value): string
 
 function redirect_attendance(int $event_id, string $attendance_date = '', string $extra = ''): never
 {
-    $url = "../event-attendance.php?id={$event_id}";
+    $url = "../event-attendance?id={$event_id}";
     if ($attendance_date !== '') {
         $url .= '&day=' . urlencode($attendance_date);
     }
@@ -209,14 +209,14 @@ function export_attendance_pdf(array $event, array $rows, string $attendance_dat
 $event_id = isset($_GET['id']) ? (int)$_GET['id'] : (int)($_POST['event_id'] ?? 0);
 if ($event_id <= 0) {
     send_notification($_SESSION['user_id'] ?? 0, 'Invalid event ID', 'danger');
-    header('Location: ../events.php');
+    header('Location: ../events');
     exit();
 }
 
 $event = attendance_event($conn, $event_id);
 if (!$event) {
     send_notification($_SESSION['user_id'] ?? 0, 'Event not found', 'danger');
-    header('Location: ../events.php');
+    header('Location: ../events');
     exit();
 }
 

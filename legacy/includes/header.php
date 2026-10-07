@@ -113,7 +113,7 @@ $hdr_bell_label = $hdr_unread > 0
             <div class="top-bar-right">
                 <!-- Notifications -->
                 <div class="notifications">
-                    <a href="notifications.php" class="btn-icon" title="<?php echo $hdr_bell_label; ?>" aria-label="<?php echo $hdr_bell_label; ?>">
+                    <a href="notifications" class="btn-icon" title="<?php echo $hdr_bell_label; ?>" aria-label="<?php echo $hdr_bell_label; ?>">
                         <i class="fas fa-bell" aria-hidden="true"></i>
                         <?php if ($hdr_unread > 0): ?>
                         <span class="badge-notification" aria-hidden="true"><?php echo $hdr_unread_label; ?></span>
@@ -130,7 +130,7 @@ $hdr_bell_label = $hdr_unread > 0
                         <span class="user-name"><?php echo htmlspecialchars($user_name); ?></span>
                         <span class="user-role"><?php echo htmlspecialchars($role); ?></span>
                     </div>
-                    <a href="logout.php" class="btn btn-danger btn-sm" title="Logout" aria-label="Logout">
+                    <a href="logout" class="btn btn-danger btn-sm" title="Logout" aria-label="Logout">
                         <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                         <span class="logout-text">Logout</span>
                     </a>

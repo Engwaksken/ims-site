@@ -21,7 +21,7 @@ $member_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($member_id <= 0) {
     $_SESSION['error'] = "Invalid member ID.";
-    header("Location: hub-operations.php?tab=members");
+    header("Location: hub-operations?tab=members");
     exit();
 }
 
@@ -47,7 +47,7 @@ $result = $stmt->get_result();
 
 if (!$result || $result->num_rows === 0) {
     $_SESSION['error'] = "Member not found.";
-    header("Location: hub-operations.php?tab=members");
+    header("Location: hub-operations?tab=members");
     exit();
 }
 
@@ -467,7 +467,7 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
 </style>
 
 <div style="margin-bottom: 20px;">
-    <a href="hub-operations.php?tab=members" class="btn btn-secondary">
+    <a href="hub-operations?tab=members" class="btn btn-secondary">
         <i class="fas fa-arrow-left"></i> Back to Members
     </a>
 </div>
@@ -556,15 +556,15 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
 <?php endif; ?>
 
 <div class="quick-actions">
-    <a href="hub-operations.php?edit_member=<?php echo $member_id; ?>&tab=members" class="btn btn-primary">
+    <a href="hub-operations?edit_member=<?php echo $member_id; ?>&tab=members" class="btn btn-primary">
         <i class="fas fa-edit"></i> Edit Member
     </a>
 
-    <a href="hub-operations.php?tab=subscriptions" class="btn btn-success">
+    <a href="hub-operations?tab=subscriptions" class="btn btn-success">
         <i class="fas fa-plus"></i> Add Payment
     </a>
 
-    <a href="hub-operations.php?tab=receipts" class="btn btn-info">
+    <a href="hub-operations?tab=receipts" class="btn btn-info">
         <i class="fas fa-receipt"></i> Add Receipt
     </a>
 
@@ -747,7 +747,7 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
     <div class="card">
         <div class="card-header">
             <h3><i class="fas fa-credit-card"></i> Payment History</h3>
-            <a href="hub-operations.php?tab=subscriptions" class="btn btn-primary">
+            <a href="hub-operations?tab=subscriptions" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add Payment
             </a>
         </div>
@@ -810,7 +810,7 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="hub-operations.php?edit_subscription=<?php echo (int)($payment['payment_id'] ?? 0); ?>&tab=subscriptions"
+                                        <a href="hub-operations?edit_subscription=<?php echo (int)($payment['payment_id'] ?? 0); ?>&tab=subscriptions"
                                            class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
@@ -823,7 +823,7 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
 
                 <?php if (count($payments) >= 10): ?>
                     <div style="text-align: center; margin-top: 20px;">
-                        <a href="hub-operations.php?tab=subscriptions" class="btn btn-secondary">
+                        <a href="hub-operations?tab=subscriptions" class="btn btn-secondary">
                             View All Payments
                         </a>
                     </div>
@@ -837,7 +837,7 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
     <div class="card">
         <div class="card-header">
             <h3><i class="fas fa-receipt"></i> Payment Receipts</h3>
-            <a href="hub-operations.php?tab=receipts" class="btn btn-primary">
+            <a href="hub-operations?tab=receipts" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add Receipt
             </a>
         </div>
@@ -917,7 +917,7 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
 
                 <?php if (count($receipts) >= 10): ?>
                     <div style="text-align: center; margin-top: 20px;">
-                        <a href="hub-operations.php?tab=receipts" class="btn btn-secondary">
+                        <a href="hub-operations?tab=receipts" class="btn btn-secondary">
                             View All Receipts
                         </a>
                     </div>
@@ -1007,7 +1007,7 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="view-booking.php?id=<?php echo (int)($booking['booking_id'] ?? 0); ?>"
+                                        <a href="view-booking?id=<?php echo (int)($booking['booking_id'] ?? 0); ?>"
                                            class="btn btn-info btn-sm">
                                             <i class="fas fa-eye"></i>
                                         </a>
@@ -1020,7 +1020,7 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
 
                 <?php if (count($bookings) >= 10): ?>
                     <div style="text-align: center; margin-top: 20px;">
-                        <a href="hub-operations.php?tab=bookings" class="btn btn-secondary">
+                        <a href="hub-operations?tab=bookings" class="btn btn-secondary">
                             View All Bookings
                         </a>
                     </div>
@@ -1111,7 +1111,7 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
                                     <?php echo nl2br(h($feedback['feedback_message'] ?? '')); ?>
                                 </p>
 
-                                <a href="view-feedback.php?id=<?php echo (int)($feedback['feedback_id'] ?? 0); ?>"
+                                <a href="view-feedback?id=<?php echo (int)($feedback['feedback_id'] ?? 0); ?>"
                                    class="btn btn-sm btn-info">
                                     <i class="fas fa-eye"></i> View Details
                                 </a>
@@ -1122,7 +1122,7 @@ $badge = $status_badges[$membershipStatus] ?? 'secondary';
 
                 <?php if (count($feedbacks) >= 5): ?>
                     <div style="text-align: center; margin-top: 20px;">
-                        <a href="hub-operations.php?tab=feedback" class="btn btn-secondary">
+                        <a href="hub-operations?tab=feedback" class="btn btn-secondary">
                             View All Feedback
                         </a>
                     </div>
@@ -1153,6 +1153,6 @@ function switchTab(event, tabName) {
 }
 
 function sendNotification(memberId) {
-    window.location.href = 'hub-operations.php?tab=notifications&member=' + encodeURIComponent(memberId);
+    window.location.href = 'hub-operations?tab=notifications&member=' + encodeURIComponent(memberId);
 }
 </script>

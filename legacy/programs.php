@@ -159,7 +159,7 @@ $currencies = [
             <button type="submit" class="btn btn-dark">
                 <i class="fas fa-filter"></i> Filter
             </button>
-            <a href="programs.php" class="btn btn-gray">
+            <a href="programs" class="btn btn-gray">
                 <i class="fas fa-times"></i> Clear
             </a>
         </div>
@@ -257,7 +257,7 @@ $currencies = [
                                 <!-- Actions -->
                                 <td>
                                     <div class="actions">
-                                        <a href="program-details.php?id=<?= (int)$p['id'] ?>"
+                                        <a href="program-details?id=<?= (int)$p['id'] ?>"
                                            class="btn btn-sm btn-soft" title="View details">
                                             <i class="fas fa-eye"></i>
                                         </a>

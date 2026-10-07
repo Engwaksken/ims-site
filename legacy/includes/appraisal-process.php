@@ -6,7 +6,7 @@ require_once __DIR__ . '/config.php';
    AUTH GUARD
 ----------------------------------------------- */
 if (!isset($_SESSION['user_id'])) {
-    header('Location: ../login.php');
+    header('Location: ../login');
     exit();
 }
 
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submi
         send_notification($uid, 'This appraisal could not be submitted (not found, not yours, or already submitted).', 'danger');
     }
 
-    header('Location: ../view-appraisal.php?id=' . $existingId);
+    header('Location: ../view-appraisal?id=' . $existingId);
     exit();
 }
 
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submi
 ----------------------------------------------- */
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || ($_POST['action'] ?? '') !== 'create_appraisal') {
     send_notification($uid, 'Invalid request.', 'danger');
-    header('Location: ../my-kpis.php');
+    header('Location: ../my-kpis');
     exit();
 }
 
@@ -184,7 +184,7 @@ if (!empty($errors)) {
     foreach ($errors as $err) {
         send_notification($uid, $err, 'danger');
     }
-    header('Location: ../performance-appraisal.php');
+    header('Location: ../performance-appraisal');
     exit();
 }
 
@@ -339,7 +339,7 @@ try {
         );
     }
 
-    header('Location: ../my-appraisals.php?appraisal_id=' . $appraisal_id);
+    header('Location: ../my-appraisals?appraisal_id=' . $appraisal_id);
     exit();
 
 } catch (Throwable $e) {
@@ -353,6 +353,6 @@ try {
         'danger'
     );
 
-    header('Location: ../performance-appraisal.php');
+    header('Location: ../performance-appraisal');
     exit();
 }

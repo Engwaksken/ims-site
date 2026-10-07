@@ -19,7 +19,7 @@ if ($filter_project_id) {
         $page_title = 'Participants for ' . $project_info['project_code'];
     } else {
         send_notification($_SESSION['user_id'], 'Project not found', 'danger');
-        header("Location: participants.php");
+        header("Location: participants");
         exit();
     }
 } elseif ($filter_program_id) {
@@ -30,7 +30,7 @@ if ($filter_project_id) {
         $page_title = 'Participants for ' . $program_info['program_code'];
     } else {
         send_notification($_SESSION['user_id'], 'Program not found', 'danger');
-        header("Location: participants.php");
+        header("Location: participants");
         exit();
     }
 }
@@ -162,15 +162,15 @@ if ($project_info) {
                 </p>
             </div>
             <div>
-                <a href="participants.php" class="btn" style="background: white; color: <?php echo $program_info ? '#E67E22' : 'var(--primary-color)'; ?>;">
+                <a href="participants" class="btn" style="background: white; color: <?php echo $program_info ? '#E67E22' : 'var(--primary-color)'; ?>;">
                     <i class="fas fa-users"></i> View All Participants
                 </a>
                 <?php if ($project_info): ?>
-                    <a href="project-details.php?id=<?php echo $filter_project_id; ?>" class="btn" style="background: rgba(255,255,255,0.2); color: white;">
+                    <a href="project-details?id=<?php echo $filter_project_id; ?>" class="btn" style="background: rgba(255,255,255,0.2); color: white;">
                         <i class="fas fa-arrow-left"></i> Back to Project
                     </a>
                 <?php else: ?>
-                    <a href="program-details.php?id=<?php echo $filter_program_id; ?>" class="btn" style="background: rgba(255,255,255,0.2); color: white;">
+                    <a href="program-details?id=<?php echo $filter_program_id; ?>" class="btn" style="background: rgba(255,255,255,0.2); color: white;">
                         <i class="fas fa-arrow-left"></i> Back to Program
                     </a>
                 <?php endif; ?>
@@ -231,7 +231,7 @@ if ($project_info) {
                 <i class="fas fa-user-plus"></i> Add Participant
             </button>
             <div class="btn-group">
-                <button onclick="window.location.href='download-participants-template.php<?php echo $context_query ? "?$context_query" : ""; ?>'" class="btn btn-info">
+                <button onclick="window.location.href='download-participants-template<?php echo $context_query ? "?$context_query" : ""; ?>'" class="btn btn-info">
                     <i class="fas fa-download"></i> Download Template
                 </button>
                 <button onclick="openModal('uploadCsvModal')" class="btn btn-info">
@@ -281,7 +281,7 @@ if ($project_info) {
                 <button type="submit" class="btn btn-info">
                     <i class="fas fa-filter"></i> Filter
                 </button>
-                <a href="<?php echo $context_query ? "participants.php?$context_query" : "participants.php"; ?>" class="btn btn-secondary">
+                <a href="<?php echo $context_query ? "participants?$context_query" : "participants"; ?>" class="btn btn-secondary">
                     <i class="fas fa-times"></i> Clear
                 </a>
             </div>
@@ -316,7 +316,7 @@ if ($project_info) {
                                         <button onclick="openModal('addBeneficiaryModal')" class="btn btn-primary">
                                             <i class="fas fa-user-plus"></i> Add First Participant
                                         </button>
-                                        <button onclick="window.location.href='download-participants-template.php?<?php echo $context_query; ?>'" class="btn btn-info">
+                                        <button onclick="window.location.href='download-participants-template?<?php echo $context_query; ?>'" class="btn btn-info">
                                             <i class="fas fa-download"></i> Download CSV Template
                                         </button>
                                     </div>
@@ -328,7 +328,7 @@ if ($project_info) {
                                         <button onclick="openModal('addBeneficiaryModal')" class="btn btn-primary">
                                             <i class="fas fa-user-plus"></i> Add Participant
                                         </button>
-                                        <button onclick="window.location.href='download-participants-template.php'" class="btn btn-info">
+                                        <button onclick="window.location.href='download-participants-template'" class="btn btn-info">
                                             <i class="fas fa-download"></i> Download CSV Template
                                         </button>
                                     </div>
@@ -384,7 +384,7 @@ if ($project_info) {
                                 </td>
                                 <td>
                                     <div class="table-actions">
-                                        <a href="participant-details.php?id=<?php echo $beneficiary['beneficiary_id']; ?><?php echo $context_query ? "&$context_query" : ''; ?>" 
+                                        <a href="participant-details?id=<?php echo $beneficiary['beneficiary_id']; ?><?php echo $context_query ? "&$context_query" : ''; ?>" 
                                            class="btn btn-info btn-sm" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </a>

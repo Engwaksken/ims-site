@@ -142,7 +142,7 @@ function h($v): string {
         </div>
 
         <div class="opp-hero-actions">
-            <a href="employees-list.php" class="btn btn-white btn-sm">
+            <a href="employees-list" class="btn btn-white btn-sm">
                 <i class="fas fa-arrow-left"></i> Directory
             </a>
             <button onclick="exportToExcel()" class="btn btn-white btn-sm">
@@ -190,7 +190,7 @@ function h($v): string {
                     <button type="submit" class="btn btn-primary btn-sm">
                         <i class="fas fa-filter"></i> Apply
                     </button>
-                    <a href="employee-reports.php" class="btn btn-secondary btn-sm">
+                    <a href="employee-reports" class="btn btn-secondary btn-sm">
                         <i class="fas fa-times"></i> Clear
                     </a>
                 </div>
@@ -546,7 +546,7 @@ function h($v): string {
 
     // -- Export helpers -------------------------------------------------------
     window.exportToExcel = function () {
-        window.location.href = 'export.php?type=employee_report'
+        window.location.href = 'export?type=employee_report'
             + '&department=<?= $filter_department ?>&year=<?= $filter_year ?>';
     };
 
@@ -554,7 +554,7 @@ function h($v): string {
         const orig = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
         btn.disabled  = true;
-        window.location.href = 'export-employee-report-pdf.php'
+        window.location.href = 'export-employee-report-pdf'
             + '?department=<?= $filter_department ?>&year=<?= $filter_year ?>';
         setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; }, 3000);
     };

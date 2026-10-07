@@ -4,7 +4,7 @@ $page_title = 'Upload Payment Receipt';
 include 'includes/header.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -12,7 +12,7 @@ $user_id = $_SESSION['user_id'];
 
 if (empty($_GET['payment_id'])) {
     $_SESSION['error'] = "No payment specified.";
-    header("Location: my-subscription.php");
+    header("Location: my-subscription");
     exit();
 }
 
@@ -34,13 +34,13 @@ $payment = $conn->query("
 
 if (!$payment) {
     $_SESSION['error'] = "Payment not found or access denied.";
-    header("Location: my-subscription.php");
+    header("Location: my-subscription");
     exit();
 }
 
 if ($payment['payment_status'] === 'Paid') {
     $_SESSION['error'] = "This payment has already been marked as paid.";
-    header("Location: my-subscription.php");
+    header("Location: my-subscription");
     exit();
 }
 
@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $_SESSION['success'] = "Receipt uploaded successfully! We'll verify your payment shortly.";
-        header("Location: my-subscription.php");
+        header("Location: my-subscription");
         exit();
     }
 }
@@ -518,7 +518,7 @@ textarea.fc { resize:vertical; min-height:80px; }
                 <button type="submit" class="btn btn-orange" id="submit-btn">
                     <i class="fas fa-upload"></i> Upload Receipt
                 </button>
-                <a href="my-subscription.php" class="btn btn-ghost">
+                <a href="my-subscription" class="btn btn-ghost">
                     <i class="fas fa-arrow-left"></i> Back to Subscription
                 </a>
             </div>

@@ -27,13 +27,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'respond') {
     // Validate inputs
     if (empty($admin_response)) {
         $_SESSION['error'] = "Please provide a response.";
-        header("Location: view-feedback.php?id=$feedback_id");
+        header("Location: view-feedback?id=$feedback_id");
         exit();
     }
     
     if (empty($new_status)) {
         $_SESSION['error'] = "Please select a status.";
-        header("Location: view-feedback.php?id=$feedback_id");
+        header("Location: view-feedback?id=$feedback_id");
         exit();
     }
     
@@ -41,7 +41,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'respond') {
     $valid_statuses = ['Responded', 'Resolved', 'Closed'];
     if (!in_array($new_status, $valid_statuses)) {
         $_SESSION['error'] = "Invalid status selected.";
-        header("Location: view-feedback.php?id=$feedback_id");
+        header("Location: view-feedback?id=$feedback_id");
         exit();
     }
     
@@ -55,7 +55,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'respond') {
     
     if ($feedback_result->num_rows == 0) {
         $_SESSION['error'] = "Feedback not found.";
-        header("Location: hub-operations.php?tab=feedback");
+        header("Location: hub-operations?tab=feedback");
         exit();
     }
     
@@ -85,7 +85,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'respond') {
                             ) VALUES (
                                 {$feedback['member_id']}, 'Feedback', 'Feedback Response Received',
                                 'We have responded to your feedback regarding: {$feedback['subject']}',
-                                'view-feedback.php?id=$feedback_id'
+                                'view-feedback?id=$feedback_id'
                             )";
             $conn->query($notif_query);
         }
@@ -95,7 +95,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'respond') {
         $_SESSION['error'] = "Error adding response: " . $conn->error;
     }
     
-    header("Location: view-feedback.php?id=$feedback_id");
+    header("Location: view-feedback?id=$feedback_id");
     exit();
 }
 
@@ -109,13 +109,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_response') {
     // Validate inputs
     if (empty($admin_response)) {
         $_SESSION['error'] = "Please provide a response.";
-        header("Location: view-feedback.php?id=$feedback_id");
+        header("Location: view-feedback?id=$feedback_id");
         exit();
     }
     
     if (empty($new_status)) {
         $_SESSION['error'] = "Please select a status.";
-        header("Location: view-feedback.php?id=$feedback_id");
+        header("Location: view-feedback?id=$feedback_id");
         exit();
     }
     
@@ -123,7 +123,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_response') {
     $valid_statuses = ['Responded', 'Resolved', 'Closed'];
     if (!in_array($new_status, $valid_statuses)) {
         $_SESSION['error'] = "Invalid status selected.";
-        header("Location: view-feedback.php?id=$feedback_id");
+        header("Location: view-feedback?id=$feedback_id");
         exit();
     }
     
@@ -136,7 +136,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_response') {
     
     if ($feedback_result->num_rows == 0) {
         $_SESSION['error'] = "Feedback not found.";
-        header("Location: hub-operations.php?tab=feedback");
+        header("Location: hub-operations?tab=feedback");
         exit();
     }
     
@@ -164,7 +164,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_response') {
                             ) VALUES (
                                 {$feedback['member_id']}, 'Feedback', 'Feedback Response Updated',
                                 'The response to your feedback has been updated.',
-                                'view-feedback.php?id=$feedback_id'
+                                'view-feedback?id=$feedback_id'
                             )";
             $conn->query($notif_query);
         }
@@ -174,7 +174,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_response') {
         $_SESSION['error'] = "Error updating response: " . $conn->error;
     }
     
-    header("Location: view-feedback.php?id=$feedback_id");
+    header("Location: view-feedback?id=$feedback_id");
     exit();
 }
 
@@ -187,7 +187,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'assign') {
     // Validate assigned_to
     if ($assigned_to <= 0) {
         $_SESSION['error'] = "Please select a staff member.";
-        header("Location: view-feedback.php?id=$feedback_id");
+        header("Location: view-feedback?id=$feedback_id");
         exit();
     }
     
@@ -197,7 +197,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'assign') {
     
     if ($staff_result->num_rows == 0) {
         $_SESSION['error'] = "Invalid staff member selected.";
-        header("Location: view-feedback.php?id=$feedback_id");
+        header("Location: view-feedback?id=$feedback_id");
         exit();
     }
     
@@ -209,7 +209,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'assign') {
     
     if ($feedback_result->num_rows == 0) {
         $_SESSION['error'] = "Feedback not found.";
-        header("Location: hub-operations.php?tab=feedback");
+        header("Location: hub-operations?tab=feedback");
         exit();
     }
     
@@ -237,7 +237,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'assign') {
                                   (SELECT member_id FROM members WHERE user_id = $assigned_to LIMIT 1),
                                   'Feedback', 'Feedback Assigned to You',
                                   'You have been assigned to handle feedback: {$feedback['subject']}',
-                                  'view-feedback.php?id=$feedback_id'
+                                  'view-feedback?id=$feedback_id'
                               )";
         $conn->query($staff_notif_query);
         
@@ -246,7 +246,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'assign') {
         $_SESSION['error'] = "Error assigning feedback: " . $conn->error;
     }
     
-    header("Location: view-feedback.php?id=$feedback_id");
+    header("Location: view-feedback?id=$feedback_id");
     exit();
 }
 
@@ -260,7 +260,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_status') {
     $valid_statuses = ['New', 'In Review', 'Responded', 'Resolved', 'Closed'];
     if (!in_array($new_status, $valid_statuses)) {
         $_SESSION['error'] = "Invalid status selected.";
-        header("Location: view-feedback.php?id=$feedback_id");
+        header("Location: view-feedback?id=$feedback_id");
         exit();
     }
     
@@ -273,7 +273,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_status') {
     
     if ($feedback_result->num_rows == 0) {
         $_SESSION['error'] = "Feedback not found.";
-        header("Location: hub-operations.php?tab=feedback");
+        header("Location: hub-operations?tab=feedback");
         exit();
     }
     
@@ -304,7 +304,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_status') {
                             ) VALUES (
                                 {$feedback['member_id']}, 'Feedback', 'Feedback Status Updated',
                                 '$status_message',
-                                'view-feedback.php?id=$feedback_id'
+                                'view-feedback?id=$feedback_id'
                             )";
             $conn->query($notif_query);
         }
@@ -314,7 +314,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_status') {
         $_SESSION['error'] = "Error updating status: " . $conn->error;
     }
     
-    header("Location: view-feedback.php?id=$feedback_id");
+    header("Location: view-feedback?id=$feedback_id");
     exit();
 }
 
@@ -328,7 +328,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_priority') {
     $valid_priorities = ['Low', 'Medium', 'High', 'Urgent'];
     if (!in_array($new_priority, $valid_priorities)) {
         $_SESSION['error'] = "Invalid priority selected.";
-        header("Location: view-feedback.php?id=$feedback_id");
+        header("Location: view-feedback?id=$feedback_id");
         exit();
     }
     
@@ -351,7 +351,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update_priority') {
         $_SESSION['error'] = "Error updating priority: " . $conn->error;
     }
     
-    header("Location: view-feedback.php?id=$feedback_id");
+    header("Location: view-feedback?id=$feedback_id");
     exit();
 }
 
@@ -362,7 +362,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete_response') {
     // Extra admin check
     if ($_SESSION['role'] != 'Administrator') {
         $_SESSION['error'] = "Only administrators can delete responses.";
-        header("Location: dashboard.php");
+        header("Location: dashboard");
         exit();
     }
     
@@ -374,7 +374,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete_response') {
     
     if ($feedback_result->num_rows == 0) {
         $_SESSION['error'] = "Feedback not found.";
-        header("Location: hub-operations.php?tab=feedback");
+        header("Location: hub-operations?tab=feedback");
         exit();
     }
     
@@ -400,7 +400,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete_response') {
         $_SESSION['error'] = "Error deleting response: " . $conn->error;
     }
     
-    header("Location: view-feedback.php?id=$feedback_id");
+    header("Location: view-feedback?id=$feedback_id");
     exit();
 }
 
@@ -412,7 +412,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'bulk_update_status') {
     
     if (empty($feedback_ids)) {
         $_SESSION['error'] = "No feedback items selected.";
-        header("Location: hub-operations.php?tab=feedback");
+        header("Location: hub-operations?tab=feedback");
         exit();
     }
     
@@ -420,7 +420,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'bulk_update_status') {
     $valid_statuses = ['New', 'In Review', 'Responded', 'Resolved', 'Closed'];
     if (!in_array($new_status, $valid_statuses)) {
         $_SESSION['error'] = "Invalid status selected.";
-        header("Location: hub-operations.php?tab=feedback");
+        header("Location: hub-operations?tab=feedback");
         exit();
     }
     
@@ -448,7 +448,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'bulk_update_status') {
         $_SESSION['error'] = "Error updating feedback: " . $conn->error;
     }
     
-    header("Location: hub-operations.php?tab=feedback");
+    header("Location: hub-operations?tab=feedback");
     exit();
 }
 
@@ -532,6 +532,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
 
 // If no valid action, redirect
 $_SESSION['error'] = "Invalid action.";
-header("Location: hub-operations.php?tab=feedback");
+header("Location: hub-operations?tab=feedback");
 exit();
 ?>

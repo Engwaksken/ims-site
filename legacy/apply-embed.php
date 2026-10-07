@@ -479,7 +479,7 @@ while ($row = $result->fetch_assoc()) {
                 </div>
                 <?php endif; ?>
 
-                <a href="submit-application.php?opportunity_id=<?php echo (int)$opp['opportunity_id']; ?>"
+                <a href="submit-application?opportunity_id=<?php echo (int)$opp['opportunity_id']; ?>"
                    class="hc-btn"
                    target="_parent">
                     <i class="fas fa-paper-plane"></i> Apply Now

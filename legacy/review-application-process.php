@@ -20,7 +20,7 @@ if (!function_exists('sanitize_input')) {
 function requireRoles(array $roles): void {
     if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || !in_array($_SESSION['role'], $roles, true)) {
         $_SESSION['error'] = "Unauthorized access. You don't have permission to review applications.";
-        header("Location: login.php");
+        header("Location: login");
         exit();
     }
 }
@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action !== '') {
     csrf_protect(true);
 }
 
-$redirectBack = $_SERVER['HTTP_REFERER'] ?? 'application-opportunities.php';
+$redirectBack = $_SERVER['HTTP_REFERER'] ?? 'application-opportunities';
 
 /* ============================================================
    LOAD APPLICATION (if needed)
@@ -131,7 +131,7 @@ $application = null;
 if ($application_id > 0) {
     $application = fetch_application($conn, $application_id);
     if (!$application) {
-        failTo('application-opportunities.php', "Application not found.");
+        failTo('application-opportunities', "Application not found.");
     }
 }
 
@@ -145,10 +145,10 @@ switch ($action) {
        POST: action=add_review, application_id, review_type, innovation_score, market_potential_score, team_score, financial_viability_score, comments, recommendation
     ------------------------------------------------------------ */
     case 'add_review': {
-        if ($application_id <= 0) failTo('application-opportunities.php', "Invalid application.");
+        if ($application_id <= 0) failTo('application-opportunities', "Invalid application.");
 
         $review_type = sanitize_input($_POST['review_type'] ?? '');
-        if ($review_type === '') failTo("view-application.php?id={$application_id}", "Review type is required.");
+        if ($review_type === '') failTo("view-application?id={$application_id}", "Review type is required.");
 
         $innovation_score         = ($_POST['innovation_score'] ?? '') !== '' ? (float)$_POST['innovation_score'] : null;
         $market_potential_score   = ($_POST['market_potential_score'] ?? '') !== '' ? (float)$_POST['market_potential_score'] : null;
@@ -168,7 +168,7 @@ switch ($action) {
                 overall_score, comments, recommendation
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
-        if (!$stmt) failTo("view-application.php?id={$application_id}", "SQL error: " . $conn->error);
+        if (!$stmt) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
 
         $stmt->bind_param(
             "iissddddss",
@@ -187,7 +187,7 @@ switch ($action) {
         if (!$stmt->execute()) {
             $err = $stmt->error;
             $stmt->close();
-            failTo("view-application.php?id={$application_id}", "Error submitting review: " . $err);
+            failTo("view-application?id={$application_id}", "Error submitting review: " . $err);
         }
         $stmt->close();
 
@@ -239,7 +239,7 @@ switch ($action) {
             "Added {$review_type} for application #{$application_id} (" . ($application['startup_name'] ?? 'N/A') . ")"
         );
 
-        okTo("view-application.php?id={$application_id}", "Review submitted successfully!");
+        okTo("view-application?id={$application_id}", "Review submitted successfully!");
     }
 
     /* ------------------------------------------------------------
@@ -247,14 +247,14 @@ switch ($action) {
        ?action=change_status&application_id=ID&status=NewStatus
     ------------------------------------------------------------ */
     case 'change_status': {
-        if ($application_id <= 0) failTo('application-opportunities.php', "Invalid application.");
+        if ($application_id <= 0) failTo('application-opportunities', "Invalid application.");
 
         $new_status = sanitize_input($_GET['status'] ?? '');
         $old_status = $application['status'] ?? null;
 
         $valid_statuses = ['Draft','Submitted','Under Review','Shortlisted','Accepted','Rejected','Withdrawn'];
         if (!in_array($new_status, $valid_statuses, true)) {
-            failTo("view-application.php?id={$application_id}", "Invalid status.");
+            failTo("view-application?id={$application_id}", "Invalid status.");
         }
 
         $stmt = $conn->prepare("
@@ -262,7 +262,7 @@ switch ($action) {
             SET status = ?, reviewed_by = ?, reviewed_at = NOW()
             WHERE application_id = ?
         ");
-        if (!$stmt) failTo("view-application.php?id={$application_id}", "SQL error: " . $conn->error);
+        if (!$stmt) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
 
         $stmt->bind_param("sii", $new_status, $user_id, $application_id);
 
@@ -270,12 +270,12 @@ switch ($action) {
             $stmt->close();
             log_status_change($conn, $application_id, $old_status, $new_status, $user_id, "Status changed from {$old_status} to {$new_status}");
             log_activity($conn, $user_id, 'Change Application Status', "Changed status of application #{$application_id} from {$old_status} to {$new_status}");
-            okTo("view-application.php?id={$application_id}", "Application status changed to {$new_status} successfully!");
+            okTo("view-application?id={$application_id}", "Application status changed to {$new_status} successfully!");
         }
 
         $err = $stmt->error;
         $stmt->close();
-        failTo("view-application.php?id={$application_id}", "Error changing status: " . $err);
+        failTo("view-application?id={$application_id}", "Error changing status: " . $err);
     }
 
     /* ------------------------------------------------------------
@@ -283,11 +283,11 @@ switch ($action) {
        action=reject, application_id, rejection_reason
     ------------------------------------------------------------ */
     case 'reject': {
-        if ($application_id <= 0) failTo('application-opportunities.php', "Invalid application.");
+        if ($application_id <= 0) failTo('application-opportunities', "Invalid application.");
 
         $rejection_reason = sanitize_input($_POST['rejection_reason'] ?? '');
         if ($rejection_reason === '') {
-            failTo("view-application.php?id={$application_id}", "Rejection reason is required.");
+            failTo("view-application?id={$application_id}", "Rejection reason is required.");
         }
 
         $old_status = $application['status'] ?? null;
@@ -302,7 +302,7 @@ switch ($action) {
                 reviewed_at = NOW()
             WHERE application_id = ?
         ");
-        if (!$stmt) failTo("view-application.php?id={$application_id}", "SQL error: " . $conn->error);
+        if (!$stmt) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
 
         $stmt->bind_param("sssii", $new_status, $rejection_reason, $rejection_reason, $user_id, $application_id);
 
@@ -317,12 +317,12 @@ switch ($action) {
                 @send_rejection_email(($application['email'] ?? $application['applicant_email'] ?? ''), ($application['startup_name'] ?? ''), $rejection_reason);
             }
 
-            okTo("view-application.php?id={$application_id}", "Application rejected successfully.");
+            okTo("view-application?id={$application_id}", "Application rejected successfully.");
         }
 
         $err = $stmt->error;
         $stmt->close();
-        failTo("view-application.php?id={$application_id}", "Error rejecting application: " . $err);
+        failTo("view-application?id={$application_id}", "Error rejecting application: " . $err);
     }
 
     /* ------------------------------------------------------------
@@ -330,7 +330,7 @@ switch ($action) {
        action=accept, application_id, comments(optional)
     ------------------------------------------------------------ */
     case 'accept': {
-        if ($application_id <= 0) failTo('application-opportunities.php', "Invalid application.");
+        if ($application_id <= 0) failTo('application-opportunities', "Invalid application.");
 
         $old_status = $application['status'] ?? null;
         $new_status = 'Accepted';
@@ -343,7 +343,7 @@ switch ($action) {
                 reviewed_at = NOW()
             WHERE application_id = ?
         ");
-        if (!$stmt) failTo("view-application.php?id={$application_id}", "SQL error: " . $conn->error);
+        if (!$stmt) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
 
         $stmt->bind_param("sii", $new_status, $user_id, $application_id);
 
@@ -357,12 +357,12 @@ switch ($action) {
                 @send_acceptance_email(($application['email'] ?? $application['applicant_email'] ?? ''), ($application['startup_name'] ?? ''));
             }
 
-            okTo("view-application.php?id={$application_id}", "Application accepted successfully!");
+            okTo("view-application?id={$application_id}", "Application accepted successfully!");
         }
 
         $err = $stmt->error;
         $stmt->close();
-        failTo("view-application.php?id={$application_id}", "Error accepting application: " . $err);
+        failTo("view-application?id={$application_id}", "Error accepting application: " . $err);
     }
 
     /* ------------------------------------------------------------
@@ -370,7 +370,7 @@ switch ($action) {
        action=update_notes, application_id, reviewer_notes
     ------------------------------------------------------------ */
     case 'update_notes': {
-        if ($application_id <= 0) failTo('application-opportunities.php', "Invalid application.");
+        if ($application_id <= 0) failTo('application-opportunities', "Invalid application.");
 
         $reviewer_notes = sanitize_input($_POST['reviewer_notes'] ?? '');
 
@@ -379,19 +379,19 @@ switch ($action) {
             SET reviewer_notes = ?, reviewed_by = ?
             WHERE application_id = ?
         ");
-        if (!$stmt) failTo("view-application.php?id={$application_id}", "SQL error: " . $conn->error);
+        if (!$stmt) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
 
         $stmt->bind_param("sii", $reviewer_notes, $user_id, $application_id);
 
         if ($stmt->execute()) {
             $stmt->close();
             log_activity($conn, $user_id, 'Update Reviewer Notes', "Updated notes for application #{$application_id} (" . ($application['startup_name'] ?? 'N/A') . ")");
-            okTo("view-application.php?id={$application_id}", "Reviewer notes updated successfully!");
+            okTo("view-application?id={$application_id}", "Reviewer notes updated successfully!");
         }
 
         $err = $stmt->error;
         $stmt->close();
-        failTo("view-application.php?id={$application_id}", "Error updating notes: " . $err);
+        failTo("view-application?id={$application_id}", "Error updating notes: " . $err);
     }
 
     /* ------------------------------------------------------------
@@ -401,36 +401,36 @@ switch ($action) {
     case 'delete_review': {
         $review_id = (int)($_GET['review_id'] ?? 0);
         if ($application_id <= 0 || $review_id <= 0) {
-            failTo("application-opportunities.php", "Invalid request.");
+            failTo("application-opportunities", "Invalid request.");
         }
 
         $stmt = $conn->prepare("SELECT review_id, reviewer_id FROM application_reviews WHERE review_id = ? LIMIT 1");
-        if (!$stmt) failTo("view-application.php?id={$application_id}", "SQL error: " . $conn->error);
+        if (!$stmt) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
         $stmt->bind_param("i", $review_id);
         $stmt->execute();
         $res = $stmt->get_result();
         $review = $res ? $res->fetch_assoc() : null;
         $stmt->close();
 
-        if (!$review) failTo("view-application.php?id={$application_id}", "Review not found.");
+        if (!$review) failTo("view-application?id={$application_id}", "Review not found.");
 
         if ((int)$review['reviewer_id'] !== $user_id && ($_SESSION['role'] ?? '') !== 'Administrator') {
-            failTo("view-application.php?id={$application_id}", "You can only delete your own reviews.");
+            failTo("view-application?id={$application_id}", "You can only delete your own reviews.");
         }
 
         $del = $conn->prepare("DELETE FROM application_reviews WHERE review_id = ?");
-        if (!$del) failTo("view-application.php?id={$application_id}", "SQL error: " . $conn->error);
+        if (!$del) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
         $del->bind_param("i", $review_id);
 
         if ($del->execute()) {
             $del->close();
             log_activity($conn, $user_id, 'Delete Review', "Deleted review #{$review_id} for application #{$application_id}");
-            okTo("view-application.php?id={$application_id}", "Review deleted successfully!");
+            okTo("view-application?id={$application_id}", "Review deleted successfully!");
         }
 
         $err = $del->error;
         $del->close();
-        failTo("view-application.php?id={$application_id}", "Error deleting review: " . $err);
+        failTo("view-application?id={$application_id}", "Error deleting review: " . $err);
     }
 
     /* ------------------------------------------------------------
@@ -500,13 +500,13 @@ switch ($action) {
        action=send_email, application_id, subject, message
     ------------------------------------------------------------ */
     case 'send_email': {
-        if ($application_id <= 0) failTo('application-opportunities.php', "Invalid application.");
+        if ($application_id <= 0) failTo('application-opportunities', "Invalid application.");
 
         $subject = sanitize_input($_POST['subject'] ?? '');
         $message = sanitize_input($_POST['message'] ?? '');
 
         if ($subject === '' || $message === '') {
-            failTo("view-application.php?id={$application_id}", "Subject and message are required.");
+            failTo("view-application?id={$application_id}", "Subject and message are required.");
         }
 
         $recipient = $application['email'] ?? $application['applicant_email'] ?? '';
@@ -516,7 +516,7 @@ switch ($action) {
         }
 
         log_activity($conn, $user_id, 'Email Sent', "Sent email to applicant of application #{$application_id}: {$subject}");
-        okTo("view-application.php?id={$application_id}", "Email sent successfully to {$recipient}");
+        okTo("view-application?id={$application_id}", "Email sent successfully to {$recipient}");
     }
 
     /* ------------------------------------------------------------
@@ -524,34 +524,34 @@ switch ($action) {
        action=assign_reviewer, application_id, reviewer_id
     ------------------------------------------------------------ */
     case 'assign_reviewer': {
-        if ($application_id <= 0) failTo('application-opportunities.php', "Invalid application.");
+        if ($application_id <= 0) failTo('application-opportunities', "Invalid application.");
 
         $reviewer_to_assign = (int)($_POST['reviewer_id'] ?? 0);
-        if ($reviewer_to_assign <= 0) failTo("view-application.php?id={$application_id}", "Invalid reviewer.");
+        if ($reviewer_to_assign <= 0) failTo("view-application?id={$application_id}", "Invalid reviewer.");
 
         $st = $conn->prepare("SELECT user_id, full_name FROM users WHERE user_id = ? LIMIT 1");
-        if (!$st) failTo("view-application.php?id={$application_id}", "SQL error: " . $conn->error);
+        if (!$st) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
         $st->bind_param("i", $reviewer_to_assign);
         $st->execute();
         $res = $st->get_result();
         $reviewer = $res ? $res->fetch_assoc() : null;
         $st->close();
 
-        if (!$reviewer) failTo("view-application.php?id={$application_id}", "Reviewer not found.");
+        if (!$reviewer) failTo("view-application?id={$application_id}", "Reviewer not found.");
 
         $up = $conn->prepare("UPDATE applications SET reviewed_by = ? WHERE application_id = ?");
-        if (!$up) failTo("view-application.php?id={$application_id}", "SQL error: " . $conn->error);
+        if (!$up) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
         $up->bind_param("ii", $reviewer_to_assign, $application_id);
 
         if ($up->execute()) {
             $up->close();
             log_activity($conn, $user_id, 'Assign Reviewer', "Assigned {$reviewer['full_name']} to review application #{$application_id}");
-            okTo("view-application.php?id={$application_id}", "Reviewer assigned successfully!");
+            okTo("view-application?id={$application_id}", "Reviewer assigned successfully!");
         }
 
         $err = $up->error;
         $up->close();
-        failTo("view-application.php?id={$application_id}", "Error assigning reviewer: " . $err);
+        failTo("view-application?id={$application_id}", "Error assigning reviewer: " . $err);
     }
 
     /* ------------------------------------------------------------
@@ -560,28 +560,28 @@ switch ($action) {
        action=withdraw, application_id, reason(optional)
     ------------------------------------------------------------ */
     case 'withdraw': {
-        if ($application_id <= 0) failTo('application-opportunities.php', "Invalid application.");
+        if ($application_id <= 0) failTo('application-opportunities', "Invalid application.");
 
         $old_status = $application['status'] ?? null;
         $new_status = 'Withdrawn';
         $reason = sanitize_input($_POST['reason'] ?? 'Withdrawn');
 
         $up = $conn->prepare("UPDATE applications SET status = ? WHERE application_id = ?");
-        if (!$up) failTo("view-application.php?id={$application_id}", "SQL error: " . $conn->error);
+        if (!$up) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
         $up->bind_param("si", $new_status, $application_id);
 
         if ($up->execute()) {
             $up->close();
             log_status_change($conn, $application_id, $old_status, $new_status, $user_id, $reason);
             log_activity($conn, $user_id, 'Withdraw Application', "Application #{$application_id} withdrawn");
-            okTo("view-application.php?id={$application_id}", "Application withdrawn successfully.");
+            okTo("view-application?id={$application_id}", "Application withdrawn successfully.");
         }
 
         $err = $up->error;
         $up->close();
-        failTo("view-application.php?id={$application_id}", "Error withdrawing application: " . $err);
+        failTo("view-application?id={$application_id}", "Error withdrawing application: " . $err);
     }
 
     default:
-        failTo('application-opportunities.php', "Invalid action.");
+        failTo('application-opportunities', "Invalid action.");
 }

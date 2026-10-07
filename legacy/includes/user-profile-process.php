@@ -14,7 +14,7 @@ require_once __DIR__ . '/config.php';
 
 if (empty($_SESSION['user_id'])) {
     $_SESSION['error'] = 'Please log in to update your profile.';
-    header('Location: ../login.php');
+    header('Location: ../login');
     exit;
 }
 
@@ -28,7 +28,7 @@ $user_id = (int)$_SESSION['user_id'];
 
 function profile_redirect(): never
 {
-    header('Location: ../user-profile.php');
+    header('Location: ../user-profile');
     exit;
 }
 

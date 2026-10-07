@@ -13,13 +13,13 @@ if (session_status() === PHP_SESSION_NONE) {
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
     $_SESSION['error'] = 'Database connection not available.';
-    header('Location: ../users.php');
+    header('Location: ../users');
     exit();
 }
 
 $conn->set_charset('utf8mb4');
 
-function redirect_users(string $message, string $type = 'success', string $location = '../users.php'): never
+function redirect_users(string $message, string $type = 'success', string $location = '../users'): never
 {
     if (function_exists('send_notification') && !empty($_SESSION['user_id'])) {
         send_notification((int)$_SESSION['user_id'], $message, $type);
@@ -54,13 +54,13 @@ function app_login_url(): string
     if (function_exists('get_setting')) {
         $baseUrl = rtrim((string)get_setting('site_url', ''), '/');
         if ($baseUrl !== '') {
-            return $baseUrl . '/login.php';
+            return $baseUrl . '/login';
         }
     }
 
     if (!empty($_SERVER['HTTP_HOST'])) {
         $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-        return $scheme . '://' . $_SERVER['HTTP_HOST'] . '/login.php';
+        return $scheme . '://' . $_SERVER['HTTP_HOST'] . '/login';
     }
 
     return 'https://ims.hivecolab.com/login.php';
@@ -267,50 +267,50 @@ if (isset($_POST['edit_user'])) {
     }
 
     if ($username === '' || $full_name === '' || $email === '' || $role === '') {
-        redirect_users('All required fields must be filled.', 'danger', "../users.php?edit={$user_id}");
+        redirect_users('All required fields must be filled.', 'danger', "../users?edit={$user_id}");
     }
 
     if (!valid_email($email)) {
-        redirect_users('Please enter a valid email address.', 'danger', "../users.php?edit={$user_id}");
+        redirect_users('Please enter a valid email address.', 'danger', "../users?edit={$user_id}");
     }
 
     if (!in_array($role, IMS_ALL_ROLES, true)) {
-        redirect_users('Please select a valid role.', 'danger', "../users.php?edit={$user_id}");
+        redirect_users('Please select a valid role.', 'danger', "../users?edit={$user_id}");
     }
 
     if ($user_id === (int)($_SESSION['user_id'] ?? 0) && ($is_active === 0 || $role !== 'Administrator')) {
-        redirect_users('You cannot deactivate or demote your own account.', 'danger', "../users.php?edit={$user_id}");
+        redirect_users('You cannot deactivate or demote your own account.', 'danger', "../users?edit={$user_id}");
     }
 
     $checkUsername = $conn->prepare("SELECT user_id FROM users WHERE username = ? AND user_id != ? LIMIT 1");
     if (!$checkUsername) {
-        redirect_users('Error preparing username check: ' . $conn->error, 'danger', "../users.php?edit={$user_id}");
+        redirect_users('Error preparing username check: ' . $conn->error, 'danger', "../users?edit={$user_id}");
     }
     $checkUsername->bind_param('si', $username, $user_id);
     $checkUsername->execute();
     $usernameResult = $checkUsername->get_result();
     if ($usernameResult && $usernameResult->num_rows > 0) {
         $checkUsername->close();
-        redirect_users('Username already exists. Please choose a different username.', 'danger', "../users.php?edit={$user_id}");
+        redirect_users('Username already exists. Please choose a different username.', 'danger', "../users?edit={$user_id}");
     }
     $checkUsername->close();
 
     $checkEmail = $conn->prepare("SELECT user_id FROM users WHERE email = ? AND user_id != ? LIMIT 1");
     if (!$checkEmail) {
-        redirect_users('Error preparing email check: ' . $conn->error, 'danger', "../users.php?edit={$user_id}");
+        redirect_users('Error preparing email check: ' . $conn->error, 'danger', "../users?edit={$user_id}");
     }
     $checkEmail->bind_param('si', $email, $user_id);
     $checkEmail->execute();
     $emailResult = $checkEmail->get_result();
     if ($emailResult && $emailResult->num_rows > 0) {
         $checkEmail->close();
-        redirect_users('Email already exists. Please use a different email.', 'danger', "../users.php?edit={$user_id}");
+        redirect_users('Email already exists. Please use a different email.', 'danger', "../users?edit={$user_id}");
     }
     $checkEmail->close();
 
     if ($password !== '') {
         if (strlen($password) < 6) {
-            redirect_users('Password must be at least 6 characters.', 'danger', "../users.php?edit={$user_id}");
+            redirect_users('Password must be at least 6 characters.', 'danger', "../users?edit={$user_id}");
         }
 
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -322,7 +322,7 @@ if (isset($_POST['edit_user'])) {
         ");
 
         if (!$stmt) {
-            redirect_users('Error preparing user update: ' . $conn->error, 'danger', "../users.php?edit={$user_id}");
+            redirect_users('Error preparing user update: ' . $conn->error, 'danger', "../users?edit={$user_id}");
         }
 
         $stmt->bind_param(
@@ -344,7 +344,7 @@ if (isset($_POST['edit_user'])) {
         ");
 
         if (!$stmt) {
-            redirect_users('Error preparing user update: ' . $conn->error, 'danger', "../users.php?edit={$user_id}");
+            redirect_users('Error preparing user update: ' . $conn->error, 'danger', "../users?edit={$user_id}");
         }
 
         $stmt->bind_param(
@@ -362,7 +362,7 @@ if (isset($_POST['edit_user'])) {
     if (!$stmt->execute()) {
         $error = $stmt->error ?: $conn->error;
         $stmt->close();
-        redirect_users('Error updating user: ' . $error, 'danger', "../users.php?edit={$user_id}");
+        redirect_users('Error updating user: ' . $error, 'danger', "../users?edit={$user_id}");
     }
 
     $stmt->close();
@@ -436,5 +436,5 @@ if (isset($_POST['delete_user'])) {
 /* ============================================================
    FALLBACK
 ============================================================ */
-header('Location: ../users.php');
+header('Location: ../users');
 exit();

@@ -151,7 +151,7 @@ $status_badge = [
             <button type="submit" class="btn btn-dark">
                 <i class="fas fa-filter"></i> Filter
             </button>
-            <a href="projects.php" class="btn btn-gray">
+            <a href="projects" class="btn btn-gray">
                 <i class="fas fa-times"></i> Clear
             </a>
         </div>
@@ -249,7 +249,7 @@ $status_badge = [
                                 <!-- Actions -->
                                 <td>
                                     <div class="actions">
-                                        <a href="project-details.php?id=<?= (int)$p['project_id'] ?>"
+                                        <a href="project-details?id=<?= (int)$p['project_id'] ?>"
                                            class="btn btn-sm btn-soft" title="View details">
                                             <i class="fas fa-eye"></i>
                                         </a>

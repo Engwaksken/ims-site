@@ -2,10 +2,15 @@
 
 declare(strict_types=1);
 
+// Must be set before header.php, which renders the <title> and page heading.
+$page_title = 'Surveys';
+
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/process-surveys.php';
 
-$page_title = 'Surveys';
+// Per-row Edit/Delete modals are collected here and printed after the
+// table: a <div> inside <tbody> is invalid HTML.
+$surveyRowModals = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -271,7 +276,7 @@ if (!function_exists('survey_h')) {
                                 <td>
                                     <div class="survey-actions">
                                         <a
-                                            href="survey-builder.php?id=<?= $surveyId ?>"
+                                            href="survey-builder?id=<?= $surveyId ?>"
                                             class="btn btn-soft btn-sm"
                                             title="Build survey"
                                         >
@@ -280,7 +285,7 @@ if (!function_exists('survey_h')) {
                                         </a>
 
                                         <a
-                                            href="survey-analytics.php?id=<?= $surveyId ?>"
+                                            href="survey-analytics?id=<?= $surveyId ?>"
                                             class="btn btn-dark btn-sm"
                                             title="View analytics"
                                         >
@@ -315,6 +320,7 @@ if (!function_exists('survey_h')) {
                                 </td>
                             </tr>
 
+                            <?php ob_start(); ?>
                             <!-- Edit Survey Modal -->
                             <div
                                 class="modal"
@@ -565,7 +571,7 @@ if (!function_exists('survey_h')) {
                                                     delete
 
                                                     <strong>
-                                                        “<?= survey_h($surveyName) ?>”
+                                                        ï¿½<?= survey_h($surveyName) ?>ï¿½
                                                     </strong>.
 
                                                     All related questions and
@@ -598,6 +604,7 @@ if (!function_exists('survey_h')) {
                                     </div>
                                 </div>
                             </div>
+                            <?php $surveyRowModals .= (string) ob_get_clean(); ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -608,67 +615,12 @@ if (!function_exists('survey_h')) {
 
 </div>
 
+<!-- Edit / Delete Survey Modals (one pair per survey) -->
+<?= $surveyRowModals ?>
+
 <!-- Create Survey Modal -->
 <?php include __DIR__ . '/partials/create-survey-modal.php'; ?>
-
-<script>
-function openModal(id) {
-    const modal = document.getElementById(id);
-
-    if (!modal) {
-        return;
-    }
-
-    modal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-
-    const focusableElement = modal.querySelector(
-        'input:not([type="hidden"]), select, textarea, button'
-    );
-
-    if (focusableElement) {
-        window.setTimeout(function () {
-            focusableElement.focus();
-        }, 100);
-    }
-}
-
-function closeModal(id) {
-    const modal = document.getElementById(id);
-
-    if (!modal) {
-        return;
-    }
-
-    modal.classList.remove('show');
-
-    if (!document.querySelector('.modal.show')) {
-        document.body.style.overflow = '';
-    }
-}
-
-
-document.querySelectorAll('.modal').forEach(function (modal) {
-    modal.addEventListener('click', function (event) {
-        if (event.target === modal) {
-            closeModal(modal.id);
-        }
-    });
-});
-
-
-
-document.addEventListener('keydown', function (event) {
-    if (event.key !== 'Escape') {
-        return;
-    }
-
-    document
-        .querySelectorAll('.modal.show')
-        .forEach(function (modal) {
-            closeModal(modal.id);
-        });
-});
-</script>
+<script src="js/survey-modal.js"></script>
+<!-- openModal()/closeModal(), backdrop click and Escape come from main.js (footer). -->
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

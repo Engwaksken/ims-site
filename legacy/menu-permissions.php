@@ -6,7 +6,7 @@ include 'includes/header.php';
 
 if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'Administrator') {
     $_SESSION['error'] = "Access denied.";
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
@@ -33,6 +33,19 @@ $all_roles = [
     'Program Officer',
 ];
 
+/**
+ * Store local menu links extensionless ("reports.php?x=1" -> "reports?x=1").
+ * Absolute http(s) URLs are kept as entered.
+ */
+function menu_clean_page(string $page): string
+{
+    if ($page === '' || preg_match('#^https?://#i', $page)) {
+        return $page;
+    }
+
+    return (string)preg_replace('#\.php(?=[?\#]|$)#i', '', $page);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['save_permissions'])) {
@@ -51,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             foreach ($_POST['items'] as $mid => $data) {
                 $mid  = (int)$mid;
-                $page = trim((string)($data['page'] ?? ''));
+                $page = menu_clean_page(trim((string)($data['page'] ?? '')));
                 $lbl  = trim((string)($data['label'] ?? ''));
                 $icon = trim((string)($data['icon'] ?? 'fa-circle'));
                 $cat  = trim((string)($data['category'] ?? 'General'));
@@ -96,12 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $_SESSION['success'] = "Permissions saved successfully.";
-        header("Location: menu-permissions.php");
+        header("Location: menu-permissions");
         exit();
     }
 
     if (isset($_POST['add_item'])) {
-        $page = trim((string)($_POST['page'] ?? ''));
+        $page = menu_clean_page(trim((string)($_POST['page'] ?? '')));
         $lbl  = trim((string)($_POST['label'] ?? ''));
         $icon = trim((string)($_POST['icon'] ?? 'fa-circle'));
         $cat  = trim((string)($_POST['category'] ?? 'General'));
@@ -109,14 +122,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($page === '' || $lbl === '') {
             $_SESSION['error'] = "Page filename and label are required.";
-            header("Location: menu-permissions.php");
+            header("Location: menu-permissions");
             exit();
         }
 
         // Menu links are rendered as href: relative paths or http(s) only.
         if (!ims_is_safe_link($page)) {
-            $_SESSION['error'] = "Invalid page link. Use a relative page (e.g. reports.php) or an http(s) URL.";
-            header("Location: menu-permissions.php");
+            $_SESSION['error'] = "Invalid page link. Use a relative page (e.g. reports) or an http(s) URL.";
+            header("Location: menu-permissions");
             exit();
         }
 
@@ -139,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $stmt->close();
-        header("Location: menu-permissions.php");
+        header("Location: menu-permissions");
         exit();
     }
 }
@@ -162,7 +175,7 @@ if (!empty($_GET['delete'])) {
     $stmt->close();
 
     $_SESSION['success'] = "\"" . htmlspecialchars($del_item['label'] ?? 'Item') . "\" removed.";
-    header("Location: menu-permissions.php");
+    header("Location: menu-permissions");
     exit();
 }
 
@@ -433,7 +446,7 @@ function catColor(string $cat, array $keys, array $pal): string
         <h1><i class="fas fa-shield-alt"></i> Menu Permissions</h1>
         <p>Edit page info inline and assign which roles see each item in the sidebar. Press <strong>Save All</strong> when done.</p>
     </div>
-    <a href="dashboard.php" class="btn btn-ghost" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.25);">
+    <a href="dashboard" class="btn btn-ghost" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.25);">
         <i class="fas fa-arrow-left"></i> Back
     </a>
 </div>
@@ -465,7 +478,7 @@ function catColor(string $cat, array $keys, array $pal): string
             <div class="ag">
                 <div class="fg">
                     <label>Page Filename *</label>
-                    <input type="text" name="page" class="fc" placeholder="reports.php" required>
+                    <input type="text" name="page" class="fc" placeholder="reports" required>
                 </div>
                 <div class="fg">
                     <label>Sidebar Label *</label>
@@ -586,8 +599,8 @@ function catColor(string $cat, array $keys, array $pal): string
                                            class="ie-inp"
                                            name="items[<?= $mid ?>][page]"
                                            value="<?= htmlspecialchars($item['page']) ?>"
-                                           placeholder="page.php"
-                                           title="Page filename (e.g. reports.php)">
+                                           placeholder="page-name"
+                                           title="Page link (e.g. reports)">
                                 </div>
 
                                 <!-- Row 2: label -->
@@ -663,7 +676,7 @@ function catColor(string $cat, array $keys, array $pal): string
 
                     <!-- -- Delete -- -->
                     <td class="del-wrap">
-                        <a href="menu-permissions.php?delete=<?= (int)$mid ?>&amp;csrf_token=<?= h(csrf_token()) ?>"
+                        <a href="menu-permissions?delete=<?= (int)$mid ?>&amp;csrf_token=<?= h(csrf_token()) ?>"
                            class="del-btn"
                            onclick="return confirm('Remove \'<?= htmlspecialchars(addslashes($item['label'])) ?>\'?\n\nThis only removes the sidebar entry - the PHP file is untouched.')">
                             <i class="fas fa-trash"></i>

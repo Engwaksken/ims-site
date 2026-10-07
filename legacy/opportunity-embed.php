@@ -96,7 +96,7 @@ if ($title === '') {
 $applyUrl = trim((string)($opp['application_url'] ?? ''));
 
 if ($applyUrl === '') {
-    $applyUrl = siteUrl('submit-application.php?opportunity_id=' . $id);
+    $applyUrl = siteUrl('submit-application?opportunity_id=' . $id);
 }
 
 $deadlineDays   = daysUntil($opp['deadline'] ?? null);

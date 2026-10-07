@@ -7,7 +7,7 @@ require_once __DIR__ . '/includes/config.php';
 check_login();
 
 if (empty($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -643,7 +643,7 @@ body {
     </button>
 
     <a
-        href="download_voucher.php?id=<?= $id ?>"
+        href="download_voucher?id=<?= $id ?>"
         class="toolbar-button toolbar-download"
     >
         <i class="fas fa-file-pdf"></i>

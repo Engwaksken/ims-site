@@ -5,7 +5,7 @@ include 'includes/header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -14,7 +14,7 @@ $user_id = $_SESSION['user_id'];
 // Get payment ID
 if (!isset($_GET['payment_id']) || empty($_GET['payment_id'])) {
     $_SESSION['error'] = "Payment ID not provided.";
-   // header("Location: my-subscription.php");
+   // header("Location: my-subscription");
     exit();
 }
 
@@ -26,7 +26,7 @@ $member_result = $conn->query($member_query);
 
 if ($member_result->num_rows == 0) {
     $_SESSION['error'] = "Member profile not found.";
-    header("Location: my-subscription.php");
+    header("Location: my-subscription");
     exit();
 }
 
@@ -43,7 +43,7 @@ $result = $conn->query($query);
 
 if ($result->num_rows == 0) {
     $_SESSION['error'] = "Payment not found or access denied.";
-    header("Location: my-subscription.php");
+    header("Location: my-subscription");
     exit();
 }
 
@@ -52,7 +52,7 @@ $payment = $result->fetch_assoc();
 // Check if payment is already completed
 if ($payment['payment_status'] == 'Paid') {
     $_SESSION['info'] = "This payment has already been completed.";
-    header("Location: payment-history.php");
+    header("Location: payment-history");
     exit();
 }
 

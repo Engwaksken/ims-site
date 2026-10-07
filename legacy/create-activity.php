@@ -12,7 +12,7 @@ $user_dept = $user_dept_query->fetch_assoc();
 
 if (!$user_dept || !$user_dept['department_id']) {
     send_notification($_SESSION['user_id'], 'Please complete your employee profile first', 'warning');
-    header("Location: my-profile.php");
+    header("Location: my-profile");
     exit();
 }
 
@@ -476,7 +476,7 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
     </div>
 </div>
 
-<form method="POST" action="activity-process.php" id="activityForm">
+<form method="POST" action="activity-process" id="activityForm">
     <input type="hidden" name="action" value="create">
     <input type="hidden" name="department_id" value="<?php echo $user_dept['department_id']; ?>">
 
@@ -629,7 +629,7 @@ body { font-family: var(--sans); background: var(--surface); color: var(--ink); 
             <button type="submit" name="submit_plan" class="btn btn-success">
                 <i class="fas fa-paper-plane"></i> Submit for Review
             </button>
-            <a href="my-kpis.php" class="btn btn-danger">
+            <a href="my-kpis" class="btn btn-danger">
                 <i class="fas fa-times"></i> Cancel
             </a>
         </div>

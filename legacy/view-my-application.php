@@ -6,7 +6,7 @@ include 'includes/header.php';
 
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -38,7 +38,7 @@ if ($sessionRole !== 'applicant') {
 
     if ($databaseRole !== 'applicant') {
         $_SESSION['error'] = 'Access denied. This page is only for applicants.';
-        header('Location: dashboard.php');
+        header('Location: dashboard');
         exit;
     }
 
@@ -57,7 +57,7 @@ $application_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?: 0;
 
 if ($application_id < 1) {
     $_SESSION['error'] = 'Application ID not provided.';
-    header('Location: my-applications.php');
+    header('Location: my-applications');
     exit;
 }
 
@@ -175,7 +175,7 @@ $stmt = $conn->prepare("
 if (!$stmt) {
     error_log('view-my-application prepare failed: ' . $conn->error);
     $_SESSION['error'] = 'Unable to load the application at this time.';
-    header('Location: my-applications.php');
+    header('Location: my-applications');
     exit;
 }
 
@@ -189,7 +189,7 @@ $stmt->close();
 
 if (!$application) {
     $_SESSION['error'] = 'Application not found or access denied.';
-    header('Location: my-applications.php');
+    header('Location: my-applications');
     exit;
 }
 
@@ -398,13 +398,13 @@ foreach ($doc_fields as $field => $meta) {
         </span>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
-            <a href="my-applications.php" class="btn btn-white btn-sm">
+            <a href="my-applications" class="btn btn-white btn-sm">
                 <i class="fas fa-arrow-left"></i> My Applications
             </a>
 
             <?php if ($status === 'Draft'): ?>
                 <a
-                    href="submit-application.php?opportunity_id=<?= (int)($application['opportunity_id'] ?? 0) ?>&draft_id=<?= (int)$application_id ?>"
+                    href="submit-application?opportunity_id=<?= (int)($application['opportunity_id'] ?? 0) ?>&draft_id=<?= (int)$application_id ?>"
                     class="btn btn-white btn-sm"
                 >
                     <i class="fas fa-edit"></i> Continue Draft

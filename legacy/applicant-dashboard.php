@@ -4,7 +4,7 @@ $page_title = 'Applicant Dashboard';
 include 'includes/header.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -36,7 +36,7 @@ if ($sessionRole !== 'applicant') {
 
     if ($databaseRole !== 'applicant') {
         $_SESSION['error'] = 'Access denied. This page is only for applicants.';
-        header('Location: dashboard.php');
+        header('Location: dashboard');
         exit;
     }
 
@@ -117,7 +117,7 @@ if ($stmt) {
 
 if (!$applicant) {
     $_SESSION['error'] = 'Your applicant profile could not be found.';
-    header('Location: logout.php');
+    header('Location: logout');
     exit;
 }
 
@@ -670,10 +670,10 @@ if ($stmt) {
         <a href="#available-opportunities" class="quick-action-btn">
             <i class="fas fa-plus-circle"></i> Apply to Opportunity
         </a>
-        <a href="user-profile.php" class="quick-action-btn">
+        <a href="user-profile" class="quick-action-btn">
             <i class="fas fa-user-edit"></i> Update Profile
         </a>
-        <a href="my-applications.php" class="quick-action-btn">
+        <a href="my-applications" class="quick-action-btn">
             <i class="fas fa-list"></i> All Applications
         </a>
     </div>
@@ -761,7 +761,7 @@ if ($stmt) {
         <div class="dashboard-tab-card">
             <div class="dashboard-tab-card-header">
                 <h3><i class="fas fa-history"></i> Recent Applications</h3>
-                <a href="my-applications.php" class="btn btn-secondary btn-sm">
+                <a href="my-applications" class="btn btn-secondary btn-sm">
                     <i class="fas fa-list"></i> All Applications
                 </a>
             </div>
@@ -927,17 +927,17 @@ if ($stmt) {
                 </div>
                 
                 <div class="app-actions">
-                    <a href="view-my-application.php?id=<?php echo $app['application_id']; ?>" class="btn btn-info btn-sm">
+                    <a href="view-my-application?id=<?php echo $app['application_id']; ?>" class="btn btn-info btn-sm">
                         <i class="fas fa-eye"></i> View Details
                     </a>
                     
                     <?php if (in_array(($app['status'] ?? ''), ['Pending', 'Submitted'], true)): ?>
-                        <a href="edit-application.php?id=<?php echo $app['application_id']; ?>" class="btn btn-warning btn-sm">
+                        <a href="edit-application?id=<?php echo $app['application_id']; ?>" class="btn btn-warning btn-sm">
                             <i class="fas fa-edit"></i> Edit Application
                         </a>
                     <?php endif; ?>
                     
-                    <a href="contact-support.php?app_id=<?php echo $app['application_id']; ?>" class="btn btn-secondary btn-sm">
+                    <a href="contact-support?app_id=<?php echo $app['application_id']; ?>" class="btn btn-secondary btn-sm">
                         <i class="fas fa-envelope"></i> Contact Support
                     </a>
                 </div>
@@ -946,7 +946,7 @@ if ($stmt) {
             
             <?php if (count($applications) > 3): ?>
                 <div class="dashboard-grid-footer">
-                    <a href="my-applications.php" class="btn btn-primary">
+                    <a href="my-applications" class="btn btn-primary">
                         <i class="fas fa-list"></i> View All <?php echo count($applications); ?> Applications
                     </a>
                 </div>
@@ -968,7 +968,7 @@ if ($stmt) {
         <div class="dashboard-tab-card">
             <div class="dashboard-tab-card-header">
                 <h3><i class="fas fa-clipboard-check"></i> Available Opportunities</h3>
-                <a href="opportunities.php" class="btn btn-secondary btn-sm">
+                <a href="opportunities" class="btn btn-secondary btn-sm">
                     <i class="fas fa-search"></i> Browse All
                 </a>
             </div>
@@ -1082,10 +1082,10 @@ if ($stmt) {
                 <?php endif; ?>
                 
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <a href="submit-application.php?opportunity_id=<?php echo (int)($opportunity['opportunity_id'] ?? 0); ?>" class="btn btn-success">
+                    <a href="submit-application?opportunity_id=<?php echo (int)($opportunity['opportunity_id'] ?? 0); ?>" class="btn btn-success">
                         <i class="fas fa-paper-plane"></i> Apply Now
                     </a>
-                    <a href="view-opportunity.php?id=<?php echo $opportunity['opportunity_id']; ?>" class="btn btn-info">
+                    <a href="view-opportunity?id=<?php echo $opportunity['opportunity_id']; ?>" class="btn btn-info">
                         <i class="fas fa-info-circle"></i> Learn More
                     </a>
                 </div>

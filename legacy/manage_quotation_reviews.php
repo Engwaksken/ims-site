@@ -20,7 +20,7 @@ function e($value): string
 
 function redirect_reviews(int $rfq_id): never
 {
-    header('Location: manage_quotation_reviews.php?rfq_id=' . $rfq_id);
+    header('Location: manage_quotation_reviews?rfq_id=' . $rfq_id);
     exit;
 }
 
@@ -33,7 +33,7 @@ $rfq_id = (int)($_GET['rfq_id'] ?? 0);
 
 if ($rfq_id <= 0) {
     $_SESSION['error'] = 'Invalid RFQ selected.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -54,7 +54,7 @@ $stmt->close();
 
 if (!$rfq) {
     $_SESSION['error'] = 'RFQ not found.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -71,7 +71,7 @@ $invitedCheck->close();
 
 if (!$isManager && !$isInvitedReviewer) {
     $_SESSION['error'] = 'You are not invited to review this RFQ.';
-    header('Location: manage_procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 
@@ -404,7 +404,7 @@ $stmt->close();
         </div>
 
         <div class="hero-actions">
-            <a href="manage_quotations.php?rfq_id=<?= (int)$rfq_id ?>" class="btn btn-primary">
+            <a href="manage_quotations?rfq_id=<?= (int)$rfq_id ?>" class="btn btn-primary">
                 <i class="fas fa-arrow-left"></i> Back to Quotations
             </a>
 

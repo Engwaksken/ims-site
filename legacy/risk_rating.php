@@ -19,7 +19,7 @@ if (
     !in_array((string)$_SESSION['role'], $allowedRoles, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit();
 }
 
@@ -39,7 +39,7 @@ unset($_SESSION['success'], $_SESSION['error']);
 
 if ($applicationId <= 0) {
     $_SESSION['error'] = 'Invalid application ID.';
-    header('Location: startups-shortlisting.php');
+    header('Location: startups-shortlisting');
     exit();
 }
 
@@ -419,7 +419,7 @@ try {
             </div>
 
             <div class="d-flex gap-2 flex-wrap">
-                <a href="startups-shortlisting.php" class="btn btn-light border">
+                <a href="startups-shortlisting" class="btn btn-light border">
                     <i class="fas fa-arrow-left me-1"></i> Back
                 </a>
 

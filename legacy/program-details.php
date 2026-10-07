@@ -10,7 +10,7 @@ function h(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8')
 $program_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if (!$program_id) {
     send_notification($_SESSION['user_id'], 'Invalid program ID', 'danger');
-    header("Location: programs.php"); exit();
+    header("Location: programs"); exit();
 }
 
 /* -- Program + donor -------------------------------------------------- */
@@ -23,7 +23,7 @@ $result = $conn->query("
 ");
 if ($result->num_rows === 0) {
     send_notification($_SESSION['user_id'], 'Program not found', 'danger');
-    header("Location: programs.php"); exit();
+    header("Location: programs"); exit();
 }
 $program = $result->fetch_assoc();
 
@@ -161,7 +161,7 @@ $doc_icons = [
                       style="font-size:12px;padding:6px 14px;">
                     <?= h($program['status']) ?>
                 </span>
-                <a href="programs.php" class="btn btn-primary">
+                <a href="programs" class="btn btn-primary">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
                 <button onclick="window.print()"
@@ -383,11 +383,11 @@ $doc_icons = [
             <div style="display:flex;gap:8px;align-items:center;">
                 <span class="badge badge-available"><?= $total_indicators ?> total</span>
                 <?php if (in_array($_SESSION['role'], ['Administrator', 'MEAL Lead'])): ?>
-                    <a href="indicators.php?program=<?= $program_id ?>" class="btn btn-sm btn-soft">
+                    <a href="indicators?program=<?= $program_id ?>" class="btn btn-sm btn-soft">
                         <i class="fas fa-plus"></i> Add
                     </a>
                 <?php endif; ?>
-                <a href="indicators.php?program=<?= $program_id ?>" class="btn btn-sm btn-gray">View All</a>
+                <a href="indicators?program=<?= $program_id ?>" class="btn btn-sm btn-gray">View All</a>
             </div>
         </div>
         <div class="info-panel-body">
@@ -493,7 +493,7 @@ $doc_icons = [
         <div class="info-panel">
             <div class="info-panel-head">
                 <h3><i class="fas fa-users"></i> Recent Participants</h3>
-                <a href="participants.php?program=<?= $program_id ?>" class="btn btn-sm btn-gray">View All</a>
+                <a href="participants?program=<?= $program_id ?>" class="btn btn-sm btn-gray">View All</a>
             </div>
             <div class="info-panel-body">
                 <?php if (empty($beneficiaries)): ?>
@@ -526,7 +526,7 @@ $doc_icons = [
     <div class="info-panel">
         <div class="info-panel-head">
             <h3><i class="fas fa-folder-open"></i> Program Documents</h3>
-            <a href="documents.php?program=<?= $program_id ?>" class="btn btn-sm btn-gray">View All</a>
+            <a href="documents?program=<?= $program_id ?>" class="btn btn-sm btn-gray">View All</a>
         </div>
         <div class="info-panel-body">
             <?php if (empty($documents)): ?>

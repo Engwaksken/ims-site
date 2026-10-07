@@ -15,21 +15,21 @@ if (isset($_POST['update_permissions'])) {
     // Validate required fields
     if (empty($role) || empty($status)) {
         send_notification($_SESSION['user_id'], 'Role and status are required', 'danger');
-        header("Location: user-permissions.php?edit=$user_id");
+        header("Location: user-permissions?edit=$user_id");
         exit();
     }
     
     // Validate role
     if (!in_array($role, IMS_ALL_ROLES, true)) {
         send_notification($_SESSION['user_id'], 'Invalid role selected', 'danger');
-        header("Location: user-permissions.php?edit=$user_id");
+        header("Location: user-permissions?edit=$user_id");
         exit();
     }
     
     // Validate status
     if (!in_array($status, ['1', '0'])) {
         send_notification($_SESSION['user_id'], 'Invalid status selected', 'danger');
-        header("Location: user-permissions.php?edit=$user_id");
+        header("Location: user-permissions?edit=$user_id");
         exit();
     }
     
@@ -37,7 +37,7 @@ if (isset($_POST['update_permissions'])) {
     $user_result = $conn->query("SELECT full_name, role, is_active FROM users WHERE user_id = " . (int)$user_id);
     if ($user_result->num_rows == 0) {
         send_notification($_SESSION['user_id'], 'User not found', 'danger');
-        header("Location: user-permissions.php");
+        header("Location: user-permissions");
         exit();
     }
     $current_user = $user_result->fetch_assoc();
@@ -45,14 +45,14 @@ if (isset($_POST['update_permissions'])) {
     // Prevent self-demotion from Administrator
     if ($user_id == $_SESSION['user_id'] && $_SESSION['role'] == 'Administrator' && $role != 'Administrator') {
         send_notification($_SESSION['user_id'], 'You cannot remove your own administrator privileges', 'danger');
-        header("Location: user-permissions.php?edit=$user_id");
+        header("Location: user-permissions?edit=$user_id");
         exit();
     }
     
     // Prevent self-deactivation
     if ($user_id == $_SESSION['user_id'] && $status === '0') {
         send_notification($_SESSION['user_id'], 'You cannot deactivate your own account', 'danger');
-        header("Location: user-permissions.php?edit=$user_id");
+        header("Location: user-permissions?edit=$user_id");
         exit();
     }
     
@@ -82,7 +82,7 @@ if (isset($_POST['update_permissions'])) {
         send_notification($_SESSION['user_id'], 'Error updating permissions: ' . $conn->error, 'danger');
     }
     
-    header("Location: user-permissions.php");
+    header("Location: user-permissions");
     exit();
 }
 
@@ -94,14 +94,14 @@ if (isset($_POST['toggle_status'])) {
     // Validate status
     if (!in_array($status, ['1', '0'])) {
         send_notification($_SESSION['user_id'], 'Invalid status', 'danger');
-        header("Location: user-permissions.php");
+        header("Location: user-permissions");
         exit();
     }
     
     // Prevent self-deactivation
     if ($user_id == $_SESSION['user_id']) {
         send_notification($_SESSION['user_id'], 'You cannot change your own status', 'danger');
-        header("Location: user-permissions.php");
+        header("Location: user-permissions");
         exit();
     }
     
@@ -109,7 +109,7 @@ if (isset($_POST['toggle_status'])) {
     $user_result = $conn->query("SELECT full_name FROM users WHERE user_id = " . (int)$user_id);
     if ($user_result->num_rows == 0) {
         send_notification($_SESSION['user_id'], 'User not found', 'danger');
-        header("Location: user-permissions.php");
+        header("Location: user-permissions");
         exit();
     }
     $user_name = $user_result->fetch_assoc()['full_name'];
@@ -126,7 +126,7 @@ if (isset($_POST['toggle_status'])) {
         send_notification($_SESSION['user_id'], 'Error updating status: ' . $conn->error, 'danger');
     }
     
-    header("Location: user-permissions.php");
+    header("Location: user-permissions");
     exit();
 }
 
@@ -139,19 +139,19 @@ if (isset($_POST['reset_password'])) {
     // Validate passwords
     if (empty($new_password) || empty($confirm_password)) {
         send_notification($_SESSION['user_id'], 'Both password fields are required', 'danger');
-        header("Location: user-permissions.php");
+        header("Location: user-permissions");
         exit();
     }
     
     if (strlen($new_password) < 8) {
         send_notification($_SESSION['user_id'], 'Password must be at least 8 characters', 'danger');
-        header("Location: user-permissions.php");
+        header("Location: user-permissions");
         exit();
     }
     
     if ($new_password !== $confirm_password) {
         send_notification($_SESSION['user_id'], 'Passwords do not match', 'danger');
-        header("Location: user-permissions.php");
+        header("Location: user-permissions");
         exit();
     }
     
@@ -159,7 +159,7 @@ if (isset($_POST['reset_password'])) {
     $user_result = $conn->query("SELECT username, full_name, email FROM users WHERE user_id = " . (int)$user_id);
     if ($user_result->num_rows == 0) {
         send_notification($_SESSION['user_id'], 'User not found', 'danger');
-        header("Location: user-permissions.php");
+        header("Location: user-permissions");
         exit();
     }
     $user = $user_result->fetch_assoc();
@@ -181,7 +181,7 @@ if (isset($_POST['reset_password'])) {
         send_notification($_SESSION['user_id'], 'Error resetting password: ' . $conn->error, 'danger');
     }
     
-    header("Location: user-permissions.php");
+    header("Location: user-permissions");
     exit();
 }
 
@@ -213,6 +213,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'get_user') {
 }
 
 // If no valid action, redirect
-header("Location: user-permissions.php");
+header("Location: user-permissions");
 exit();
 ?>

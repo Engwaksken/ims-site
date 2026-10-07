@@ -36,7 +36,7 @@ if (
         'Google Calendar connection failed because the OAuth state could not be verified.';
 
     header(
-        'Location: ../settings.php?tab=google'
+        'Location: ../settings?tab=google'
     );
 
     exit;
@@ -52,7 +52,7 @@ if (!empty($_GET['error'])) {
         . (string)$_GET['error'];
 
     header(
-        'Location: ../settings.php?tab=google'
+        'Location: ../settings?tab=google'
     );
 
     exit;
@@ -67,7 +67,7 @@ if ($code === '') {
         'Google Calendar did not return an authorization code.';
 
     header(
-        'Location: ../settings.php?tab=google'
+        'Location: ../settings?tab=google'
     );
 
     exit;
@@ -94,7 +94,7 @@ try {
 }
 
 header(
-    'Location: ../settings.php?tab=google'
+    'Location: ../settings?tab=google'
 );
 
 exit;

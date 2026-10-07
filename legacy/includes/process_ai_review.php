@@ -15,7 +15,7 @@ function redirectBack(
 ): never {
     $_SESSION[$type] = $message;
 
-    $url = '../ai-review-applicant.php?id=' . $applicationId;
+    $url = '../ai-review-applicant?id=' . $applicationId;
 
     if ($reviewTypeId > 0) {
         $url .= '&rt=' . $reviewTypeId;
@@ -178,7 +178,7 @@ if (
     !in_array((string)$_SESSION['role'], $allowedRoles, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: ../dashboard.php');
+    header('Location: ../dashboard');
     exit;
 }
 
@@ -187,7 +187,7 @@ if (
 ========================================================= */
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $_SESSION['error'] = 'Invalid request method.';
-    header('Location: ../startups-shortlisting.php');
+    header('Location: ../startups-shortlisting');
     exit;
 }
 
@@ -198,7 +198,7 @@ $aiApiId       = safePostInt('ai_api_id');
 
 if ($applicationId <= 0) {
     $_SESSION['error'] = 'Invalid application selected.';
-    header('Location: ../startups-shortlisting.php');
+    header('Location: ../startups-shortlisting');
     exit;
 }
 

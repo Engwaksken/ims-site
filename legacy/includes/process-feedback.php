@@ -5,7 +5,7 @@ require_once 'config.php';
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = "Please login to submit feedback.";
-    header("Location: login.php");
+    header("Location: ../login");
     exit();
 }
 
@@ -51,7 +51,7 @@ if (isset($_POST['submit_feedback'])) {
     $member_id = get_member_id($conn, $user_id);
     if (!$member_id) {
         $_SESSION['error'] = "Member profile not found.";
-        header("Location: ../submit-feedback.php");
+        header("Location: ../submit-feedback");
         exit();
     }
 
@@ -69,13 +69,13 @@ if (isset($_POST['submit_feedback'])) {
 
     if (!$feedback_type || !$subject || !$feedback_message) {
         $_SESSION['error'] = "Please fill in all required fields.";
-        header("Location: ../submit-feedback.php");
+        header("Location: ../submit-feedback");
         exit();
     }
 
     if (!in_array($feedback_type, $valid_types)) {
         $_SESSION['error'] = "Invalid feedback type.";
-        header("Location: ../submit-feedback.php");
+        header("Location: ../submit-feedback");
         exit();
     }
 
@@ -83,7 +83,7 @@ if (isset($_POST['submit_feedback'])) {
     if ($rating !== null && ($rating < 0 || $rating > 5)) $rating = null;
     if (strlen($feedback_message) < 10) {
         $_SESSION['error'] = "Feedback message must be at least 10 characters.";
-        header("Location: ../submit-feedback.php");
+        header("Location: ../submit-feedback");
         exit();
     }
 
@@ -96,7 +96,7 @@ if (isset($_POST['submit_feedback'])) {
         $file_count = count($_FILES['attachments']['name']);
         if ($file_count > 5) {
             $_SESSION['error'] = "Maximum 5 files allowed.";
-            header("Location: ../submit-feedback.php");
+            header("Location: ../submit-feedback");
             exit();
         }
 
@@ -116,13 +116,13 @@ if (isset($_POST['submit_feedback'])) {
 
                 if (!in_array($file_type, $allowed_types)) {
                     $_SESSION['error'] = "Invalid file type for $file_name.";
-                    header("Location: ../submit-feedback.php");
+                    header("Location: ../submit-feedback");
                     exit();
                 }
 
                 if ($file_size > 5 * 1024 * 1024) {
                     $_SESSION['error'] = "File $file_name exceeds max size of 5MB.";
-                    header("Location: ../submit-feedback.php");
+                    header("Location: ../submit-feedback");
                     exit();
                 }
 
@@ -137,7 +137,7 @@ if (isset($_POST['submit_feedback'])) {
                 ], ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx'], 5 * 1024 * 1024);
                 if (!$attachmentCheck['ok']) {
                     $_SESSION['error'] = 'Invalid file: ' . $attachmentCheck['error'];
-                    header("Location: ../submit-feedback.php");
+                    header("Location: ../submit-feedback");
                     exit();
                 }
 
@@ -149,7 +149,7 @@ if (isset($_POST['submit_feedback'])) {
                     $attachments[] = substr($upload_path, 3); // store relative path
                 } else {
                     $_SESSION['error'] = "Error uploading file $file_name.";
-                    header("Location: ../submit-feedback.php");
+                    header("Location: ../submit-feedback");
                     exit();
                 }
             }
@@ -185,7 +185,7 @@ if (isset($_POST['submit_feedback'])) {
         $_SESSION['error'] = "Error submitting feedback: " . $conn->error;
     }
 
-    header("Location: ../submit-feedback.php");
+    header("Location: ../submit-feedback");
     exit();
 }
 
@@ -197,7 +197,7 @@ if (isset($_POST['update_feedback'])) {
     $member_id = get_member_id($conn, $user_id);
     if (!$member_id) {
         $_SESSION['error'] = "Member profile not found.";
-        header("Location: ../my-feedback.php");
+        header("Location: ../my-feedback");
         exit();
     }
 
@@ -207,14 +207,14 @@ if (isset($_POST['update_feedback'])) {
     $res = $stmt->get_result();
     if ($res->num_rows === 0) {
         $_SESSION['error'] = "Feedback not found or does not belong to you.";
-        header("Location: ../my-feedback.php");
+        header("Location: ../my-feedback");
         exit();
     }
 
     $row = $res->fetch_assoc();
     if (!in_array($row['feedback_status'], ['New', 'In Review'])) {
         $_SESSION['error'] = "Cannot edit feedback that has been responded to or closed.";
-        header("Location: ../my-feedback.php");
+        header("Location: ../my-feedback");
         exit();
     }
 
@@ -236,7 +236,7 @@ if (isset($_POST['update_feedback'])) {
         $_SESSION['error'] = "Error updating feedback: " . $conn->error;
     }
 
-    header("Location: ../my-feedback.php");
+    header("Location: ../my-feedback");
     exit();
 }
 
@@ -248,7 +248,7 @@ if (isset($_GET['delete_feedback'])) {
     $member_id = get_member_id($conn, $user_id);
     if (!$member_id) {
         $_SESSION['error'] = "Member profile not found.";
-        header("Location: ../my-feedback.php");
+        header("Location: ../my-feedback");
         exit();
     }
 
@@ -258,14 +258,14 @@ if (isset($_GET['delete_feedback'])) {
     $res = $stmt->get_result();
     if ($res->num_rows === 0) {
         $_SESSION['error'] = "Feedback not found or does not belong to you.";
-        header("Location: ../my-feedback.php");
+        header("Location: ../my-feedback");
         exit();
     }
 
     $row = $res->fetch_assoc();
     if ($row['feedback_status'] != 'New') {
         $_SESSION['error'] = "Cannot delete feedback that is being reviewed or has been responded to.";
-        header("Location: ../my-feedback.php");
+        header("Location: ../my-feedback");
         exit();
     }
 
@@ -286,12 +286,12 @@ if (isset($_GET['delete_feedback'])) {
         $_SESSION['error'] = "Error deleting feedback: " . $conn->error;
     }
 
-    header("Location: ../my-feedback.php");
+    header("Location: ../my-feedback");
     exit();
 }
 
 // If no valid action
 $_SESSION['error'] = "Invalid action.";
-header("Location: ../submit-feedback.php");
+header("Location: ../submit-feedback");
 exit();
 ?>

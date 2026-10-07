@@ -3223,7 +3223,7 @@ body.ev-modal-open{overflow:hidden}
 
                                             <?php if ($googleConnected): ?>
                                                 <a
-                                                    href="includes/google-calendar-sync.php?type=event&id=<?= (int)$event['event_id'] ?>&return=<?= rawurlencode('../events.php?tab=table') ?>"
+                                                    href="includes/google-calendar-sync.php?type=event&id=<?= (int)$event['event_id'] ?>&return=<?= rawurlencode('../events?tab=table') ?>"
                                                     class="ev-icon-btn"
                                                     title="Sync Google Calendar"
                                                 >

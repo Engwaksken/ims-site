@@ -12,7 +12,7 @@ if (
     !in_array($_SESSION['role'], $allowed_roles, true)
 ) {
     $_SESSION['error'] = 'Unauthorized access.';
-    header('Location: ../login.php');
+    header('Location: ../login');
     exit;
 }
 
@@ -232,7 +232,7 @@ function log_activity(mysqli $conn, int $userId, string $action, string $details
 $action = posted('action', getted('action'));
 
 if ($action === '') {
-    flash_redirect('error', 'Invalid action.', '../application-opportunities.php');
+    flash_redirect('error', 'Invalid action.', '../application-opportunities');
 }
 
 /*
@@ -244,8 +244,8 @@ if (in_array($action, ['create', 'update'], true)) {
     $opportunityId = $action === 'update' ? (int)($_POST['opportunity_id'] ?? 0) : 0;
 
     $back = $action === 'update'
-        ? '../edit-opportunity.php?id=' . $opportunityId
-        : '../application-opportunities.php';
+        ? '../edit-opportunity?id=' . $opportunityId
+        : '../application-opportunities';
 
     $title = posted('opportunity_title');
     $type = posted('opportunity_type');
@@ -422,14 +422,14 @@ if (in_array($action, ['create', 'update'], true)) {
             ? 'Opportunity published successfully.'
             : 'Opportunity saved as draft.';
 
-        redirect_to('../view-opportunity.php?id=' . $opportunityId);
+        redirect_to('../view-opportunity?id=' . $opportunityId);
     }
 
     if ($opportunityId < 1 || !fetch_opportunity($conn, $opportunityId)) {
         flash_redirect(
             'error',
             'Opportunity not found.',
-            '../application-opportunities.php'
+            '../application-opportunities'
         );
     }
 
@@ -514,7 +514,7 @@ if (in_array($action, ['create', 'update'], true)) {
     flash_redirect(
         'success',
         'Opportunity updated successfully.',
-        '../view-opportunity.php?id=' . $opportunityId
+        '../view-opportunity?id=' . $opportunityId
     );
 }
 
@@ -530,18 +530,18 @@ if (in_array($action, ['publish', 'close', 'reopen', 'complete', 'toggle_feature
     $id = (int)getted('id');
 
     if ($id < 1) {
-        flash_redirect('error', 'Invalid opportunity ID.', '../application-opportunities.php');
+        flash_redirect('error', 'Invalid opportunity ID.', '../application-opportunities');
     }
 
     $opportunity = fetch_opportunity($conn, $id);
 
     if (!$opportunity) {
-        flash_redirect('error', 'Opportunity not found.', '../application-opportunities.php');
+        flash_redirect('error', 'Opportunity not found.', '../application-opportunities');
     }
 
     if ($action === 'publish') {
         if (($opportunity['status'] ?? '') !== 'Draft') {
-            flash_redirect('error', 'Only draft opportunities can be published.', '../application-opportunities.php');
+            flash_redirect('error', 'Only draft opportunities can be published.', '../application-opportunities');
         }
 
         $status = 'Published';
@@ -557,12 +557,12 @@ if (in_array($action, ['publish', 'close', 'reopen', 'complete', 'toggle_feature
         $stmt->close();
 
         log_activity($conn, $user_id, 'Publish Opportunity', "Published opportunity ID {$id}");
-        flash_redirect('success', 'Opportunity published successfully.', '../application-opportunities.php');
+        flash_redirect('success', 'Opportunity published successfully.', '../application-opportunities');
     }
 
     if ($action === 'close') {
         if (($opportunity['status'] ?? '') !== 'Published') {
-            flash_redirect('error', 'Only published opportunities can be closed.', '../application-opportunities.php');
+            flash_redirect('error', 'Only published opportunities can be closed.', '../application-opportunities');
         }
 
         $status = 'Closed';
@@ -572,12 +572,12 @@ if (in_array($action, ['publish', 'close', 'reopen', 'complete', 'toggle_feature
         $stmt->close();
 
         log_activity($conn, $user_id, 'Close Opportunity', "Closed opportunity ID {$id}");
-        flash_redirect('success', 'Opportunity closed successfully.', '../application-opportunities.php');
+        flash_redirect('success', 'Opportunity closed successfully.', '../application-opportunities');
     }
 
     if ($action === 'reopen') {
         if (($opportunity['status'] ?? '') !== 'Closed') {
-            flash_redirect('error', 'Only closed opportunities can be reopened.', '../application-opportunities.php');
+            flash_redirect('error', 'Only closed opportunities can be reopened.', '../application-opportunities');
         }
 
         $status = 'Published';
@@ -587,7 +587,7 @@ if (in_array($action, ['publish', 'close', 'reopen', 'complete', 'toggle_feature
         $stmt->close();
 
         log_activity($conn, $user_id, 'Reopen Opportunity', "Reopened opportunity ID {$id}");
-        flash_redirect('success', 'Opportunity reopened successfully.', '../application-opportunities.php');
+        flash_redirect('success', 'Opportunity reopened successfully.', '../application-opportunities');
     }
 
     if ($action === 'complete') {
@@ -598,7 +598,7 @@ if (in_array($action, ['publish', 'close', 'reopen', 'complete', 'toggle_feature
         $stmt->close();
 
         log_activity($conn, $user_id, 'Complete Opportunity', "Completed opportunity ID {$id}");
-        flash_redirect('success', 'Opportunity marked as completed.', '../application-opportunities.php');
+        flash_redirect('success', 'Opportunity marked as completed.', '../application-opportunities');
     }
 
     if ($action === 'toggle_featured') {
@@ -610,16 +610,16 @@ if (in_array($action, ['publish', 'close', 'reopen', 'complete', 'toggle_feature
         $stmt->close();
 
         log_activity($conn, $user_id, 'Toggle Featured', "Updated featured status for opportunity ID {$id}");
-        flash_redirect('success', 'Featured status updated.', '../application-opportunities.php');
+        flash_redirect('success', 'Featured status updated.', '../application-opportunities');
     }
 
     if ($action === 'delete') {
         if (($opportunity['status'] ?? '') !== 'Draft') {
-            flash_redirect('error', 'Only draft opportunities can be deleted.', '../application-opportunities.php');
+            flash_redirect('error', 'Only draft opportunities can be deleted.', '../application-opportunities');
         }
 
         if (application_count($conn, $id) > 0) {
-            flash_redirect('error', 'Cannot delete an opportunity that already has applications.', '../application-opportunities.php');
+            flash_redirect('error', 'Cannot delete an opportunity that already has applications.', '../application-opportunities');
         }
 
         $stmt = $conn->prepare('DELETE FROM application_opportunities WHERE opportunity_id = ?');
@@ -628,7 +628,7 @@ if (in_array($action, ['publish', 'close', 'reopen', 'complete', 'toggle_feature
         $stmt->close();
 
         log_activity($conn, $user_id, 'Delete Opportunity', "Deleted opportunity ID {$id}");
-        flash_redirect('success', 'Opportunity deleted successfully.', '../application-opportunities.php');
+        flash_redirect('success', 'Opportunity deleted successfully.', '../application-opportunities');
     }
 }
 
@@ -644,14 +644,14 @@ if ($action === 'extend_deadline') {
     $opportunity = fetch_opportunity($conn, $id);
 
     if (!$opportunity || !valid_date($newDeadline)) {
-        flash_redirect('error', 'Invalid deadline request.', '../application-opportunities.php');
+        flash_redirect('error', 'Invalid deadline request.', '../application-opportunities');
     }
 
     if (strtotime($newDeadline) <= strtotime((string)$opportunity['deadline'])) {
         flash_redirect(
             'error',
             'New deadline must be after the current deadline.',
-            '../view-opportunity.php?id=' . $id
+            '../view-opportunity?id=' . $id
         );
     }
 
@@ -665,8 +665,8 @@ if ($action === 'extend_deadline') {
     flash_redirect(
         'success',
         'Deadline extended successfully.',
-        '../view-opportunity.php?id=' . $id
+        '../view-opportunity?id=' . $id
     );
 }
 
-flash_redirect('error', 'Invalid action.', '../application-opportunities.php');
+flash_redirect('error', 'Invalid action.', '../application-opportunities');

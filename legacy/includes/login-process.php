@@ -55,7 +55,7 @@ function sendLoginResponse(array $response): never
     $_SESSION['login_error'] =
         (string) ($response['message'] ?? 'Login failed.');
 
-    header('Location: ../login.php');
+    header('Location: ../login');
     exit;
 }
 
@@ -93,7 +93,7 @@ function safeLogAction(
 */
 
 if (!empty($_SESSION['user_id'])) {
-    header('Location: ../dashboard.php');
+    header('Location: ../dashboard');
     exit;
 }
 
@@ -599,7 +599,7 @@ if ($emailResult === true) {
     $response['success']  = true;
     $response['message']  =
         'A verification code was sent to your email.';
-    $response['redirect'] = '../verify.php';
+    $response['redirect'] = '../verify';
 
     sendLoginResponse($response);
 }

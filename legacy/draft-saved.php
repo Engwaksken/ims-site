@@ -3,7 +3,7 @@ session_start();
 require_once 'includes/config.php';
 
 if (empty($_SESSION['draft_saved'])) {
-    header("Location: opportunities.php");
+    header("Location: opportunities");
     exit();
 }
 
@@ -334,10 +334,10 @@ $reference = 'DRAFT-' . str_pad($draft_id, 6, '0', STR_PAD_LEFT);
 
         <!-- -- BUTTONS -- -->
         <div class="btn-row">
-            <a href="my-applications.php" class="btn btn-primary">
+            <a href="my-applications" class="btn btn-primary">
                 <i class="fas fa-briefcase"></i> My Applications
             </a>
-            <a href="login.php" class="btn btn-secondary">
+            <a href="login" class="btn btn-secondary">
                 <i class="fas fa-sign-in-alt"></i> Log In Now
             </a>
         </div>

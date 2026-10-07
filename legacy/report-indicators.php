@@ -219,7 +219,7 @@ $stale_indicators = array_filter($indicators, function($i) {
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-search"></i> Apply Filters
                 </button>
-                <a href="report-indicators.php" class="btn btn-secondary">
+                <a href="report-indicators" class="btn btn-secondary">
                     <i class="fas fa-redo"></i> Reset
                 </a>
             </div>
@@ -408,7 +408,7 @@ $stale_indicators = array_filter($indicators, function($i) {
                         <?php endif; ?>
                     </small>
                 </div>
-                <a href="indicators.php?progress=<?php echo $indicator['indicator_id']; ?>" class="btn btn-warning btn-sm">
+                <a href="indicators?progress=<?php echo $indicator['indicator_id']; ?>" class="btn btn-warning btn-sm">
                     <i class="fas fa-plus"></i> Update
                 </a>
             </div>
@@ -581,7 +581,7 @@ if (achievementCtx) {
 <?php endforeach; ?>
 
 function exportToExcel() {
-    window.location.href = 'export.php?type=indicators<?php echo $project_filter ? "&project=" . (int)$project_filter : ""; ?><?php echo $type_filter ? "&indicator_type=" . h(rawurlencode($type_filter)) : ""; ?>';
+    window.location.href = 'export?type=indicators<?php echo $project_filter ? "&project=" . (int)$project_filter : ""; ?><?php echo $type_filter ? "&indicator_type=" . h(rawurlencode($type_filter)) : ""; ?>';
 }
 </script>
 

@@ -489,7 +489,7 @@ function send_application_confirmation(string $email, string $startup_name, int 
         <p>We will be in touch if your application is shortlisted. In the meantime you can
            track your status at any time by logging in to your account.</p>
 
-        <a href='https://ims.hivecolab.com/my-applications.php' class='btn'>
+        <a href='https://ims.hivecolab.com/my-applications' class='btn'>
             View My Applications
         </a>
 
@@ -646,7 +646,7 @@ function send_asset_request_admin_notification(array $request, array $recipients
         <p><strong>Reason:</strong></p>
         <p>" . nl2br(htmlspecialchars($request['request_reason'])) . "</p>
 
-        <a href='https://ims.hivecolab.com/manage_assets.php' class='btn'>
+        <a href='https://ims.hivecolab.com/manage_assets' class='btn'>
             Review Asset Request
         </a>
     ";
@@ -715,7 +715,7 @@ function send_procurement_submitted_email(array $data, array $recipients): void
 
         <p>{$data['description']}</p>
 
-        <a href='https://ims.hivecolab.com/manage_procurement.php' class='btn'>
+        <a href='https://ims.hivecolab.com/manage_procurement' class='btn'>
             Review Request
         </a>
     ";
@@ -779,7 +779,7 @@ function send_rfq_created_email(array $recipients, array $data): void
             <div><strong>RFQ Number:</strong> {$data['rfq_number']}</div>
         </div>
 
-        <a href='https://ims.hivecolab.com/manage_rfq.php?procurement_id={$data['procurement_id']}' class='btn'>
+        <a href='https://ims.hivecolab.com/manage_rfq?procurement_id={$data['procurement_id']}' class='btn'>
             Manage RFQ
         </a>
     ";
@@ -854,7 +854,7 @@ function send_quotation_review_invite_email(string $email, array $data): void
             <div><strong>Procurement:</strong> " . htmlspecialchars($data['title'] ?? '-') . "</div>
         </div>
 
-        <a href='https://ims.hivecolab.com/manage_quotation_reviews.php?rfq_id=" . (int)$data['rfq_id'] . "' class='btn'>
+        <a href='https://ims.hivecolab.com/manage_quotation_reviews?rfq_id=" . (int)$data['rfq_id'] . "' class='btn'>
             Review Quotations
         </a>
     ";
@@ -898,7 +898,7 @@ function send_event_registration_confirmation(array $data): void
         $checkinPayload .= '&sig=' . ims_event_checkin_signature($registrationId, $eventId);
     }
     $checkinToken = base64_encode($checkinPayload);
-    $checkinUrl   = 'https://ims.hivecolab.com/event-checkin.php?token=' . urlencode($checkinToken);
+    $checkinUrl   = 'https://ims.hivecolab.com/event-checkin?token=' . urlencode($checkinToken);
 
     $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' . urlencode($checkinUrl);
 
@@ -996,7 +996,7 @@ function send_booking_request_confirmation(string $email, string $name, array $b
             <div><strong>Amount:</strong> UGX " . number_format((float)($booking['booking_amount'] ?? 0)) . "</div>
         </div>
         <p>You'll receive another email as soon as your booking is confirmed.</p>
-        <a href='https://ims.hivecolab.com/my-bookings.php' class='btn'>View My Bookings</a>
+        <a href='https://ims.hivecolab.com/my-bookings' class='btn'>View My Bookings</a>
         <p>Best regards,<br><strong>Hive Colab Team</strong></p>
     ";
 
@@ -1052,7 +1052,7 @@ function send_booking_cancellation_email(string $email, array $booking): void
         <p>This confirms that your booking below has been cancelled.</p>
         " . _booking_info_box($booking) . "
         <p>Need to book again? You're welcome to submit a new request any time.</p>
-        <a href='https://ims.hivecolab.com/book-space.php' class='btn'>Book a Space</a>
+        <a href='https://ims.hivecolab.com/book-space' class='btn'>Book a Space</a>
         <p>Best regards,<br><strong>Hive Colab Team</strong></p>
     ";
 
@@ -1111,7 +1111,7 @@ function send_booking_reschedule_email(string $email, array $booking): void
             <div><strong>New Time:</strong> {$newTime}</div>
         </div>
         <p>You'll be notified again once Operations confirms the new slot.</p>
-        <a href='https://ims.hivecolab.com/my-bookings.php' class='btn'>View My Bookings</a>
+        <a href='https://ims.hivecolab.com/my-bookings' class='btn'>View My Bookings</a>
         <p>Best regards,<br><strong>Hive Colab Team</strong></p>
     ";
 
@@ -1175,7 +1175,7 @@ function send_booking_reminder_email(string $email, array $booking, string $audi
         <p>{$intro}</p>
         " . _booking_info_box($booking) . "
         <p>If anything has changed, please update or cancel the booking as soon as possible.</p>
-        <a href='https://ims.hivecolab.com/my-bookings.php' class='btn'>View Booking Details</a>
+        <a href='https://ims.hivecolab.com/my-bookings' class='btn'>View Booking Details</a>
         <p>Best regards,<br><strong>Hive Colab Team</strong></p>
     ";
 
@@ -1222,7 +1222,7 @@ if (!function_exists('send_booking_approved_email')) {
                     . "</div>
             </div>
             <p>Please arrive on time and contact the Operations team if your plans change.</p>
-            <a href='https://ims.hivecolab.com/hub-events.php?tab=my-bookings'
+            <a href='https://ims.hivecolab.com/hub-events?tab=my-bookings'
                class='btn'>View My Bookings</a>
             <p>Best regards,<br><strong>Hive Colab Team</strong></p>
         ";
@@ -1267,7 +1267,7 @@ if (!function_exists('send_booking_rejected_email')) {
                 " . nl2br(htmlspecialchars($reason)) . "
             </div>
             <p>You may return to the booking page and choose another free date or time.</p>
-            <a href='https://ims.hivecolab.com/hub-events.php'
+            <a href='https://ims.hivecolab.com/hub-events'
                class='btn'>Choose Another Slot</a>
             <p>Best regards,<br><strong>Hive Colab Team</strong></p>
         ";

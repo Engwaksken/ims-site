@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
 
     // Render edit form
     ?>
-    <form id="editprogramForm" action="program-edit.php" method="POST">
+    <form id="editprogramForm" action="program-edit" method="POST">
         <input type="hidden" name="program_id" value="<?= $program['program_id']; ?>">
         <?php include __DIR__.'/program-form-fields.php'; ?>
         <button type="submit" class="btn btn-primary">Update program</button>

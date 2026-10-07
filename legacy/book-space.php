@@ -5,7 +5,7 @@ require_once 'includes/header.php';
 // Must be logged in member
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = "Please log in to book a space.";
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -15,7 +15,7 @@ $user_id = $_SESSION['user_id'];
 $member = $conn->query("SELECT * FROM members WHERE user_id = " . (int)$user_id)->fetch_assoc();
 if (!$member) {
     $_SESSION['error'] = "Member profile not found.";
-    header("Location: member-dashboard.php");
+    header("Location: member-dashboard");
     exit();
 }
 
@@ -440,7 +440,7 @@ if ($result) {
         <?php endforeach; ?>
         <p class="no-pending-note" style="margin-top: 8px;">
             Space and pricing can't be changed once a booking exists. To change space, cancel it from
-            <a href="my-bookings.php">My Bookings</a> and create a new one.
+            <a href="my-bookings">My Bookings</a> and create a new one.
         </p>
     <?php endif; ?>
 </div>
@@ -526,7 +526,7 @@ if ($result) {
                 <input type="hidden" name="total_amount" id="total_amount_hidden" value="0">
                 <!-- Only relevant (and only enabled) for action=update_booking. -->
                 <input type="hidden" name="booking_id" id="field_booking_id" disabled>
-                <input type="hidden" name="return_to" value="book-space.php">
+                <input type="hidden" name="return_to" value="book-space">
 
                 <div id="editModeNote" class="edit-mode-note" style="display:none;">
                     <i class="fas fa-info-circle"></i> Saving changes will reset this booking to <strong>Pending</strong>
@@ -708,7 +708,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectable: true,
         selectMirror: true,
         events: function(info, successCallback, failureCallback) {
-            fetch('get-bookings.php?start=' + info.startStr + '&end=' + info.endStr)
+            fetch('get-bookings?start=' + info.startStr + '&end=' + info.endStr)
                 .then(response => response.json())
                 .then(data => successCallback(data))
                 .catch(error => failureCallback(error));
@@ -967,7 +967,7 @@ function loadExistingBookings() {
     const panel = document.getElementById('existingBookingsPanel');
     const list = document.getElementById('existingBookingsList');
 
-    fetch('get-bookings.php?start=' + date + '&end=' + date + '&space_name=' + encodeURIComponent(spaceNameForOverlapCheck))
+    fetch('get-bookings?start=' + date + '&end=' + date + '&space_name=' + encodeURIComponent(spaceNameForOverlapCheck))
         .then(response => response.json())
         .then(events => {
             existingBookingsForSpace = events

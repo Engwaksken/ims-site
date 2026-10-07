@@ -6,7 +6,7 @@ check_login();
    Helpers
 --------------------------------------------------------- */
 function redirect_back($query = '') {
-    header("Location: ../donors-partners.php$query");
+    header("Location: ../donors-partners$query");
     exit();
 }
 

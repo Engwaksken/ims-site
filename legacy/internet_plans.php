@@ -65,7 +65,7 @@ require_once 'includes/internet-plans.php';
         </div>
 
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <a href="internet_subscriptions.php" class="internet-btn internet-btn-light">
+            <a href="internet_subscriptions" class="internet-btn internet-btn-light">
                 <i class="fas fa-list"></i> Subscriptions
             </a>
 

@@ -14,7 +14,7 @@ function aiFlash(string $type, string $message): void
     $_SESSION[$type] = $message;
 }
 
-function aiRedirect(string $url = 'manage-ai-apis.php'): never
+function aiRedirect(string $url = 'manage-ai-apis'): never
 {
     header('Location: ' . $url);
     exit;

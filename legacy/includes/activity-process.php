@@ -2,12 +2,12 @@
 require_once __DIR__ . '/config.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../login");
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: ../create-activity.php");
+    header("Location: ../create-activity");
     exit();
 }
 
@@ -15,7 +15,7 @@ $uid    = (int)$_SESSION['user_id'];
 $action = $_POST['action'] ?? '';
 
 if ($action !== 'create' && $action !== 'submit_activity_plan') {
-    header("Location: ../create-activity.php");
+    header("Location: ../create-activity");
     exit();
 }
 
@@ -38,11 +38,11 @@ function safe_int($v): int
 function redirect_error(string $msg): void
 {
     $_SESSION['activity_error'] = $msg;
-    header("Location: ../create-activity.php");
+    header("Location: ../create-activity");
     exit();
 }
 
-function redirect_success(string $msg, string $url = '../my-activities.php'): void
+function redirect_success(string $msg, string $url = '../my-activities'): void
 {
     $_SESSION['activity_success'] = $msg;
     header("Location: {$url}");
@@ -65,13 +65,13 @@ if ($action === 'submit_activity_plan' && $existing_plan_id > 0 && !isset($_POST
 
     if (!$plan_row) {
         $_SESSION['activity_error'] = 'Activity plan not found or access denied.';
-        header("Location: ../my-activities.php");
+        header("Location: ../my-activities");
         exit();
     }
 
     if (!in_array($plan_row['status'], ['draft', 'rejected'], true)) {
         $_SESSION['activity_error'] = 'Only draft or rejected plans can be submitted.';
-        header("Location: ../view-activity.php?id={$existing_plan_id}");
+        header("Location: ../view-activity?id={$existing_plan_id}");
         exit();
     }
 
@@ -88,11 +88,11 @@ if ($action === 'submit_activity_plan' && $existing_plan_id > 0 && !isset($_POST
             $log->execute();
             $log->close();
         }
-        redirect_success('Activity plan submitted for review.', "../view-activity.php?id={$existing_plan_id}");
+        redirect_success('Activity plan submitted for review.', "../view-activity?id={$existing_plan_id}");
     }
 
     $_SESSION['activity_error'] = 'Could not submit the activity plan. Please try again.';
-    header("Location: ../view-activity.php?id={$existing_plan_id}");
+    header("Location: ../view-activity?id={$existing_plan_id}");
     exit();
 }
 
@@ -373,7 +373,7 @@ try {
                     $sup_id,
                     "{$emp_name} has submitted an Activity Plan \"{$plan_title}\" for your review.",
                     'info',
-                    "view-activity.php?id={$plan_id}"
+                    "view-activity?id={$plan_id}"
                 );
             }
         }
@@ -383,7 +383,7 @@ try {
         ? "Activity Plan submitted successfully! Your supervisor has been notified."
         : "Activity Plan draft saved successfully.";
 
-    redirect_success($msg, "../view-activity.php?id={$plan_id}");
+    redirect_success($msg, "../view-activity?id={$plan_id}");
 
 } catch (Throwable $e) {
     $conn->rollback();

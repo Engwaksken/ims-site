@@ -254,52 +254,42 @@ $avg_achievement = !empty($completed_kpis) ?
 <!-- Statistics -->
 <div class="stats-grid">
     <div class="stat-card">
-        <div class="stat-icon blue">
-            <i class="fas fa-bullseye"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $total_kpis; ?></h4>
-            <p>Total KPIs (<?php echo $filter_year; ?>)</p>
+        <div class="stat-icon bg-primary"><i class="fas fa-bullseye" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Total KPIs (<?php echo $filter_year; ?>)</span>
+            <span class="stat-value"><?php echo $total_kpis; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon orange">
-            <i class="fas fa-edit"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $draft; ?></h4>
-            <p>Draft KPIs</p>
+        <div class="stat-icon bg-slate"><i class="fas fa-edit" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Draft KPIs</span>
+            <span class="stat-value"><?php echo $draft; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon purple">
-            <i class="fas fa-paper-plane"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $submitted; ?></h4>
-            <p>Submitted</p>
+        <div class="stat-icon bg-blue"><i class="fas fa-paper-plane" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Submitted</span>
+            <span class="stat-value"><?php echo $submitted; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon green">
-            <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $approved; ?></h4>
-            <p>Approved</p>
+        <div class="stat-icon bg-green"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Approved</span>
+            <span class="stat-value"><?php echo $approved; ?></span>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon" style="background: #E91E63; color: #fff;">
-            <i class="fas fa-chart-line" aria-hidden="true"></i>
-        </div>
-        <div class="stat-details">
-            <h4><?php echo $avg_achievement; ?>%</h4>
-            <p>Avg Achievement</p>
+        <div class="stat-icon bg-purple"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Avg Achievement</span>
+            <span class="stat-value"><?php echo $avg_achievement; ?>%</span>
         </div>
     </div>
 </div>
@@ -308,7 +298,7 @@ $avg_achievement = !empty($completed_kpis) ?
     <div class="card-header">
         <h3><i class="fas fa-bullseye"></i> My KPIs - <?php echo h($user_dept['department_name'] ?? ''); ?></h3>
         <div class="card-header-actions">
-            <a href="create-kpi.php" class="btn btn-success">
+            <a href="create-kpi" class="btn btn-success">
                 <i class="fas fa-plus" aria-hidden="true"></i> Create New KPI
             </a>
         </div>
@@ -342,7 +332,7 @@ $avg_achievement = !empty($completed_kpis) ?
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-filter" aria-hidden="true"></i> Filter
                 </button>
-                <a href="my-kpis.php" class="btn btn-secondary">
+                <a href="my-kpis" class="btn btn-secondary">
                     <i class="fas fa-times" aria-hidden="true"></i> Clear
                 </a>
             </div>
@@ -354,7 +344,7 @@ $avg_achievement = !empty($completed_kpis) ?
                 <i class="fas fa-bullseye" aria-hidden="true"></i>
                 <h4>No KPIs Found</h4>
                 <p>Create your first KPI to get started with performance tracking.</p>
-                <a href="create-kpi.php" class="btn btn-success">
+                <a href="create-kpi" class="btn btn-success">
                     <i class="fas fa-plus" aria-hidden="true"></i> Create Your First KPI
                 </a>
             </div>
@@ -442,12 +432,12 @@ $avg_achievement = !empty($completed_kpis) ?
                     <?php endif; ?>
                     
                     <div class="kpi-actions" style="margin-top: 15px;">
-                        <a href="view-kpi.php?id=<?php echo (int) $kpi['kpi_id']; ?>" class="btn btn-info btn-sm">
+                        <a href="view-kpi?id=<?php echo (int) $kpi['kpi_id']; ?>" class="btn btn-info btn-sm">
                             <i class="fas fa-eye"></i> View Details
                         </a>
                         
                         <?php if ($kpi['status'] == 'Draft' || $kpi['status'] == 'Rejected'): ?>
-                            <a href="edit-kpi.php?id=<?php echo (int) $kpi['kpi_id']; ?>" class="btn btn-warning btn-sm">
+                            <a href="edit-kpi?id=<?php echo (int) $kpi['kpi_id']; ?>" class="btn btn-warning btn-sm">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
                             <button onclick="submitKPI(<?php echo (int) $kpi['kpi_id']; ?>)" class="btn btn-success btn-sm">
@@ -459,7 +449,7 @@ $avg_achievement = !empty($completed_kpis) ?
                         <?php endif; ?>
                         
                         <?php if ($kpi['status'] == 'Approved'): ?>
-                            <a href="update-kpi-progress.php?id=<?php echo (int) $kpi['kpi_id']; ?>" class="btn btn-primary btn-sm">
+                            <a href="update-kpi-progress?id=<?php echo (int) $kpi['kpi_id']; ?>" class="btn btn-primary btn-sm">
                                 <i class="fas fa-chart-line"></i> Update Progress
                             </a>
                         <?php endif; ?>
@@ -477,7 +467,7 @@ $avg_achievement = !empty($completed_kpis) ?
 function postKpiAction(action, kpiId) {
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = 'kpi-process.php';
+    form.action = 'kpi-process';
     [['action', action], ['kpi_id', kpiId], ['csrf_token', <?php echo json_encode(csrf_token()); ?>]].forEach(function (pair) {
         const input = document.createElement('input');
         input.type = 'hidden';

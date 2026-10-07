@@ -8,7 +8,7 @@
         </div>
         <div class="modal-body">
             <?php if ($edit_user): ?>
-                <form method="POST" action="user-permissions-process.php">
+                <form method="POST" action="user-permissions-process">
                     <input type="hidden" name="user_id" value="<?php echo $edit_user['user_id']; ?>">
                     
                     <div class="alert alert-info">
@@ -127,7 +127,7 @@
             <span class="close" onclick="closeModal('resetPasswordModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="user-permissions-process.php">
+            <form method="POST" action="user-permissions-process">
                 <input type="hidden" name="user_id" id="resetUserId">
                 
                 <p style="margin-bottom: 20px;">
@@ -282,7 +282,7 @@
 </div>
 
 <!-- Hidden form for status toggle -->
-<form id="statusForm" method="POST" action="user-permissions-process.php" style="display: none;">
+<form id="statusForm" method="POST" action="user-permissions-process" style="display: none;">
     <input type="hidden" name="user_id" id="statusUserId">
     <input type="hidden" name="status" id="statusNewStatus">
     <input type="hidden" name="toggle_status" value="1">

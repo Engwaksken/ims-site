@@ -5,7 +5,7 @@ include 'includes/header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -333,7 +333,7 @@ $stats['resolved'] = $conn->query("SELECT COUNT(*) as count FROM member_feedback
 
 <!-- Quick Actions -->
 <div style="margin-bottom: 25px;">
-    <a href="submit-feedback.php" class="btn btn-primary">
+    <a href="submit-feedback" class="btn btn-primary">
         <i class="fas fa-plus"></i> Submit New Feedback
     </a>
 </div>
@@ -370,7 +370,7 @@ $stats['resolved'] = $conn->query("SELECT COUNT(*) as count FROM member_feedback
             <button type="submit" class="btn btn-info">
                 <i class="fas fa-filter"></i> Filter
             </button>
-            <a href="my-feedback.php" class="btn btn-secondary">
+            <a href="my-feedback" class="btn btn-secondary">
                 <i class="fas fa-times"></i> Clear
             </a>
         </div>
@@ -391,7 +391,7 @@ $stats['resolved'] = $conn->query("SELECT COUNT(*) as count FROM member_feedback
                         You haven't submitted any feedback yet.
                     <?php endif; ?>
                 </p>
-                <a href="submit-feedback.php" class="btn btn-primary">
+                <a href="submit-feedback" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Submit Feedback
                 </a>
             </div>
@@ -549,7 +549,7 @@ $stats['resolved'] = $conn->query("SELECT COUNT(*) as count FROM member_feedback
         </div>
         
         <div class="feedback-actions">
-            <a href="view-feedback.php?id=<?php echo $feedback['feedback_id']; ?>" class="btn btn-info btn-sm">
+            <a href="view-feedback?id=<?php echo $feedback['feedback_id']; ?>" class="btn btn-info btn-sm">
                 <i class="fas fa-eye"></i> View Details
             </a>
             
@@ -566,7 +566,7 @@ $stats['resolved'] = $conn->query("SELECT COUNT(*) as count FROM member_feedback
             <?php endif; ?>
             
             <?php if (strlen($feedback['feedback_message']) > 300): ?>
-                <a href="view-feedback.php?id=<?php echo $feedback['feedback_id']; ?>" class="btn btn-secondary btn-sm">
+                <a href="view-feedback?id=<?php echo $feedback['feedback_id']; ?>" class="btn btn-secondary btn-sm">
                     <i class="fas fa-ellipsis-h"></i> Read More
                 </a>
             <?php endif; ?>

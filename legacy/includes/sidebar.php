@@ -13,6 +13,8 @@ if (function_exists('check_login')) {
 }
 
 $current_page = basename($_SERVER['PHP_SELF'] ?? '');
+// Page name without ".php", for matching extensionless menu links.
+$current_page_name = (string)preg_replace('/\.php$/i', '', $current_page);
 $user_role    = (string)($_SESSION['role'] ?? '');
 $user_name    = (string)($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'User');
 
@@ -56,7 +58,7 @@ try {
             <h1><?= htmlspecialchars((string)(defined('SITE_NAME') ? SITE_NAME : 'Dashboard'), ENT_QUOTES, 'UTF-8') ?></h1>
         </div>
 
-        <a href="user-profile.php" class="sidebar-user" title="My profile">
+        <a href="user-profile" class="sidebar-user" title="My profile">
             <div class="user-avatar" aria-hidden="true">
                 <i class="fas fa-user-circle"></i>
             </div>
@@ -88,10 +90,16 @@ try {
                     if (!$page_ok) {
                         continue;
                     }
+                    // Local pages are linked extensionless ("dashboard.php?x=1" -> "dashboard?x=1");
+                    // absolute http(s) URLs are left untouched.
+                    $is_local = !preg_match('#^https?://#i', $page);
+                    $href = $is_local ? (string)preg_replace('#\.php(?=[?\#]|$)#i', '', $page) : $page;
+                    $is_active = $is_local
+                        && $current_page_name !== ''
+                        && $current_page_name === basename((string)strtok($href, '?#'));
                     ?>
-                    <?php $is_active = ($current_page === basename($page)); ?>
                     <li class="<?= $is_active ? 'active' : '' ?>">
-                        <a href="<?= htmlspecialchars($page, ENT_QUOTES, 'UTF-8') ?>"<?= $is_active ? ' aria-current="page"' : '' ?>>
+                        <a href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>"<?= $is_active ? ' aria-current="page"' : '' ?>>
                             <i class="fas <?= htmlspecialchars($icon, ENT_QUOTES, 'UTF-8') ?>" aria-hidden="true"></i>
                             <span><?= htmlspecialchars($label) ?></span>
                         </a>
@@ -102,7 +110,7 @@ try {
     </nav>
 
     <div class="sidebar-footer">
-        <a href="logout.php" class="logout-btn">
+        <a href="logout" class="logout-btn">
             <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
             <span>Logout</span>
         </a>

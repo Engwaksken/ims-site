@@ -4,7 +4,7 @@ $page_title = 'My Appraisals';
 include 'includes/header.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login');
     exit();
 }
 
@@ -13,7 +13,7 @@ $appraisal_id = (int) ($_GET['id'] ?? 0);
 
 if ($appraisal_id === 0) {
     send_notification($uid, 'No appraisal specified.', 'danger');
-    header('Location: my-appraisals.php');
+    header('Location: my-appraisals');
     exit();
 }
 
@@ -34,7 +34,7 @@ $stmt->close();
 
 if (!$appraisal) {
     send_notification($uid, 'Appraisal not found or access denied.', 'danger');
-    header('Location: my-appraisals.php');
+    header('Location: my-appraisals');
     exit();
 }
 
@@ -684,13 +684,13 @@ function fmt_date(?string $d): string {
 
     <!-- Top bar -->
     <div class="topbar">
-        <a href="my-appraisals.php" class="back-link">
+        <a href="my-appraisals" class="back-link">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
             My Appraisals
         </a>
         <div class="topbar-actions no-print">
             <?php if ($is_owner && $status === 'draft'): ?>
-                <a href="performance-appraisal.php?edit=<?= $appraisal_id ?>" class="btn btn-outline">
+                <a href="performance-appraisal?edit=<?= $appraisal_id ?>" class="btn btn-outline">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     Edit Draft
                 </a>

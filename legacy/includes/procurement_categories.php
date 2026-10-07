@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 function redirect_procurement_categories(): never
 {
-    header('Location: procurement_categories.php');
+    header('Location: procurement_categories');
     exit;
 }
 

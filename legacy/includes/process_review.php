@@ -20,13 +20,13 @@ if (
     !in_array((string)$_SESSION['role'], $allowed_roles, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: ../dashboard.php');
+    header('Location: ../dashboard');
     exit();
 }
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
     $_SESSION['error'] = 'Database connection not available.';
-    header('Location: ../dashboard.php');
+    header('Location: ../dashboard');
     exit();
 }
 
@@ -47,7 +47,7 @@ $is_ajax          = ($ajax_action !== '') ||
                         strtolower((string)$_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
                     );
 
-$back = "../review-applicant.php?id={$application_id}&rt={$review_type_id}";
+$back = "../review-applicant?id={$application_id}&rt={$review_type_id}";
 
 function respond(bool $success, string $message, array $extra = []): never
 {

@@ -441,12 +441,12 @@ $load_chartjs = true; // header.php loads Chart.js in <head> so inline chart scr
 require_once __DIR__ . '/includes/header.php';
 
 $basePath = strtok(
-    (string) ($_SERVER['REQUEST_URI'] ?? '/progress-board.php'),
+    (string) ($_SERVER['REQUEST_URI'] ?? '/progress-board'),
     '?'
 );
 
 if ($basePath === false || $basePath === '') {
-    $basePath = '/progress-board.php';
+    $basePath = '/progress-board';
 }
 
 $baseQuery = [
@@ -560,7 +560,7 @@ if (!array_key_exists($activeTab, $tabs)) {
             <button type="submit" class="btn btn-primary" style="height:38px;">Apply</button>
             <a href="<?= h($basePath) ?>" class="btn btn-gray" style="height:38px;">Clear</a>
             
-             <a href="manage_application_scores.php" class="btn btn-dark" style="height:38px;">Scores</a>
+             <a href="manage_application_scores" class="btn btn-dark" style="height:38px;">Scores</a>
             
         </form>
     </div>
@@ -785,7 +785,7 @@ if (!array_key_exists($activeTab, $tabs)) {
                 ?>
                 <tr>
                     <td style="font-weight:700">
-                        <a href="manage_reviewer_scores.php?reviewer_id=<?= (int)$r['reviewer_id'] ?>" style="color:var(--brand-500);text-decoration:none;"><?= h($r['reviewer_name']) ?></a>
+                        <a href="manage_reviewer_scores?reviewer_id=<?= (int)$r['reviewer_id'] ?>" style="color:var(--brand-500);text-decoration:none;"><?= h($r['reviewer_name']) ?></a>
                     </td>
                     <td>
                         <div class="score-bar-wrap">

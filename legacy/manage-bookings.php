@@ -17,7 +17,7 @@ if (
     $_SESSION['error'] =
         'Access denied. Administrator or Operations/Admin role required.';
 
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit;
 }
 
@@ -498,7 +498,7 @@ body.mb-modal-open{overflow:hidden}
         </div>
 
         <a
-            href="hub-operations.php?tab=bookings"
+            href="hub-operations?tab=bookings"
             class="btn btn-secondary"
         >
             <i class="fas fa-arrow-left"></i>
@@ -615,7 +615,7 @@ body.mb-modal-open{overflow:hidden}
             </button>
 
             <a
-                href="manage-bookings.php"
+                href="manage-bookings"
                 class="btn btn-secondary"
             >
                 Clear

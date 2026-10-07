@@ -8,7 +8,7 @@ require_once __DIR__ . '/config.php';
 
 if (!isset($conn) || !$conn instanceof mysqli) {
     $_SESSION['error'] = 'Database connection not found.';
-    header('Location: ../internet_subscriptions.php');
+    header('Location: ../internet_subscriptions');
     exit;
 }
 
@@ -20,7 +20,7 @@ const PFSENSE_CP_LOGIN_URL = 'http://192.168.1.1:8000/index.php';
 
 function redirect_back(): never
 {
-    header('Location: ../internet_subscriptions.php');
+    header('Location: ../internet_subscriptions');
     exit;
 }
 

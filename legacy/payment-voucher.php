@@ -1329,7 +1329,7 @@ if ($dataStmt) {
                                     <i class="fas fa-eye"></i>
                                 </button>
 
-                                <a href="voucher_print.php?id=<?= $id ?>"
+                                <a href="voucher_print?id=<?= $id ?>"
                                    target="_blank"
                                    class="btn btn-sm btn-outline-secondary"
                                    title="Print">

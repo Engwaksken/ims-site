@@ -23,7 +23,7 @@ $member_result = $conn->query($member_query);
 
 if ($member_result->num_rows == 0) {
     $_SESSION['error'] = "Member profile not found. Please contact support.";
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -307,7 +307,7 @@ $total_events_attended = $conn->query("SELECT COUNT(*) as count FROM event_regis
 <div class="alert-warning">
     <strong><i class="fas fa-exclamation-triangle"></i> Subscription Expiring Soon!</strong>
     <p style="margin: 5px 0 0 0;">Your membership expires in <?php echo $days_until_expiry; ?> days. Please renew to continue enjoying hub services.</p>
-    <a href="my-subscription.php" class="btn btn-warning btn-sm" style="margin-top: 10px;">
+    <a href="my-subscription" class="btn btn-warning btn-sm" style="margin-top: 10px;">
         <i class="fas fa-redo"></i> Renew Now
     </a>
 </div>
@@ -315,7 +315,7 @@ $total_events_attended = $conn->query("SELECT COUNT(*) as count FROM event_regis
 <div class="alert-danger">
     <strong><i class="fas fa-times-circle"></i> Subscription Expired!</strong>
     <p style="margin: 5px 0 0 0;">Your membership expired <?php echo abs($days_until_expiry); ?> days ago. Renew now to regain access.</p>
-    <a href="my-subscription.php" class="btn btn-danger btn-sm" style="margin-top: 10px;">
+    <a href="my-subscription" class="btn btn-danger btn-sm" style="margin-top: 10px;">
         <i class="fas fa-redo"></i> Renew Membership
     </a>
 </div>
@@ -326,7 +326,7 @@ $total_events_attended = $conn->query("SELECT COUNT(*) as count FROM event_regis
 <div class="alert-warning">
     <strong><i class="fas fa-exclamation-circle"></i> Pending Payments</strong>
     <p style="margin: 5px 0;">You have <?php echo count($pending_payments); ?> pending payment(s).</p>
-    <a href="payment-history.php" class="btn btn-warning btn-sm" style="margin-top: 10px;">
+    <a href="payment-history" class="btn btn-warning btn-sm" style="margin-top: 10px;">
         <i class="fas fa-money-bill"></i> View Payments
     </a>
 </div>
@@ -386,7 +386,7 @@ $total_events_attended = $conn->query("SELECT COUNT(*) as count FROM event_regis
             <div class="empty-state">
                 <i class="fas fa-calendar-times"></i>
                 <p>No upcoming bookings</p>
-                <a href="book-space.php" class="btn btn-primary btn-sm">
+                <a href="book-space" class="btn btn-primary btn-sm">
                     Book Now
                 </a>
             </div>
@@ -413,7 +413,7 @@ $total_events_attended = $conn->query("SELECT COUNT(*) as count FROM event_regis
                 </div>
             </div>
             <?php endforeach; ?>
-            <a href="my-bookings.php" class="btn btn-primary btn-sm">
+            <a href="my-bookings" class="btn btn-primary btn-sm">
                 <i class="fas fa-list"></i> View All Bookings
             </a>
         <?php endif; ?>
@@ -426,7 +426,7 @@ $total_events_attended = $conn->query("SELECT COUNT(*) as count FROM event_regis
             <div class="empty-state">
                 <i class="fas fa-calendar-times"></i>
                 <p>No upcoming events</p>
-                <a href="hub-events.php" class="btn btn-primary btn-sm">
+                <a href="hub-events" class="btn btn-primary btn-sm">
                     Browse Events
                 </a>
             </div>
@@ -442,13 +442,13 @@ $total_events_attended = $conn->query("SELECT COUNT(*) as count FROM event_regis
                 <?php if ($event['registration_status']): ?>
                     <span class="badge badge-success">Registered</span>
                 <?php else: ?>
-                    <a href="hub-events.php?event_id=<?php echo $event['event_id']; ?>" class="btn btn-primary btn-sm">
+                    <a href="hub-events?event_id=<?php echo $event['event_id']; ?>" class="btn btn-primary btn-sm">
                         <i class="fas fa-user-plus"></i> Register
                     </a>
                 <?php endif; ?>
             </div>
             <?php endforeach; ?>
-            <a href="hub-events.php" class="btn btn-primary btn-sm">
+            <a href="hub-events" class="btn btn-primary btn-sm">
                 <i class="fas fa-calendar-alt"></i> View All Events
             </a>
         <?php endif; ?>

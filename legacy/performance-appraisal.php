@@ -364,7 +364,7 @@ $current_year = date('Y');
         <button type="button" class="btn btn-print" onclick="generatePreview()">
             <i class="fas fa-eye"></i> Preview &amp; Print
         </button>
-        <a href="my-kpis.php" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+        <a href="my-kpis" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
     </div>
 </div>
 
@@ -465,7 +465,7 @@ $current_year = date('Y');
         <button type="submit" name="submit_appraisal" class="btn btn-success">
             <i class="fas fa-paper-plane"></i> Submit for Review
         </button>
-        <a href="my-kpis.php" class="btn btn-danger"><i class="fas fa-times"></i> Cancel</a>
+        <a href="my-kpis" class="btn btn-danger"><i class="fas fa-times"></i> Cancel</a>
     </div>
 </div>
 

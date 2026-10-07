@@ -319,7 +319,7 @@ function jobs_apply_link(array $job, string $baseUrl = ''): array
     }
     $base = rtrim($baseUrl, '/');
     return [
-        'href'   => $base . '/apply-job.php?job_id=' . (int)$job['job_id'],
+        'href'   => $base . '/apply-job?job_id=' . (int)$job['job_id'],
         'target' => '_self',
     ];
 }

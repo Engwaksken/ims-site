@@ -109,7 +109,7 @@ $application_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?: 0;
 
 if ($application_id < 1) {
     $_SESSION['error'] = 'Invalid application ID.';
-    header('Location: application-opportunities.php');
+    header('Location: application-opportunities');
     exit;
 }
 
@@ -158,7 +158,7 @@ $stmt = $conn->prepare($sql);
 if (!$stmt) {
     error_log('view-application prepare failed: ' . $conn->error);
     $_SESSION['error'] = 'Unable to load this application.';
-    header('Location: application-opportunities.php');
+    header('Location: application-opportunities');
     exit;
 }
 
@@ -172,7 +172,7 @@ $stmt->close();
 
 if (!$app) {
     $_SESSION['error'] = 'Application not found.';
-    header('Location: application-opportunities.php');
+    header('Location: application-opportunities');
     exit;
 }
 
@@ -490,7 +490,7 @@ $canReject = in_array($status, ['Submitted', 'Under Review', 'Shortlisted'], tru
     <div class="opp-hero-actions" style="position:relative;flex-direction:column;align-items:flex-end;gap:10px;">
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
             <a
-                href="manage-applications.php?opportunity_id=<?= (int)($app['opportunity_id'] ?? 0) ?>"
+                href="manage-applications?opportunity_id=<?= (int)($app['opportunity_id'] ?? 0) ?>"
                 class="btn btn-white btn-sm"
             >
                 <i class="fas fa-arrow-left"></i> Back
@@ -1367,7 +1367,7 @@ $canReject = in_array($status, ['Submitted', 'Under Review', 'Shortlisted'], tru
             <button type="button" class="modal-close" onclick="closeModal('reviewModal')" aria-label="Close">&times;</button>
         </div>
 
-        <form method="POST" action="review-application-process.php">
+        <form method="POST" action="review-application-process">
             <input type="hidden" name="action" value="add_review">
             <input type="hidden" name="application_id" value="<?= $application_id ?>">
 
@@ -1440,7 +1440,7 @@ $canReject = in_array($status, ['Submitted', 'Under Review', 'Shortlisted'], tru
             <button type="button" class="modal-close" onclick="closeModal('rejectModal')" aria-label="Close">&times;</button>
         </div>
 
-        <form method="POST" action="review-application-process.php">
+        <form method="POST" action="review-application-process">
             <input type="hidden" name="action" value="reject">
             <input type="hidden" name="application_id" value="<?= $application_id ?>">
 
@@ -1555,7 +1555,7 @@ ob_end_flush();
         }
 
         window.location.href =
-            'review-application-process.php?action=change_status&csrf_token=<?= h(csrf_token()) ?>'
+            'review-application-process?action=change_status&csrf_token=<?= h(csrf_token()) ?>'
             + '&application_id=<?= $application_id ?>'
             + '&status=' + encodeURIComponent(status);
     };

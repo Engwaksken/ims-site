@@ -7,7 +7,7 @@ require_once __DIR__ . '/includes/config.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -536,13 +536,13 @@ require_once __DIR__ . '/includes/header.php';
         </div>
         <div class="hero-actions">
             <!-- PDF export -->
-            <a href="reports.php?export=pdf" target="_blank"
+            <a href="reports?export=pdf" target="_blank"
                class="btn btn-primary"
                style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);">
                 <i class="fas fa-file-pdf"></i> Export PDF
             </a>
             <!-- CSV overview export -->
-            <a href="reports.php?export=csv&section=overview"
+            <a href="reports?export=csv&section=overview"
                class="btn btn-primary"
                style="background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.28);">
                 <i class="fas fa-file-csv"></i> Export CSV
@@ -653,7 +653,7 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="report-card-head">
                             <div class="report-card-icon bg-amber"><i class="fas fa-sitemap"></i></div>
                             <span class="report-card-title">Programs Summary</span>
-                            <a href="reports.php?export=csv&section=programs" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
+                            <a href="reports?export=csv&section=programs" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
                                 <i class="fas fa-file-csv"></i>
                             </a>
                         </div>
@@ -669,7 +669,7 @@ require_once __DIR__ . '/includes/header.php';
                             <?php endforeach; endif; ?>
                         </div>
                         <div class="report-card-foot">
-                            <a href="generate-report.php" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
+                            <a href="generate-report" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
                         </div>
                     </div>
 
@@ -678,7 +678,7 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="report-card-head">
                             <div class="report-card-icon bg-blue"><i class="fas fa-project-diagram"></i></div>
                             <span class="report-card-title">Projects Summary</span>
-                            <a href="reports.php?export=csv&section=projects" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
+                            <a href="reports?export=csv&section=projects" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
                                 <i class="fas fa-file-csv"></i>
                             </a>
                         </div>
@@ -694,7 +694,7 @@ require_once __DIR__ . '/includes/header.php';
                             <?php endforeach; endif; ?>
                         </div>
                         <div class="report-card-foot">
-                            <a href="generate-report.php" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
+                            <a href="generate-report" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
                         </div>
                     </div>
 
@@ -703,7 +703,7 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="report-card-head">
                             <div class="report-card-icon bg-green"><i class="fas fa-users"></i></div>
                             <span class="report-card-title">Participants by Gender</span>
-                            <a href="reports.php?export=csv&section=participants" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
+                            <a href="reports?export=csv&section=participants" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
                                 <i class="fas fa-file-csv"></i>
                             </a>
                         </div>
@@ -721,7 +721,7 @@ require_once __DIR__ . '/includes/header.php';
                             </div>
                         </div>
                         <div class="report-card-foot">
-                            <a href="generate-report.php" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
+                            <a href="generate-report" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
                         </div>
                     </div>
 
@@ -730,7 +730,7 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="report-card-head">
                             <div class="report-card-icon bg-primary"><i class="fas fa-chart-line"></i></div>
                             <span class="report-card-title">Indicators Performance</span>
-                            <a href="reports.php?export=csv&section=indicators" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
+                            <a href="reports?export=csv&section=indicators" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
                                 <i class="fas fa-file-csv"></i>
                             </a>
                         </div>
@@ -750,7 +750,7 @@ require_once __DIR__ . '/includes/header.php';
                             </div>
                         </div>
                         <div class="report-card-foot">
-                            <a href="generate-report.php" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
+                            <a href="generate-report" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
                         </div>
                     </div>
 
@@ -759,7 +759,7 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="report-card-head">
                             <div class="report-card-icon bg-amber"><i class="fas fa-wheelchair"></i></div>
                             <span class="report-card-title">PWD Statistics</span>
-                            <a href="reports.php?export=csv&section=pwd" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
+                            <a href="reports?export=csv&section=pwd" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
                                 <i class="fas fa-file-csv"></i>
                             </a>
                         </div>
@@ -779,7 +779,7 @@ require_once __DIR__ . '/includes/header.php';
                             </div>
                         </div>
                         <div class="report-card-foot">
-                            <a href="generate-report.php" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
+                            <a href="generate-report" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
                         </div>
                     </div>
 
@@ -788,7 +788,7 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="report-card-head">
                             <div class="report-card-icon bg-purple"><i class="fas fa-calendar-check"></i></div>
                             <span class="report-card-title">Events Summary</span>
-                            <a href="reports.php?export=csv&section=events" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
+                            <a href="reports?export=csv&section=events" class="btn btn-sm btn-gray" style="margin-left:auto;" title="Download CSV">
                                 <i class="fas fa-file-csv"></i>
                             </a>
                         </div>
@@ -801,7 +801,7 @@ require_once __DIR__ . '/includes/header.php';
                             <div class="sub-number-label">In the last 30 days</div>
                         </div>
                         <div class="report-card-foot">
-                            <a href="generate-report.php" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
+                            <a href="generate-report" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
                         </div>
                     </div>
 
@@ -816,8 +816,8 @@ require_once __DIR__ . '/includes/header.php';
                             <div class="report-card-icon bg-amber"><i class="fas fa-sitemap"></i></div>
                             <span class="report-card-title">Programs by Status</span>
                             <div class="actions" style="margin-left:auto;">
-                                <a href="reports.php?export=csv&section=programs" class="btn btn-sm btn-gray"><i class="fas fa-file-csv"></i> CSV</a>
-                                <a href="reports.php?export=pdf" target="_blank" class="btn btn-sm btn-soft"><i class="fas fa-file-pdf"></i> PDF</a>
+                                <a href="reports?export=csv&section=programs" class="btn btn-sm btn-gray"><i class="fas fa-file-csv"></i> CSV</a>
+                                <a href="reports?export=pdf" target="_blank" class="btn btn-sm btn-soft"><i class="fas fa-file-pdf"></i> PDF</a>
                             </div>
                         </div>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
@@ -847,8 +847,8 @@ require_once __DIR__ . '/includes/header.php';
                             <div class="report-card-icon bg-blue"><i class="fas fa-project-diagram"></i></div>
                             <span class="report-card-title">Projects by Status</span>
                             <div class="actions" style="margin-left:auto;">
-                                <a href="reports.php?export=csv&section=projects" class="btn btn-sm btn-gray"><i class="fas fa-file-csv"></i> CSV</a>
-                                <a href="reports.php?export=pdf" target="_blank" class="btn btn-sm btn-soft"><i class="fas fa-file-pdf"></i> PDF</a>
+                                <a href="reports?export=csv&section=projects" class="btn btn-sm btn-gray"><i class="fas fa-file-csv"></i> CSV</a>
+                                <a href="reports?export=pdf" target="_blank" class="btn btn-sm btn-soft"><i class="fas fa-file-pdf"></i> PDF</a>
                             </div>
                         </div>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
@@ -877,7 +877,7 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="report-card-head">
                             <div class="report-card-icon bg-green"><i class="fas fa-venus-mars"></i></div>
                             <span class="report-card-title">By Gender</span>
-                            <a href="reports.php?export=csv&section=participants" class="btn btn-sm btn-gray" style="margin-left:auto;"><i class="fas fa-file-csv"></i> CSV</a>
+                            <a href="reports?export=csv&section=participants" class="btn btn-sm btn-gray" style="margin-left:auto;"><i class="fas fa-file-csv"></i> CSV</a>
                         </div>
                         <div class="report-card-chart"><canvas id="genderChartFull"></canvas></div>
                         <div class="report-card-breakdown">
@@ -889,14 +889,14 @@ require_once __DIR__ . '/includes/header.php';
                             <?php endforeach; ?>
                         </div>
                         <div class="report-card-foot">
-                            <a href="generate-report.php" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
+                            <a href="generate-report" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
                         </div>
                     </div>
                     <div class="report-card">
                         <div class="report-card-head">
                             <div class="report-card-icon bg-amber"><i class="fas fa-wheelchair"></i></div>
                             <span class="report-card-title">PWD vs Non-PWD</span>
-                            <a href="reports.php?export=csv&section=pwd" class="btn btn-sm btn-gray" style="margin-left:auto;"><i class="fas fa-file-csv"></i> CSV</a>
+                            <a href="reports?export=csv&section=pwd" class="btn btn-sm btn-gray" style="margin-left:auto;"><i class="fas fa-file-csv"></i> CSV</a>
                         </div>
                         <div class="report-card-chart"><canvas id="pwdChartFull"></canvas></div>
                         <div class="report-card-breakdown">
@@ -914,7 +914,7 @@ require_once __DIR__ . '/includes/header.php';
                             </div>
                         </div>
                         <div class="report-card-foot">
-                            <a href="generate-report.php" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
+                            <a href="generate-report" class="btn btn-sm btn-soft"><i class="fas fa-eye"></i> Full Report</a>
                         </div>
                     </div>
                 </div>
@@ -928,8 +928,8 @@ require_once __DIR__ . '/includes/header.php';
                             <div class="report-card-icon bg-primary"><i class="fas fa-chart-bar"></i></div>
                             <span class="report-card-title">Indicators Achievement Overview</span>
                             <div class="actions" style="margin-left:auto;">
-                                <a href="reports.php?export=csv&section=indicators" class="btn btn-sm btn-gray"><i class="fas fa-file-csv"></i> CSV</a>
-                                <a href="reports.php?export=pdf" target="_blank" class="btn btn-sm btn-soft"><i class="fas fa-file-pdf"></i> PDF</a>
+                                <a href="reports?export=csv&section=indicators" class="btn btn-sm btn-gray"><i class="fas fa-file-csv"></i> CSV</a>
+                                <a href="reports?export=pdf" target="_blank" class="btn btn-sm btn-soft"><i class="fas fa-file-pdf"></i> PDF</a>
                             </div>
                         </div>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
@@ -977,7 +977,7 @@ require_once __DIR__ . '/includes/header.php';
                         <h3>Power BI Not Configured</h3>
                         <p>Connect your Power BI workspace to visualise real-time analytics.</p>
                         <?php if (($_SESSION['role'] ?? '') === 'Administrator'): ?>
-                            <a href="/settings.php?tab=powerbi" class="btn btn-dark"><i class="fas fa-cog"></i> Configure Power BI</a>
+                            <a href="/settings?tab=powerbi" class="btn btn-dark"><i class="fas fa-cog"></i> Configure Power BI</a>
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
@@ -991,7 +991,7 @@ require_once __DIR__ . '/includes/header.php';
                 </p>
                 <div class="exports-grid">
                     <!-- PDF exports -->
-                    <a href="reports.php?export=pdf" target="_blank" class="export-item">
+                    <a href="reports?export=pdf" target="_blank" class="export-item">
                         <div class="export-icon pdf"><i class="fas fa-file-pdf"></i></div>
                         <div class="export-item-body">
                             <div class="export-item-name">Analytics Overview (PDF)</div>
@@ -1011,7 +1011,7 @@ require_once __DIR__ . '/includes/header.php';
                     ];
                     foreach ($csv_exports as [$sec, $ico, $name, $desc]):
                     ?>
-                        <a href="reports.php?export=csv&section=<?= $sec ?>" class="export-item">
+                        <a href="reports?export=csv&section=<?= $sec ?>" class="export-item">
                             <div class="export-icon excel"><i class="fas <?= $ico ?>"></i></div>
                             <div class="export-item-body">
                                 <div class="export-item-name"><?= $name ?></div>
@@ -1020,7 +1020,7 @@ require_once __DIR__ . '/includes/header.php';
                         </a>
                     <?php endforeach; ?>
                     <!-- Detailed web reports -->
-                    <a href="generate-report.php" class="export-item">
+                    <a href="generate-report" class="export-item">
                         <div class="export-icon web"><i class="fas fa-globe"></i></div>
                         <div class="export-item-body">
                             <div class="export-item-name">Custom Report Builder</div>
@@ -1141,12 +1141,12 @@ require_once __DIR__ . '/includes/header.php';
             document.querySelector('[data-tab="powerbi"]').click(); return;
         }
         if(format === 'pdf'){
-            window.open('reports.php?export=pdf','_blank'); return;
+            window.open('reports?export=pdf','_blank'); return;
         }
         if(format === 'excel'){
-            window.location.href = 'reports.php?export=csv&section=' + type; return;
+            window.location.href = 'reports?export=csv&section=' + type; return;
         }
-        window.location.href = 'generate-report.php?type='+type+'&period='+period+'&format=html';
+        window.location.href = 'generate-report?type='+type+'&period='+period+'&format=html';
     };
 })();
 </script>

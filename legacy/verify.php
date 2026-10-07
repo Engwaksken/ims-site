@@ -11,7 +11,7 @@ if (
     !isset($_SESSION['verification_expiry'])
 ) {
     $_SESSION['login_error'] = 'Session expired. Please login again.';
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -27,7 +27,7 @@ if (time() > strtotime($_SESSION['verification_expiry'])) {
     );
 
     $_SESSION['login_error'] = 'Verification code expired. Please login again.';
-    header("Location: login.php");
+    header("Location: login");
     exit();
 }
 
@@ -193,7 +193,7 @@ $remaining_seconds = max(0, strtotime($_SESSION['verification_expiry']) - time()
                 </div>
 
                 <div style="text-align: center; margin-top: 20px;">
-                    <a href="login.php" style="color: #7f8c8d; text-decoration: none; font-size: 14px;">
+                    <a href="login" style="color: #7f8c8d; text-decoration: none; font-size: 14px;">
                         <i class="fas fa-arrow-left"></i> Back to Login
                     </a>
                 </div>
@@ -349,7 +349,7 @@ $remaining_seconds = max(0, strtotime($_SESSION['verification_expiry']) - time()
             if (remainingSeconds <= 0) {
                 clearInterval(countdown);
                 alert('Verification code has expired. Please login again.');
-                window.location.href = 'login.php';
+                window.location.href = 'login';
             }
         }, 1000);
 

@@ -36,7 +36,7 @@ function nt_self_url(string $filter, int $page): string
     if ($page > 1) {
         $query['page'] = $page;
     }
-    return 'notifications.php' . ($query ? '?' . http_build_query($query) : '');
+    return 'notifications' . ($query ? '?' . http_build_query($query) : '');
 }
 
 /*
@@ -196,7 +196,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
         <?php if ($ntUnread > 0): ?>
         <div class="page-actions">
-            <form method="post" action="notifications.php">
+            <form method="post" action="notifications">
                 <?= csrf_field() ?>
                 <input type="hidden" name="action" value="mark_all_read">
                 <input type="hidden" name="filter" value="<?= h($ntFilter) ?>">
@@ -256,7 +256,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <?php if ($isUnread): ?>
                     <div class="nt-actions">
-                        <form method="post" action="notifications.php">
+                        <form method="post" action="notifications">
                             <?= csrf_field() ?>
                             <input type="hidden" name="action" value="mark_read">
                             <input type="hidden" name="id" value="<?= h((string)(int)$n['id']) ?>">

@@ -27,7 +27,7 @@ $result = $conn->query($query);
 $employee = $result ? $result->fetch_assoc() : null;
 
 if (!$employee) {
-    header("Location: my-profile.php");
+    header("Location: my-profile");
     exit();
 }
 
@@ -37,7 +37,7 @@ if ((int)$employee['user_id'] !== $user_id) {
 
     if (!$can_view_others) {
         send_notification($user_id, 'You do not have permission to view that profile.', 'danger');
-        header("Location: dashboard.php");
+        header("Location: dashboard");
         exit();
     }
 }
@@ -603,7 +603,7 @@ function downloadPDF() {
     btn.disabled = true;
     
     // Redirect to PDF generation endpoint
-    window.location.href = 'generate-employee-pdf.php?employee_id=<?php echo $employee['employee_id']; ?>';
+    window.location.href = 'generate-employee-pdf?employee_id=<?php echo $employee['employee_id']; ?>';
     
     // Reset button after 3 seconds
     setTimeout(() => {

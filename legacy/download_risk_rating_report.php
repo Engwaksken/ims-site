@@ -3,7 +3,7 @@
 // logged-in user download any report. Same roles as risk_ratings_report.php.
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/auth.php';
-require_login('login.php');
+require_login('login');
 check_role(['Administrator', 'MEAL Lead', 'Programs Lead', 'Reviewer', 'Project Officer']);
 
 $conn = db_connect();

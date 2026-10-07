@@ -20,7 +20,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/auth.php';
 
-require_login('login.php');
+require_login('login');
 
 function support_back(string $message, string $type, int $appId = 0): never
 {
@@ -30,12 +30,12 @@ function support_back(string $message, string $type, int $appId = 0): never
         'type'    => $type,
     ];
 
-    header('Location: contact-support.php' . ($appId > 0 ? '?app_id=' . $appId : ''), true, 303);
+    header('Location: contact-support' . ($appId > 0 ? '?app_id=' . $appId : ''), true, 303);
     exit;
 }
 
 if (strtoupper((string)($_SERVER['REQUEST_METHOD'] ?? 'GET')) !== 'POST') {
-    header('Location: contact-support.php', true, 303);
+    header('Location: contact-support', true, 303);
     exit;
 }
 

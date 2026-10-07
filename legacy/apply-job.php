@@ -6,14 +6,14 @@ require_once 'includes/config.php';
    Validate job
 --------------------------------------------------------------- */
 $job_id = isset($_GET['job_id']) ? intval($_GET['job_id']) : 0;
-if (!$job_id) { header("Location: jobs-listings.php"); exit(); }
+if (!$job_id) { header("Location: jobs-listings"); exit(); }
 
 $job = $conn->query("SELECT * FROM jobs
     WHERE  job_id = $job_id
       AND  status = 'Published'
 ")->fetch_assoc();
 
-if (!$job) { header("Location: jobs-listings.php"); exit(); }
+if (!$job) { header("Location: jobs-listings"); exit(); }
 
 /* Max applicants check */
 $app_count = $conn->query("
@@ -140,7 +140,7 @@ function saveJobDraft($conn, $user_id, $job_id, $post, $files, $existing_id) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'save_draft') {
     $r = saveJobDraft($conn, $user_id, $job_id, $_POST, $_FILES, $draft_id);
     $_SESSION['job_app_success'] = 'Draft saved on ' . $r['saved_at'] . '. You can return any time to complete your application.';
-    header("Location: apply-job.php?job_id=$job_id");
+    header("Location: apply-job?job_id=$job_id");
     exit();
 }
 
@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submi
 
     if (!empty($errors)) {
         $_SESSION['job_app_error'] = implode('<br>', $errors);
-        header("Location: apply-job.php?job_id=$job_id");
+        header("Location: apply-job?job_id=$job_id");
         exit();
     }
 
@@ -517,7 +517,7 @@ body {
 <body>
 <div class="aj-page">
 
-    <a href="jobs-listings.php" class="aj-back">
+    <a href="jobs-listings" class="aj-back">
         <i class="fas fa-arrow-left"></i> Back to Jobs
     </a>
 
@@ -560,7 +560,7 @@ body {
                     ? 'The deadline for this position was ' . date('d M Y', strtotime($job['deadline'])) . '-'
                     : 'This position has reached its maximum number of applicants.' ?>
             </p>
-            <a href="jobs-listings.php" class="aj-btn aj-btn-primary">
+            <a href="jobs-listings" class="aj-btn aj-btn-primary">
                 <i class="fas fa-search"></i> Browse Other Jobs
             </a>
         </div>
@@ -620,7 +620,7 @@ body {
     <!-- LEFT - Application Form -->
     <div>
     <form method="POST" enctype="multipart/form-data" id="ajForm"
-          action="apply-job.php?job_id=<?= $job_id ?>">
+          action="apply-job?job_id=<?= $job_id ?>">
         <?php if ($draft_id): ?>
         <input type="hidden" name="draft_id" value="<?= $draft_id ?>">
         <?php endif; ?>
@@ -1080,7 +1080,7 @@ async function ajPerformSave() {
     const fd = new FormData(document.getElementById('ajForm'));
     fd.set('action','autosave');
     try {
-        const r = await fetch('apply-job.php?job_id=<?= $job_id ?>', {
+        const r = await fetch('apply-job?job_id=<?= $job_id ?>', {
             method:'POST', headers:{'X-Requested-With':'XMLHttpRequest'}, body:fd
         });
         const j = await r.json();

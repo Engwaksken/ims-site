@@ -6,7 +6,7 @@ require_once 'config.php';
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = "Please login to manage bookings.";
-    header("Location: login.php");
+    header("Location: ../login");
     exit();
 }
 
@@ -66,7 +66,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
     
     if ($member_result->num_rows == 0) {
         $_SESSION['error'] = "Member profile not found.";
-        header("Location: book-space.php");
+        header("Location: ../book-space");
         exit();
     }
     
@@ -84,28 +84,28 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
     // Validate required fields
     if (empty($space_name) || empty($booking_date) || empty($start_time) || empty($end_time) || empty($booking_type)) {
         $_SESSION['error'] = "Please fill in all required fields.";
-        header("Location: book-space.php");
+        header("Location: ../book-space");
         exit();
     }
     
     // Validate date is not in the past
     if ($booking_date < date('Y-m-d')) {
         $_SESSION['error'] = "Cannot book for past dates.";
-        header("Location: book-space.php");
+        header("Location: ../book-space");
         exit();
     }
     
     // Validate time
     if ($start_time >= $end_time) {
         $_SESSION['error'] = "End time must be after start time.";
-        header("Location: book-space.php");
+        header("Location: ../book-space");
         exit();
     }
     
     // Check for conflicts
     if (check_booking_conflict($space_name, $booking_date, $start_time, $end_time)) {
         $_SESSION['error'] = "This time slot is already booked. Please choose another time.";
-        header("Location: book-space.php");
+        header("Location: ../book-space");
         exit();
     }
     
@@ -139,15 +139,15 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
                         ) VALUES (
                             $member_id, 'Booking', 'Booking Request Submitted',
                             'Your booking request for $space_name on $booking_date is pending approval.',
-                            'my-bookings.php'
+                            'my-bookings'
                         )";
         $conn->query($notif_query);
         
         $_SESSION['success'] = "Booking request submitted successfully! You will be notified once approved.";
-        header("Location: my-bookings.php");
+        header("Location: ../my-bookings");
     } else {
         $_SESSION['error'] = "Error creating booking: " . $conn->error;
-        header("Location: book-space.php");
+        header("Location: ../book-space");
     }
     
     exit();
@@ -159,7 +159,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'approve') {
     // Check admin access
     if (!in_array($_SESSION['role'], ['Administrator', 'Operations/Admin'])) {
         $_SESSION['error'] = "Access denied.";
-        header("Location: ../dashboard.php");
+        header("Location: ../dashboard");
         exit();
     }
     
@@ -174,7 +174,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'approve') {
     
     if ($booking_result->num_rows == 0) {
         $_SESSION['error'] = "Booking not found.";
-        header("Location: ../manage-bookings.php");
+        header("Location: ../manage-bookings");
         exit();
     }
     
@@ -183,7 +183,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'approve') {
     // Check if already approved
     if ($booking['booking_status'] != 'Pending') {
         $_SESSION['error'] = "Booking has already been processed.";
-        header("Location: ../manage-bookings.php");
+        header("Location: ../manage-bookings");
         exit();
     }
     
@@ -191,7 +191,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'approve') {
     if (check_booking_conflict($booking['space_name'], $booking['booking_date'], 
                                $booking['start_time'], $booking['end_time'], $booking_id)) {
         $_SESSION['error'] = "Cannot approve: Time slot now has a conflict.";
-        header("Location: ../manage-bookings.php");
+        header("Location: ../manage-bookings");
         exit();
     }
     
@@ -217,7 +217,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'approve') {
                         ) VALUES (
                             {$booking['member_id']}, 'Booking', 'Booking Confirmed',
                             'Your booking for {$booking['space_name']} on {$booking['booking_date']} has been confirmed!',
-                            'view-booking.php?id=$booking_id'
+                            'view-booking?id=$booking_id'
                         )";
         $conn->query($notif_query);
         
@@ -226,7 +226,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'approve') {
         $_SESSION['error'] = "Error approving booking: " . $conn->error;
     }
     
-    header("Location: ../manage-bookings.php");
+    header("Location: ../manage-bookings");
     exit();
 }
 
@@ -236,7 +236,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'reject') {
     // Check admin access
     if (!in_array($_SESSION['role'], ['Administrator', 'Operations/Admin'])) {
         $_SESSION['error'] = "Access denied.";
-        header("Location: ../dashboard.php");
+        header("Location: ../dashboard");
         exit();
     }
     
@@ -245,7 +245,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'reject') {
     
     if (empty($rejection_reason)) {
         $_SESSION['error'] = "Please provide a rejection reason.";
-        header("Location: ../manage-bookings.php");
+        header("Location: ../manage-bookings");
         exit();
     }
     
@@ -258,7 +258,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'reject') {
     
     if ($booking_result->num_rows == 0) {
         $_SESSION['error'] = "Booking not found.";
-        header("Location: ../manage-bookings.php");
+        header("Location: ../manage-bookings");
         exit();
     }
     
@@ -287,7 +287,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'reject') {
                         ) VALUES (
                             {$booking['member_id']}, 'Booking', 'Booking Rejected',
                             'Your booking for {$booking['space_name']} on {$booking['booking_date']} was rejected. Reason: $rejection_reason',
-                            'my-bookings.php'
+                            'my-bookings'
                         )";
         $conn->query($notif_query);
         
@@ -296,7 +296,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'reject') {
         $_SESSION['error'] = "Error rejecting booking: " . $conn->error;
     }
     
-    header("Location: ../manage-bookings.php");
+    header("Location: ../manage-bookings");
     exit();
 }
 
@@ -311,7 +311,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'cancel') {
     
     if ($member_result->num_rows == 0) {
         $_SESSION['error'] = "Member profile not found.";
-        header("Location: my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
     
@@ -325,7 +325,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'cancel') {
     
     if ($booking_result->num_rows == 0) {
         $_SESSION['error'] = "Booking not found or access denied.";
-        header("Location: my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
     
@@ -337,13 +337,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'cancel') {
     
     if ($hours_until < 24) {
         $_SESSION['error'] = "Cannot cancel booking within 24 hours of start time.";
-        header("Location: view-booking.php?id=$booking_id");
+        header("Location: ../view-booking?id=$booking_id");
         exit();
     }
     
     if ($booking['booking_status'] == 'Cancelled') {
         $_SESSION['error'] = "Booking is already cancelled.";
-        header("Location: my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
     
@@ -370,7 +370,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'cancel') {
                         ) VALUES (
                             $member_id, 'Booking', 'Booking Cancelled',
                             'Your booking for {$booking['space_name']} on {$booking['booking_date']} has been cancelled.',
-                            'my-bookings.php'
+                            'my-bookings'
                         )";
         $conn->query($notif_query);
         
@@ -379,7 +379,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'cancel') {
         $_SESSION['error'] = "Error cancelling booking: " . $conn->error;
     }
     
-    header("Location: my-bookings.php");
+    header("Location: ../my-bookings");
     exit();
 }
 
@@ -390,7 +390,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'admin_cancel') {
     // Check admin access
     if (!in_array($_SESSION['role'], ['Administrator', 'Operations/Admin'])) {
         $_SESSION['error'] = "Access denied.";
-        header("Location: ../dashboard.php");
+        header("Location: ../dashboard");
         exit();
     }
     
@@ -405,7 +405,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'admin_cancel') {
     
     if ($booking_result->num_rows == 0) {
         $_SESSION['error'] = "Booking not found.";
-        header("Location: ../manage-bookings.php");
+        header("Location: ../manage-bookings");
         exit();
     }
     
@@ -434,7 +434,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'admin_cancel') {
                         ) VALUES (
                             {$booking['member_id']}, 'Booking', 'Booking Cancelled',
                             'Your booking for {$booking['space_name']} on {$booking['booking_date']} has been cancelled by administration.',
-                            'my-bookings.php'
+                            'my-bookings'
                         )";
         $conn->query($notif_query);
         
@@ -443,7 +443,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'admin_cancel') {
         $_SESSION['error'] = "Error cancelling booking: " . $conn->error;
     }
     
-    header("Location: ../manage-bookings.php");
+    header("Location: ../manage-bookings");
     exit();
 }
 
@@ -461,7 +461,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'reschedule') {
     
     if ($member_result->num_rows == 0) {
         $_SESSION['error'] = "Member profile not found.";
-        header("Location: my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
     
@@ -475,7 +475,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'reschedule') {
     
     if ($booking_result->num_rows == 0) {
         $_SESSION['error'] = "Booking not found or access denied.";
-        header("Location: my-bookings.php");
+        header("Location: ../my-bookings");
         exit();
     }
     
@@ -487,27 +487,27 @@ if (isset($_POST['action']) && $_POST['action'] == 'reschedule') {
     
     if ($hours_until < 24) {
         $_SESSION['error'] = "Cannot reschedule booking within 24 hours of start time.";
-        header("Location: view-booking.php?id=$booking_id");
+        header("Location: ../view-booking?id=$booking_id");
         exit();
     }
     
     // Validate new date and times
     if (empty($new_date) || empty($new_start_time) || empty($new_end_time)) {
         $_SESSION['error'] = "Please provide new date and time.";
-        header("Location: view-booking.php?id=$booking_id");
+        header("Location: ../view-booking?id=$booking_id");
         exit();
     }
     
     if ($new_start_time >= $new_end_time) {
         $_SESSION['error'] = "End time must be after start time.";
-        header("Location: view-booking.php?id=$booking_id");
+        header("Location: ../view-booking?id=$booking_id");
         exit();
     }
     
     // Check for conflicts
     if (check_booking_conflict($booking['space_name'], $new_date, $new_start_time, $new_end_time, $booking_id)) {
         $_SESSION['error'] = "The new time slot is already booked. Please choose another time.";
-        header("Location: view-booking.php?id=$booking_id");
+        header("Location: ../view-booking?id=$booking_id");
         exit();
     }
     
@@ -538,7 +538,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'reschedule') {
                         ) VALUES (
                             $member_id, 'Booking', 'Booking Rescheduled',
                             'Your booking for {$booking['space_name']} has been rescheduled to $new_date and is pending approval.',
-                            'view-booking.php?id=$booking_id'
+                            'view-booking?id=$booking_id'
                         )";
         $conn->query($notif_query);
         
@@ -547,7 +547,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'reschedule') {
         $_SESSION['error'] = "Error rescheduling booking: " . $conn->error;
     }
     
-    header("Location: view-booking.php?id=$booking_id");
+    header("Location: ../view-booking?id=$booking_id");
     exit();
 }
 
@@ -558,7 +558,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'mark_complete') {
     // Check admin access
     if (!in_array($_SESSION['role'], ['Administrator', 'Operations/Admin'])) {
         $_SESSION['error'] = "Access denied.";
-        header("Location: ../dashboard.php");
+        header("Location: ../dashboard");
         exit();
     }
     
@@ -573,7 +573,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'mark_complete') {
     
     if ($booking_result->num_rows == 0) {
         $_SESSION['error'] = "Booking not found.";
-        header("Location: ../manage-bookings.php");
+        header("Location: ../manage-bookings");
         exit();
     }
     
@@ -599,7 +599,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'mark_complete') {
                         ) VALUES (
                             {$booking['member_id']}, 'Booking', 'Booking Completed',
                             'Your booking for {$booking['space_name']} on {$booking['booking_date']} has been marked as completed. Thank you!',
-                            'my-bookings.php'
+                            'my-bookings'
                         )";
         $conn->query($notif_query);
         
@@ -608,12 +608,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'mark_complete') {
         $_SESSION['error'] = "Error updating booking: " . $conn->error;
     }
     
-    header("Location: ../manage-bookings.php");
+    header("Location: ../manage-bookings");
     exit();
 }
 
 // If no valid action, redirect
 $_SESSION['error'] = "Invalid action.";
-header("Location: ../dashboard.php");
+header("Location: ../dashboard");
 exit();
 ?>

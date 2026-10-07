@@ -51,7 +51,7 @@ if (
     !in_array($_SESSION['role'], $allowed, true)
 ) {
     $_SESSION['error'] = 'Access denied.';
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit;
 }
 
@@ -59,7 +59,7 @@ $applicationId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?: 0;
 $reviewTypeId  = filter_input(INPUT_GET, 'rt', FILTER_VALIDATE_INT) ?: 0;
 
 if ($applicationId <= 0 || $reviewTypeId <= 0) {
-    header('Location: startups-shortlisting.php');
+    header('Location: startups-shortlisting');
     exit;
 }
 
@@ -87,7 +87,7 @@ $app = rows($conn, "
 
 if (!$app) {
     $_SESSION['error'] = 'Application not found.';
-    header('Location: startups-shortlisting.php');
+    header('Location: startups-shortlisting');
     exit;
 }
 
@@ -267,17 +267,17 @@ require_once 'includes/header.php';
 
         <div class="opp-hero-actions">
 
-            <a href="ai-review-applicant.php?id=<?= (int)$applicationId ?>" class="btn btn-white">
+            <a href="ai-review-applicant?id=<?= (int)$applicationId ?>" class="btn btn-white">
                 <i class="fas fa-robot"></i>
                 AI Reviews
             </a>
 
-            <a href="review-applicant.php?id=<?= (int)$applicationId ?>" class="btn btn-white">
+            <a href="review-applicant?id=<?= (int)$applicationId ?>" class="btn btn-white">
                 <i class="fas fa-user-check"></i>
                 Manual Reviews
             </a>
 
-            <a href="startups-shortlisting.php" class="btn btn-white">
+            <a href="startups-shortlisting" class="btn btn-white">
                 <i class="fas fa-arrow-left"></i>
                 Back
             </a>

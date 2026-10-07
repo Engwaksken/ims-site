@@ -144,7 +144,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
                     <i class="fas fa-users-cog"></i> Manage Users
                 </a>
             <?php endif; ?>
-            <a href="reports.php" class="btn btn-dark">
+            <a href="reports" class="btn btn-dark">
                 <i class="fas fa-chart-column"></i> Reports
             </a>
         </div>
@@ -247,7 +247,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
         <div class="panel">
             <div class="panel-head">
                 <h3><i class="fas fa-sitemap" style="color:var(--brand-500)"></i> Recent Programs</h3>
-                <a href="programs.php" class="btn btn-sm btn-soft">View All</a>
+                <a href="programs" class="btn btn-sm btn-soft">View All</a>
             </div>
             <div class="panel-body no-pad">
                 <?php if (empty($recent_programs)): ?>
@@ -268,7 +268,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
                             <span><i class="fas fa-hand-holding-usd"></i> <?= htmlspecialchars($p['donor_name'] ?? 'N/A') ?></span>
                             <span><i class="fas fa-calendar"></i> <?= date('M Y', strtotime($p['start_date'])) ?></span>
                         </div>
-                        <a href="program-details.php?id=<?= (int)$p['id'] ?>" class="btn btn-sm btn-soft" style="margin-top:8px;">
+                        <a href="program-details?id=<?= (int)$p['id'] ?>" class="btn btn-sm btn-soft" style="margin-top:8px;">
                             <i class="fas fa-eye"></i> View
                         </a>
                     </div>
@@ -281,7 +281,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
         <div class="panel">
             <div class="panel-head">
                 <h3><i class="fas fa-project-diagram" style="color:var(--blue-fg)"></i> Recent Projects</h3>
-                <a href="projects.php" class="btn btn-sm btn-soft">View All</a>
+                <a href="projects" class="btn btn-sm btn-soft">View All</a>
             </div>
             <div class="panel-body no-pad">
                 <?php if (empty($recent_projects)): ?>
@@ -302,7 +302,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
                             <span><i class="fas fa-hand-holding-usd"></i> <?= htmlspecialchars($p['donor_name'] ?? 'N/A') ?></span>
                             <span><i class="fas fa-calendar"></i> <?= date('M Y', strtotime($p['start_date'])) ?></span>
                         </div>
-                        <a href="project-details.php?id=<?= (int)$p['project_id'] ?>" class="btn btn-sm btn-soft" style="margin-top:8px;">
+                        <a href="project-details?id=<?= (int)$p['project_id'] ?>" class="btn btn-sm btn-soft" style="margin-top:8px;">
                             <i class="fas fa-eye"></i> View
                         </a>
                     </div>
@@ -343,7 +343,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
         <div class="panel">
             <div class="panel-head">
                 <h3><i class="fas fa-sitemap" style="color:var(--brand-500)"></i> All Recent Programs</h3>
-                <a href="programs.php" class="btn btn-sm btn-soft">View All</a>
+                <a href="programs" class="btn btn-sm btn-soft">View All</a>
             </div>
             <div class="panel-body no-pad">
                 <?php foreach ($recent_programs as $p): ?>
@@ -361,7 +361,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
                         <span><i class="fas fa-hand-holding-usd"></i> <?= htmlspecialchars($p['donor_name'] ?? 'N/A') ?></span>
                         <span><i class="fas fa-calendar"></i> <?= date('M Y', strtotime($p['start_date'])) ?></span>
                     </div>
-                    <a href="program-details.php?id=<?= (int)$p['id'] ?>" class="btn btn-sm btn-soft" style="margin-top:8px;"><i class="fas fa-eye"></i> View</a>
+                    <a href="program-details?id=<?= (int)$p['id'] ?>" class="btn btn-sm btn-soft" style="margin-top:8px;"><i class="fas fa-eye"></i> View</a>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -370,7 +370,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
         <div class="panel">
             <div class="panel-head">
                 <h3><i class="fas fa-project-diagram" style="color:var(--blue-fg)"></i> All Recent Projects</h3>
-                <a href="projects.php" class="btn btn-sm btn-soft">View All</a>
+                <a href="projects" class="btn btn-sm btn-soft">View All</a>
             </div>
             <div class="panel-body no-pad">
                 <?php foreach ($recent_projects as $p): ?>
@@ -388,7 +388,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
                         <span><i class="fas fa-hand-holding-usd"></i> <?= htmlspecialchars($p['donor_name'] ?? 'N/A') ?></span>
                         <span><i class="fas fa-calendar"></i> <?= date('M Y', strtotime($p['start_date'])) ?></span>
                     </div>
-                    <a href="project-details.php?id=<?= (int)$p['project_id'] ?>" class="btn btn-sm btn-soft" style="margin-top:8px;"><i class="fas fa-eye"></i> View</a>
+                    <a href="project-details?id=<?= (int)$p['project_id'] ?>" class="btn btn-sm btn-soft" style="margin-top:8px;"><i class="fas fa-eye"></i> View</a>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -476,7 +476,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
     <div class="panel">
         <div class="panel-head">
             <h3><i class="fas fa-trophy"></i> Top Performing Indicators</h3>
-            <a href="indicators.php" class="btn btn-sm btn-soft">View All</a>
+            <a href="indicators" class="btn btn-sm btn-soft">View All</a>
         </div>
         <div class="panel-body">
             <?php if (empty($indicators_performance)): ?>
@@ -554,7 +554,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
     <div class="panel">
         <div class="panel-head">
             <h3><i class="fas fa-building"></i> Department KPI Performance</h3>
-            <a href="kpi-reports.php" class="btn btn-sm btn-soft">View Reports</a>
+            <a href="kpi-reports" class="btn btn-sm btn-soft">View Reports</a>
         </div>
         <div class="panel-body">
             <div class="chart-wrap chart-tall"><canvas id="deptKpiChart"></canvas></div>
@@ -573,7 +573,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
     <div class="panel">
         <div class="panel-head">
             <h3><i class="fas fa-calendar-alt"></i> Upcoming Events</h3>
-            <a href="events.php" class="btn btn-sm btn-soft">View All</a>
+            <a href="events" class="btn btn-sm btn-soft">View All</a>
         </div>
         <div class="table-wrap">
             <table class="table">
@@ -612,7 +612,7 @@ if (!isset($visible_tabs[$active_tab])) $active_tab = $first_tab;
                         </span>
                     </td>
                     <td>
-                        <a href="event-attendance.php?id=<?= (int)$ev['event_id'] ?>" class="btn btn-sm btn-soft" title="Attendance">
+                        <a href="event-attendance?id=<?= (int)$ev['event_id'] ?>" class="btn btn-sm btn-soft" title="Attendance">
                             <i class="fas fa-users"></i>
                         </a>
                     </td>

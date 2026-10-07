@@ -7,7 +7,7 @@ include 'includes/header.php';
 
 if (empty($_SESSION['user_id'])) {
     $_SESSION['error'] = 'Please log in to view your profile.';
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -97,7 +97,7 @@ if ($stmt) {
 
 if (!$user) {
     $_SESSION['error'] = 'User profile not found.';
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit;
 }
 
