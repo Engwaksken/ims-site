@@ -331,7 +331,7 @@ body {
 }
 
 .review-info-item .val a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .review-text-block {

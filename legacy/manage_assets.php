@@ -269,12 +269,12 @@ unset($_SESSION['success'], $_SESSION['error']);
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    flex-wrap: wrap;
     gap: 0.75rem;
     margin-bottom: 1rem;
 }
 .tab-toolbar .tab-toolbar-left { flex: 1; min-width: 200px; max-width: 340px; }
-.tab-toolbar .tab-toolbar-right { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.tab-toolbar .tab-toolbar-right { display: flex; align-items: center; gap: 0.5rem; }
+@media (max-width: 768px) { .tab-toolbar .tab-toolbar-left { flex: 1 1 100%; max-width: none; } }
 </style>
 
 <div class="assets-wrap">
@@ -379,11 +379,11 @@ unset($_SESSION['success'], $_SESSION['error']);
             <div class="panel-body table-wrap">
                 <form method="GET">
                     <input type="hidden" name="tab" value="assets">
-                    <div class="tab-toolbar">
-                        <div class="tab-toolbar-left">
+                    <div class="tab-toolbar filters-bar">
+                        <div class="tab-toolbar-left filters-grow">
                             <input name="asset_search" class="form-control" value="<?= e($assetSearch) ?>" placeholder="Search assets...">
                         </div>
-                        <div class="tab-toolbar-right">
+                        <div class="tab-toolbar-right filters-actions">
                             <button class="btn btn-dark"><i class="fas fa-search"></i> Search</button>
                             <a href="?tab=assets" class="btn btn-gray">Reset</a>
                             <a href="?<?= buildQuery(['export' => 'assets_csv', 'tab' => 'assets']) ?>" class="btn btn-green">
@@ -510,11 +510,11 @@ unset($_SESSION['success'], $_SESSION['error']);
             <div class="panel-body table-wrap">
                 <form method="GET">
                     <input type="hidden" name="tab" value="requests">
-                    <div class="tab-toolbar">
-                        <div class="tab-toolbar-left">
+                    <div class="tab-toolbar filters-bar">
+                        <div class="tab-toolbar-left filters-grow">
                             <input name="request_search" class="form-control" value="<?= e($requestSearch) ?>" placeholder="Search requests...">
                         </div>
-                        <div class="tab-toolbar-right">
+                        <div class="tab-toolbar-right filters-actions">
                             <button class="btn btn-dark"><i class="fas fa-search"></i> Search</button>
                             <a href="?tab=requests" class="btn btn-gray">Reset</a>
                             <a href="?<?= buildQuery(['export' => 'requests_csv', 'tab' => 'requests']) ?>" class="btn btn-green">
@@ -613,11 +613,11 @@ unset($_SESSION['success'], $_SESSION['error']);
             <div class="panel-body table-wrap">
                 <form method="GET">
                     <input type="hidden" name="tab" value="assignments">
-                    <div class="tab-toolbar">
-                        <div class="tab-toolbar-left">
+                    <div class="tab-toolbar filters-bar">
+                        <div class="tab-toolbar-left filters-grow">
                             <input name="assignment_search" class="form-control" value="<?= e($assignmentSearch) ?>" placeholder="Search assignments...">
                         </div>
-                        <div class="tab-toolbar-right">
+                        <div class="tab-toolbar-right filters-actions">
                             <button class="btn btn-dark"><i class="fas fa-search"></i> Search</button>
                             <a href="?tab=assignments" class="btn btn-gray">Reset</a>
                             <a href="?<?= buildQuery(['export' => 'assignments_csv', 'tab' => 'assignments']) ?>" class="btn btn-green">

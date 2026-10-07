@@ -1065,3 +1065,16 @@ select.form-control {
     gap: 10px;
   }
 }
+/* Links: no underlines anywhere (matches style.css); keep a visible keyboard focus ring. */
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+    text-decoration: none;
+}
+
+:where(a):focus-visible {
+    outline: 2px solid #ea580c;
+    outline-offset: 2px;
+}

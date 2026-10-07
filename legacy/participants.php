@@ -246,14 +246,14 @@ if ($project_info) {
     
     <div class="card-body">
         <!-- Filters -->
-        <form method="GET" action="" class="form-row" style="margin-bottom: 20px;">
+        <form method="GET" action="" class="filters-bar" role="search" aria-label="Filter participants">
             <?php if ($filter_project_id): ?>
                 <input type="hidden" name="project" value="<?php echo $filter_project_id; ?>">
             <?php elseif ($filter_program_id): ?>
                 <input type="hidden" name="program" value="<?php echo $filter_program_id; ?>">
             <?php endif; ?>
             
-            <div class="form-group">
+            <div class="form-group filters-grow">
                 <input type="text" name="search" class="form-control" placeholder="Search by name, phone, or email..." value="<?php echo htmlspecialchars($search); ?>">
             </div>
             
@@ -277,7 +277,7 @@ if ($project_info) {
                 </select>
             </div>
             
-            <div class="form-group">
+            <div class="filters-actions">
                 <button type="submit" class="btn btn-info">
                     <i class="fas fa-filter"></i> Filter
                 </button>

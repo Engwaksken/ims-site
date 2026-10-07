@@ -81,25 +81,9 @@
   box-shadow: var(--shadow-md);
   border: 1px solid rgba(0,0,0,.04);
   padding: 16px 20px;
-  display: flex;
-  gap: 12px;
-  align-items: flex-end;
-  flex-wrap: wrap;
+  margin-bottom: 0; /* parent wrapper spaces sections with gap; layout comes from .filters-bar */
 }
 
-.filter-bar .form-group {
-  flex: 1;
-  min-width: 150px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: 0;
-}
-
-.filter-bar .form-group.search-group {
-  flex: 2;
-  min-width: 220px;
-}
 
 
 
@@ -369,6 +353,10 @@
 
 .tab-panel {
   padding: 20px;
+}
+
+.tab-panel > .filter-bar {
+  margin-bottom: 16px;
 }
 
 .detail-grid-2 {
@@ -673,26 +661,6 @@
   .detail-summary-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-  }
-
-  .filter-bar {
-    flex-direction: column;
-  }
-
-  .filter-bar .form-group,
-  .filter-bar .form-group.search-group {
-    flex: unset;
-    width: 100%;
-    min-width: unset;
-  }
-
-  .filter-actions {
-    width: 100%;
-  }
-
-  .filter-actions .btn {
-    flex: 1;
-    justify-content: center;
   }
 
   .tab-nav {

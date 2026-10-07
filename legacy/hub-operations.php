@@ -139,6 +139,7 @@ if (isset($_GET['edit_receipt'])) {
         border-radius: 8px;
         margin-bottom: 20px;
     }
+    .filter-bar > .filters-bar { margin-bottom: 0; }
     .notification-badge {
         background: #E74C3C;
         color: white;
@@ -308,8 +309,8 @@ if (isset($_GET['edit_receipt'])) {
         <!-- Filter Bar -->
         <form method="GET" action="" class="filter-bar">
             <input type="hidden" name="tab" value="members">
-            <div class="form-row">
-                <div class="form-group">
+            <div class="filters-bar">
+                <div class="form-group filters-grow">
                     <input type="text" name="search" class="form-control" placeholder="Search members..."
                            value="<?php echo isset($_GET['search']) ? hub_e($_GET['search']) : ''; ?>">
                 </div>
@@ -332,7 +333,7 @@ if (isset($_GET['edit_receipt'])) {
                         <option value="Annual" <?php echo (isset($_GET['plan']) && $_GET['plan'] == 'Annual') ? 'selected' : ''; ?>>Annual</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="filters-actions">
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-filter"></i> Filter
                     </button>
@@ -489,7 +490,7 @@ if (isset($_GET['edit_receipt'])) {
         <!-- Filter Bar -->
         <form method="GET" action="" class="filter-bar">
             <input type="hidden" name="tab" value="bookings">
-            <div class="form-row">
+            <div class="filters-bar">
                 <div class="form-group">
                     <input type="date" name="booking_date" class="form-control" 
                            value="<?php echo isset($_GET['booking_date']) ? hub_e($_GET['booking_date']) : ''; ?>">
@@ -513,7 +514,7 @@ if (isset($_GET['edit_receipt'])) {
                         <option value="Cancelled" <?php echo (isset($_GET['booking_status']) && $_GET['booking_status'] == 'Cancelled') ? 'selected' : ''; ?>>Cancelled</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="filters-actions">
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-filter"></i> Filter
                     </button>
@@ -663,7 +664,7 @@ if (isset($_GET['edit_receipt'])) {
         <!-- Filter Bar -->
         <form method="GET" action="" class="filter-bar">
             <input type="hidden" name="tab" value="receipts">
-            <div class="form-row">
+            <div class="filters-bar">
                 <div class="form-group">
                     <select name="receipt_type" class="form-control">
                         <option value="">All Types</option>
@@ -681,7 +682,7 @@ if (isset($_GET['edit_receipt'])) {
                         <option value="Rejected" <?php echo (isset($_GET['receipt_status']) && $_GET['receipt_status'] == 'Rejected') ? 'selected' : ''; ?>>Rejected</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="filters-actions">
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-filter"></i> Filter
                     </button>
@@ -818,7 +819,7 @@ if (isset($_GET['edit_receipt'])) {
         <!-- Filter Bar -->
         <form method="GET" action="" class="filter-bar">
             <input type="hidden" name="tab" value="feedback">
-            <div class="form-row">
+            <div class="filters-bar">
                 <div class="form-group">
                     <select name="feedback_type" class="form-control">
                         <option value="">All Types</option>
@@ -840,7 +841,7 @@ if (isset($_GET['edit_receipt'])) {
                         <option value="Closed" <?php echo (isset($_GET['feedback_status']) && $_GET['feedback_status'] == 'Closed') ? 'selected' : ''; ?>>Closed</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="filters-actions">
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-filter"></i> Filter
                     </button>
@@ -1484,7 +1485,7 @@ new Chart(revenueTrendCtx, {
         <!-- Filter Bar -->
         <form method="GET" action="" class="filter-bar">
             <input type="hidden" name="tab" value="subscriptions">
-            <div class="form-row">
+            <div class="filters-bar">
                 <div class="form-group">
                     <select name="subscription_plan" class="form-control">
                         <option value="">All Plans</option>
@@ -1504,7 +1505,7 @@ new Chart(revenueTrendCtx, {
                         <option value="Overdue" <?php echo (isset($_GET['payment_status']) && $_GET['payment_status'] == 'Overdue') ? 'selected' : ''; ?>>Overdue</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="filters-actions">
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-filter"></i> Filter
                     </button>

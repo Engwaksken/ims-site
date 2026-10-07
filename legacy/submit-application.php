@@ -287,7 +287,7 @@ function safe_saved_html(?string $html): string
 .detail-meta-grid>div{border:1px solid var(--border);border-radius:12px;padding:14px;background:#f8fafc}
 .detail-meta-grid span{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
 .detail-meta-grid strong{color:var(--ink)}
-.rich-content a{color:var(--brand-dark);text-decoration:underline}
+.rich-content a{color:var(--brand-dark);text-decoration:none}
 
 @media(max-width:980px){.grid-3,.grid-4{grid-template-columns:1fr 1fr}.repeater-row{grid-template-columns:1fr 1fr}.repeater-row .remove-row{grid-column:2;justify-self:end}}
 @media(max-width:700px){.detail-meta-grid{grid-template-columns:1fr}.grid-2,.grid-3,.grid-4,.choice-grid{grid-template-columns:1fr}.form-section{padding:18px}.stepper{grid-template-columns:repeat(9,90px);overflow-x:auto}.repeater-row{grid-template-columns:1fr}.repeater-row .remove-row{grid-column:1;justify-self:end}.nav-bar{flex-wrap:wrap}.nav-bar .spacer{display:none}.nav-bar .btn{flex:1;justify-content:center}}

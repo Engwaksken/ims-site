@@ -208,14 +208,12 @@
 /* ===============================
    TOOLBAR
 =============================== */
+/* One-row layout comes from .filters-bar (style.css). */
 .sl-toolbar {
     background: #fff;
     border: 1px solid var(--rule);
     padding: 12px;
     border-radius: 12px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
     margin-bottom: 20px;
     box-shadow: var(--sh-sm);
 }
@@ -1246,13 +1244,6 @@
 
     .sl-toolbar {
         padding: 10px;
-    }
-
-    .sl-toolbar select,
-    .sl-toolbar input,
-    .sl-search-input {
-        width: 100%;
-        min-width: 100%;
     }
 
     .toolbar-gap {

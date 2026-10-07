@@ -374,7 +374,7 @@ $needs_attention = array_slice($needs_attention, 0, 5);
     
     <div class="card-body">
         <!-- Filters -->
-        <form method="GET" action="" class="form-row" style="margin-bottom: 30px;">
+        <form method="GET" action="" class="filters-bar" style="margin-bottom: 30px;" aria-label="Report filters">
             <div class="form-group">
                 <label>Fiscal Year</label>
                 <select name="year" class="form-control">
@@ -413,11 +413,11 @@ $needs_attention = array_slice($needs_attention, 0, 5);
             </div>
             <?php endif; ?>
             
-            <div class="form-group" style="display: flex; align-items: flex-end;">
+            <div class="filters-actions">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-filter"></i> Apply Filters
                 </button>
-                <a href="kpi-reports" class="btn btn-secondary" style="margin-left: 10px;">
+                <a href="kpi-reports" class="btn btn-secondary">
                     <i class="fas fa-times"></i> Clear
                 </a>
             </div>

@@ -147,7 +147,7 @@ while ($d = $donorRes->fetch_assoc()) {
     <div class="card-body">
 
         <!-- Filters -->
-        <form method="GET" class="form-row mb-20">
+        <form method="GET" class="filters-bar mb-20">
             <select name="status" class="form-control">
                 <option value="">All Status</option>
                 <?php foreach($status_count as $s=>$c): ?>

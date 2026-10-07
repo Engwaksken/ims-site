@@ -151,6 +151,17 @@ body {
     line-height: 1.6;
 }
 
+/* Links: no underlines anywhere in the app (hover/focus included).
+   Keyboard users still get a visible outline via the :focus-visible rule in
+   section 7. */
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+    text-decoration: none;
+}
+
 /* Layout */
 .container {
     max-width: 1400px;
@@ -1985,30 +1996,183 @@ canvas {
     gap: var(--space-2);
 }
 
-/* 7.5 Filters bar --------------------------------------------------------- */
+/* 7.5 Filters bar ---------------------------------------------------------
+   THE filter/search bar for every list page: one horizontal row on desktop.
+   Put .filters-bar on the element whose children are the fields (usually the
+   <form method="GET">). Children can be .form-group wrappers (label above the
+   control), bare selects/inputs, a search wrapper, buttons, or an actions
+   group. Within one bar use labels on every field or on none.
+     - The search field grows (.filters-grow, .search-input-wrap,
+       .pb-toolbar-search, input[type=search]); everything else stays compact.
+     - Buttons line up with the bottom edge of the inputs.
+     - If the row does not fit (medium widths) the bar scrolls sideways
+       instead of wrapping.
+     - <=768px: wraps, 2 fields per row; search and actions take a full row.
+   -------------------------------------------------------------------------- */
 .filters-bar {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: flex-end;
     gap: var(--space-3);
     margin-bottom: var(--space-5);
+    /* 3px keeps focus rings from being clipped by the scroll container. */
+    padding: 3px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
 }
 
-.filters-bar .form-group {
-    flex: 1 1 180px;
+.filters-bar > * {
+    flex: 0 1 auto;
     min-width: 0;
+    margin-top: 0;
     margin-bottom: 0;
 }
 
-.filters-bar .form-group.filters-grow {
-    flex: 2 1 240px;
+.filters-bar > input[type="hidden"] {
+    display: none;
+}
+
+/* Field wrappers: compact, label above the control. */
+.filters-bar > .form-group {
+    flex: 0 1 180px;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+}
+
+.filters-bar > .form-group > label,
+.filters-bar > .form-group > .form-label {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.filters-bar > .form-group .form-control,
+.filters-bar > .form-group select,
+.filters-bar > .form-group input:not([type="checkbox"]):not([type="radio"]) {
+    width: 100%;
+}
+
+/* Bare controls placed straight in the bar (an inline/page width wins). */
+.filters-bar > select,
+.filters-bar > input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="search"]):not(.filters-grow),
+.filters-bar > .form-control {
+    width: auto;
+    max-width: 260px;
+}
+
+.filters-bar > select {
+    min-width: 140px;
+}
+
+.filters-bar > input[type="date"],
+.filters-bar > input[type="month"],
+.filters-bar > .form-group > input[type="date"],
+.filters-bar > .form-group > input[type="month"] {
+    min-width: 140px;
+}
+
+/* The search field is the one that grows. */
+.filters-bar > .filters-grow,
+.filters-bar > .form-group.filters-grow,
+.filters-bar > .search-input-wrap,
+.filters-bar > .pb-toolbar-search,
+.filters-bar > input[type="search"] {
+    flex: 1 1 220px;
+    min-width: 180px;
+    max-width: none;
+}
+
+.filters-bar > .search-input-wrap .form-control,
+.filters-bar > .pb-toolbar-search input {
+    width: 100%;
+}
+
+/* Same height for controls and buttons so their bottoms line up. */
+.filters-bar .form-control,
+.filters-bar select,
+.filters-bar input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.filters-bar .btn {
+    min-height: 40px;
+    margin-bottom: 0;
+}
+
+.filters-bar .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.filters-bar > .btn,
+.filters-bar > button,
+.filters-bar > a,
+.filters-bar > .filters-actions,
+.filters-bar > .ctrl-actions,
+.filters-bar > .filter-actions {
+    flex: 0 0 auto;
 }
 
 .filters-actions {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: flex-end;
     gap: var(--space-2);
+}
+
+/* Small inline toggles (checkbox + text) stay on one line. */
+.filters-bar > .filters-check,
+.filters-bar > label.filters-check {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .filters-bar {
+        flex-wrap: wrap;
+        overflow: visible;
+    }
+
+    .filters-bar > *,
+    .filters-bar > .form-group,
+    .filters-bar > select,
+    .filters-bar > input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="search"]):not(.filters-grow),
+    .filters-bar > .form-control {
+        flex: 1 1 calc(50% - var(--space-3));
+        min-width: 0;
+        max-width: none;
+        width: auto;
+    }
+
+    .filters-bar > .filters-grow,
+    .filters-bar > .form-group.filters-grow,
+    .filters-bar > .search-input-wrap,
+    .filters-bar > .pb-toolbar-search,
+    .filters-bar > input[type="search"],
+    .filters-bar > .filters-actions,
+    .filters-bar > .ctrl-actions,
+    .filters-bar > .filter-actions {
+        flex: 1 1 100%;
+    }
+
+    .filters-bar > .btn,
+    .filters-bar > button,
+    .filters-bar > a {
+        flex: 1 1 auto;
+    }
+
+    .filters-bar .filters-actions .btn,
+    .filters-bar .filter-actions .btn {
+        flex: 1 1 auto;
+    }
 }
 
 /* Consolidated from indicators.css / milestones.css / projects.css
@@ -2399,12 +2563,6 @@ tr.task-pending > td:first-child {
         gap: 8px;
     }
 
-    .filters-bar .form-group,
-    .filters-actions {
-        flex-basis: 100%;
-    }
-
-    .filters-actions .btn,
     .page-actions .btn {
         flex: 1 1 auto;
         justify-content: center;

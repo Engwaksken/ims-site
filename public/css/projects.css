@@ -82,20 +82,10 @@
   box-shadow: var(--shadow-md);
   border: 1px solid rgba(0,0,0,.04);
   padding: 16px 20px;
-  display: flex;
-  gap: 12px;
-  align-items: flex-end;
-  flex-wrap: wrap;
+  margin-bottom: 0; /* parent wrapper spaces sections with gap; layout comes from .filters-bar */
 }
 
 /* .search-input-wrap* and .filter-actions moved to style.css (section 7.5). */
- {
-  flex: 1;
-  min-width: 160px;
-  margin: 0;
-}
-
-.filter-bar .form-group.search-group { flex: 2; min-width: 220px; }
 
 /* search input with icon */
 
@@ -532,7 +522,7 @@
 
 .donor-contact-row .dc-value { color: var(--ink-500); font-weight: 500; }
 .donor-contact-row a { color: var(--blue-fg); text-decoration: none; }
-.donor-contact-row a:hover { text-decoration: underline; }
+.donor-contact-row a:hover { text-decoration: none; }
 
 /* -- Partner cards ----------------------------------------------------- */
 .partner-card {
@@ -948,14 +938,6 @@
 
   .projects-stats { grid-template-columns: 1fr 1fr; gap: 12px; }
 
-  .filter-bar {
-    flex-direction: column;
-    gap: 10px;
-  }
-  .filter-bar .form-group,
-  .filter-bar .form-group.search-group { flex: unset; width: 100%; min-width: unset; }
-  .filter-actions { width: 100%; }
-  .filter-actions .btn { flex: 1; justify-content: center; }
 }
 
 @media (max-width: 400px) {

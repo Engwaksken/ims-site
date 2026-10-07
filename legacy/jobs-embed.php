@@ -178,18 +178,23 @@ body {
   line-height: 1.5;
 }
 
-/* -- Widget search + filter bar ---------------------------------- */
+/* -- Widget search + filter bar ----------------------------------
+   One row (search grows, pills stay on one line; the bar scrolls sideways
+   if it overflows). Wraps at <=768px. */
 .widget-bar {
   display: flex;
   align-items: center;
   gap: 9px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 3px;
+  scrollbar-width: thin;
   margin-bottom: <?= $compact ? '12px' : '16px' ?>;
   <?= (!$showSearch && !$showFilter) ? 'display:none;' : '' ?>
 }
 
 .widget-search {
-  flex: 1;
+  flex: 1 1 220px;
   min-width: 160px;
   display: flex;
   align-items: center;
@@ -228,6 +233,14 @@ body {
   gap: 6px;
   flex-wrap: wrap;
   <?= !$showFilter ? 'display:none;' : '' ?>
+}
+
+.widget-bar > .widget-pills { flex: 0 0 auto; flex-wrap: nowrap; }
+
+@media (max-width: 768px) {
+  .widget-bar { flex-wrap: wrap; overflow-x: visible; }
+  .widget-bar > .widget-search { flex: 1 1 100%; min-width: 0; }
+  .widget-bar > .widget-pills { flex: 1 1 100%; flex-wrap: wrap; }
 }
 
 .widget-pill {

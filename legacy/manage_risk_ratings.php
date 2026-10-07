@@ -690,13 +690,13 @@ function buildSigArea(string $prefix, bool $canSign, array $allowedRoles, string
         </div>
 
         <div class="mrr-filters">
-            <form method="get" action="manage_risk_ratings">
-                <div class="fg">
+            <form method="get" action="manage_risk_ratings" class="filters-bar" role="search" aria-label="Filter risk ratings">
+                <div class="fg form-group filters-grow">
                     <label>Search</label>
                     <input type="text" name="search" class="fg-search" placeholder="Startup, email, contact..." value="<?= h($search) ?>">
                 </div>
 
-                <div class="fg">
+                <div class="fg form-group">
                     <label>Opportunity</label>
                     <select name="opportunity_id" class="fg-select">
                         <option value="">All Opportunities</option>
@@ -708,7 +708,7 @@ function buildSigArea(string $prefix, bool $canSign, array $allowedRoles, string
                     </select>
                 </div>
 
-                <div class="fg">
+                <div class="fg form-group">
                     <label>Risk Level</label>
                     <select name="rating" class="fg-select">
                         <option value="">All Levels</option>
@@ -718,7 +718,7 @@ function buildSigArea(string $prefix, bool $canSign, array $allowedRoles, string
                     </select>
                 </div>
 
-                <div class="fg">
+                <div class="fg form-group">
                     <label>Status</label>
                     <select name="status" class="fg-select">
                         <option value="">All Statuses</option>

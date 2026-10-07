@@ -670,25 +670,16 @@ select.form-control {
   gap: 16px;
 }
 
+/* Card look only: the one-row layout comes from .filters-bar (style.css). */
 .controls-bar {
   background: var(--surface-card);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
   border: 1px solid rgba(0,0,0,.04);
   padding: 18px 22px;
-  display: flex;
-  gap: 14px;
-  align-items: flex-end;
-  flex-wrap: wrap;
 }
 
-.controls-bar .form-group {
-  flex: 1;
-  min-width: 150px;
-  margin: 0;
-}
-
-.controls-bar .form-group.grow { flex: 2; }
+.controls-bar.filters-bar { margin-bottom: 0; }
 
 .controls-bar .ctrl-actions {
   display: flex;
@@ -815,22 +806,10 @@ select.form-control {
   .reports-stats { grid-template-columns: 1fr 1fr; gap: 12px; }
   .stat-value { font-size: 24px; }
 
-  .controls-bar,
   .form-row,
   .form-grid {
     grid-template-columns: 1fr;
     flex-direction: column;
-  }
-
-  .controls-bar .form-group,
-  .controls-bar .form-group.grow {
-    flex: unset;
-    width: 100%;
-    min-width: unset;
-  }
-
-  .controls-bar .ctrl-actions {
-    width: 100%;
   }
 
   .controls-bar .ctrl-actions .btn {

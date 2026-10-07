@@ -402,9 +402,9 @@ if (isset($_GET['edit'])) {
 
     </section>
 
-    <form method="get" action="/cohort" class="controls-bar">
+    <form method="get" action="/cohort" class="controls-bar filters-bar">
 
-        <div class="form-group grow">
+        <div class="form-group grow filters-grow">
             <label for="cohortSearch">Search</label>
 
             <input

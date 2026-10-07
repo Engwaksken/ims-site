@@ -485,10 +485,10 @@ $status_options = ['Draft','Submitted','Under Review','Approved','Rejected','Wai
         <form method="GET" action="">
             <input type="hidden" name="opportunity_id" value="<?= $opportunity_id ?>">
 
-            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+            <div class="filters-bar" role="search" aria-label="Filter applications" style="margin-bottom:12px;">
 
                 <!-- Search -->
-                <div class="ma-search-wrap">
+                <div class="ma-search-wrap filters-grow">
                     <i class="fas fa-search ma-search-icon"></i>
                     <input type="text" name="search" class="ma-search-input"
                            placeholder="Startup, contact, email, phone..."

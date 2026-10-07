@@ -278,7 +278,7 @@ $types = array_values(
 
 .opp-card-desc a {
     color: #ea580c;
-    text-decoration: underline;
+    text-decoration: none;
     text-underline-offset: 2px;
 }
 

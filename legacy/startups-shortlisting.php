@@ -666,7 +666,7 @@ function build_page_url(int $pageNo): string
         </div>
 
         <form method="GET" action="startups-shortlisting" id="filter-form">
-            <div class="sl-toolbar">
+            <div class="sl-toolbar filters-bar" role="search" aria-label="Filter applicants">
                 <select name="opportunity_id" onchange="this.form.submit()">
                     <option value="">All Opportunities</option>
                     <?php foreach ($opportunities as $o): ?>
@@ -715,7 +715,7 @@ function build_page_url(int $pageNo): string
                     <?php endforeach; ?>
                 </select>
 
-                <input type="text" name="q" placeholder="Search startup..." value="<?= h($q) ?>" class="sl-search-input">
+                <input type="text" name="q" placeholder="Search startup..." value="<?= h($q) ?>" class="sl-search-input filters-grow">
 
                 <div class="toolbar-gap"></div>
 

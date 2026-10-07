@@ -360,8 +360,8 @@ foreach ($departments as $dept) {
     
     <div class="card-body">
         <!-- Filters -->
-        <form method="GET" action="" class="form-row" style="margin-bottom: 20px;">
-            <div class="form-group">
+        <form method="GET" action="" class="filters-bar" role="search" aria-label="Filter KPIs">
+            <div class="form-group filters-grow">
                 <input type="text" name="search" class="form-control" placeholder="Search KPIs or employees..." 
                        value="<?php echo htmlspecialchars($search); ?>">
             </div>
@@ -407,7 +407,7 @@ foreach ($departments as $dept) {
                 </select>
             </div>
             
-            <div class="form-group">
+            <div class="filters-actions">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-filter"></i> Filter
                 </button>

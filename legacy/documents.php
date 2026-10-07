@@ -170,10 +170,8 @@ $autoOpenUpload = (
     grid-column:1/-1;text-align:center;padding:55px 20px;color:var(--ink-300)
 }
 .doc-empty i{font-size:34px;opacity:.45;margin-bottom:10px}
-.doc-filter-row{
-    display:grid;grid-template-columns:minmax(220px,1fr) 180px 180px auto;gap:8px;
-    margin-bottom:16px
-}
+/* Filter row: layout from .filters-bar (style.css) */
+.doc-filter-row{margin-bottom:16px}
 .doc-filter-search{position:relative}
 .doc-filter-search i{
     position:absolute;left:11px;top:50%;transform:translateY(-50%);
@@ -209,11 +207,9 @@ $autoOpenUpload = (
 }
 @media(max-width:1100px){
     .doc-repo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .doc-filter-row{grid-template-columns:1fr 1fr}
 }
 @media(max-width:700px){
     .doc-repo-grid{grid-template-columns:1fr}
-    .doc-filter-row{grid-template-columns:1fr}
     .doc-rights-grid{grid-template-columns:minmax(120px,1fr) repeat(3,65px)}
 }
 
@@ -1397,12 +1393,12 @@ $autoOpenUpload = (
     </div>
 <?php endif; ?>
 
-<form method="GET" action="documents" class="doc-filter-row">
+<form method="GET" action="documents" class="doc-filter-row filters-bar" role="search" aria-label="Filter documents">
     <?php if ($currentFolderId > 0): ?>
         <input type="hidden" name="folder" value="<?= $currentFolderId ?>">
     <?php endif; ?>
 
-    <div class="doc-filter-search">
+    <div class="doc-filter-search filters-grow">
         <i class="fas fa-search"></i>
         <input
             type="text"
@@ -1437,7 +1433,7 @@ $autoOpenUpload = (
         <?php endforeach; ?>
     </select>
 
-    <div style="display:flex;gap:6px;">
+    <div class="filters-actions">
         <button type="submit" class="btn btn-primary btn-sm">
             <i class="fas fa-filter"></i> Filter
         </button>

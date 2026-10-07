@@ -588,8 +588,8 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 
     <!-- ── Report Controls ────────────────────────────────────────────── -->
-    <div class="controls-bar">
-        <div class="form-group grow">
+    <div class="controls-bar filters-bar" role="group" aria-label="Report controls">
+        <div class="form-group grow filters-grow">
             <label class="form-label" for="reportType">Report Type</label>
             <select id="reportType" class="form-control">
                 <option value="overview">Overview Dashboard</option>

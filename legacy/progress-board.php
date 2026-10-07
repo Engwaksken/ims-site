@@ -541,7 +541,7 @@ if (!array_key_exists($activeTab, $tabs)) {
     </div>
     <div class="hero-actions">
         <!-- Global filter form -->
-        <form method="GET" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative;z-index:1;">
+        <form method="GET" class="filters-bar" style="position:relative;z-index:1;" aria-label="Report filters">
             <input type="hidden" name="tab" value="<?= h($activeTab) ?>">
             <input type="number" name="top_n" value="<?= $topN ?>" min="1" max="100" class="form-control" style="width:90px;height:38px;padding:0 10px;font-size:13px;" title="Top N per type">
             <select name="review_type" class="form-control" style="height:38px;padding:0 36px 0 12px;font-size:13px;min-width:180px;" onchange="this.form.submit()">
@@ -684,7 +684,7 @@ if (!array_key_exists($activeTab, $tabs)) {
 
         <!-- Search -->
         <div class="pb-toolbar">
-            <form method="GET" style="display:contents;">
+            <form method="GET" class="filters-bar" role="search">
                 <?php foreach (array_merge(is_array($baseQuery) ? $baseQuery : [], ['tab'=>'rankings']) as $k=>$v): ?>
                     <input type="hidden" name="<?= h($k) ?>" value="<?= h((string)$v) ?>">
                 <?php endforeach; ?>
@@ -748,7 +748,7 @@ if (!array_key_exists($activeTab, $tabs)) {
     </div>
 
     <div class="pb-toolbar">
-        <form method="GET" style="display:contents;">
+        <form method="GET" class="filters-bar" role="search">
             <?php foreach (array_merge(is_array($baseQuery) ? $baseQuery : [], ['tab'=>'reviewers']) as $k=>$v): ?>
                 <input type="hidden" name="<?= h($k) ?>" value="<?= h((string)$v) ?>">
             <?php endforeach; ?>
@@ -838,8 +838,8 @@ if (!array_key_exists($activeTab, $tabs)) {
     </div>
 
     <!-- Comment filters -->
-    <div class="pb-toolbar" style="flex-wrap:wrap;gap:8px;">
-        <form method="GET" style="display:contents;">
+    <div class="pb-toolbar">
+        <form method="GET" class="filters-bar" role="search">
             <?php foreach (array_merge(is_array($baseQuery) ? $baseQuery : [], ['tab'=>'comments']) as $k=>$v): ?>
                 <input type="hidden" name="<?= h($k) ?>" value="<?= h((string)$v) ?>">
             <?php endforeach; ?>

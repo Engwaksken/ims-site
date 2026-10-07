@@ -383,8 +383,8 @@ $stats = [
         </div>
     <?php endif; ?>
 
-    <form method="GET" class="filter-bar">
-        <div class="form-group search-group">
+    <form method="GET" class="filter-bar filters-bar">
+        <div class="form-group search-group filters-grow">
             <label class="form-label">Search</label>
             <div class="search-input-wrap">
                 <i class="fas fa-search"></i>

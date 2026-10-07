@@ -216,7 +216,7 @@ body{background:var(--bg)}
 .toolbar{
     background:#fff;border:1px solid var(--line);border-radius:14px;
     padding:14px;box-shadow:var(--shadow);margin-bottom:18px;
-    display:flex;gap:10px;flex-wrap:wrap;align-items:center
+    gap:10px /* layout: .filters-bar (style.css) */
 }
 .toolbar select,.toolbar input[type="text"]{
     padding:10px 12px;border:1px solid var(--line);border-radius:10px;
@@ -309,7 +309,7 @@ body{background:var(--bg)}
         </div>
     </div>
 
-    <form method="GET" class="toolbar" aria-label="Filter activity plans">
+    <form method="GET" class="toolbar filters-bar" aria-label="Filter activity plans">
         <select name="status" onchange="this.form.submit()" aria-label="Filter by status">
             <option value="">All Statuses</option>
             <option value="draft" <?= $status_filter === 'draft' ? 'selected' : '' ?>>Draft</option>
@@ -328,7 +328,7 @@ body{background:var(--bg)}
             <?php endforeach; ?>
         </select>
 
-        <input type="text" name="q" value="<?= h($q) ?>" placeholder="Search plan title or category" aria-label="Search plan title or category">
+        <input type="text" name="q" class="filters-grow" value="<?= h($q) ?>" placeholder="Search plan title or category" aria-label="Search plan title or category">
 
         <button type="submit" class="btn btn-outline">Filter</button>
 

@@ -359,7 +359,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
     </div>
 </div>
 
-<div class="toolbar">
+<div class="toolbar filters-bar" role="search" aria-label="Filter subscriptions">
     <div class="filter-tabs" id="filterTabs">
         <button type="button" class="filter-tab active" data-filter="all">All</button>
         <button type="button" class="filter-tab" data-filter="pending">Pending</button>
@@ -368,7 +368,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         <button type="button" class="filter-tab" data-filter="rejected">Rejected</button>
     </div>
 
-    <div class="search-wrap">
+    <div class="search-wrap filters-grow">
         <i class="fas fa-magnifying-glass"></i>
         <input type="text"
                class="search-input"

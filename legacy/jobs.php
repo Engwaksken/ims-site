@@ -73,8 +73,8 @@ include 'includes/header.php';
     </div>
 
     <!-- -- Toolbar ------------------------------------------------------------ -->
-    <div class="jm-toolbar">
-        <div class="jm-search-wrap">
+    <div class="jm-toolbar filters-bar" role="search" aria-label="Filter jobs">
+        <div class="jm-search-wrap filters-grow">
             <i class="fas fa-search"></i>
             <input type="text" class="jm-search" id="jmSearch"
                    placeholder="Search jobs..." oninput="jmFilter()">

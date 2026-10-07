@@ -227,6 +227,7 @@ function pgUrl(int $p): string {
 /* Rec pill colours already in progress_board.css */
 
 /* Per-page select in toolbar */
+.filters-bar > .pp-select { min-width: 100px; }
 .pp-select {
     height: 38px;
     padding: 0 32px 0 10px;
@@ -330,8 +331,8 @@ function pgUrl(int $p): string {
     <div class="panel">
 
         <!-- Filter toolbar -->
-        <div class="pb-toolbar" style="flex-wrap:wrap;gap:10px;">
-            <form method="GET" style="display:contents;" id="filterForm">
+        <div class="pb-toolbar">
+            <form method="GET" class="filters-bar" id="filterForm" role="search" aria-label="Filter reviews">
 
                 <select name="review_type_id" class="form-control" style="height:38px;padding:0 32px 0 10px;font-size:13px;min-width:160px;" onchange="this.form.submit()">
                     <option value="0">All review types</option>

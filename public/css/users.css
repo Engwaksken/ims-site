@@ -31,10 +31,11 @@
 /* -- Search + filter toolbar ---------------------------------- */
 .users-toolbar {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 8px;
-    flex-wrap: wrap;
     flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
 }
 
 /* Search box wrapper */

@@ -342,10 +342,9 @@ $baseLink .= $baseLink === '?' ? '' : '&';
         }
 
         .page-conn-logs .filter-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr auto auto;
+            /* Layout from .filters-bar (style.css): one row, scrolls if needed. */
             gap: 10px;
-            align-items: end;
+            margin-bottom: 0;
         }
 
         .page-conn-logs label {
@@ -439,8 +438,7 @@ $baseLink .= $baseLink === '?' ? '' : '&';
         }
 
         @media (max-width: 900px) {
-            .page-conn-logs .cards,
-            .page-conn-logs .filter-grid {
+            .page-conn-logs .cards {
                 grid-template-columns: 1fr;
             }
 
@@ -482,8 +480,8 @@ $baseLink .= $baseLink === '?' ? '' : '&';
     </div>
 
     <form method="get" class="filters">
-        <div class="filter-grid">
-            <div>
+        <div class="filter-grid filters-bar" role="search">
+            <div class="filters-grow">
                 <label>Search</label>
                 <input type="text" name="q" value="<?= h($q) ?>" placeholder="Search MAC, IP, member, plan...">
             </div>

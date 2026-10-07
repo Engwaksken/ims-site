@@ -93,12 +93,11 @@ if ($res) {
         <div class="panel-body">
             <div class="table-wrap">
 
-                <form method="GET" class="filter-bar" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;">
+                <form method="GET" class="filter-bar filters-bar" role="search" style="margin-bottom:15px;">
                     <input
                         type="text"
                         name="search"
-                        class="form-control"
-                        style="max-width:320px;"
+                        class="form-control filters-grow"
                         placeholder="Search asset, status, urgency, reason..."
                         value="<?= e($search) ?>"
                     >

@@ -199,8 +199,8 @@ $stats = $stats_result->fetch_assoc();
     
     <div class="card-body">
         <!-- Filters -->
-        <form method="GET" action="" class="form-row" style="margin-bottom: 20px;">
-            <div class="form-group">
+        <form method="GET" action="" class="filters-bar" role="search" aria-label="Filter activity log">
+            <div class="form-group filters-grow">
                 <input type="text" name="search" class="form-control" placeholder="Search logs..." value="<?php echo htmlspecialchars($search); ?>">
             </div>
             
@@ -245,7 +245,7 @@ $stats = $stats_result->fetch_assoc();
                 <input type="date" name="date_to" class="form-control" placeholder="To Date" value="<?php echo htmlspecialchars($filter_date_to); ?>">
             </div>
             
-            <div class="form-group">
+            <div class="filters-actions">
                 <button type="submit" class="btn btn-info">
                     <i class="fas fa-filter"></i> Filter
                 </button>

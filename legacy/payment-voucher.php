@@ -1132,7 +1132,7 @@ if ($dataStmt) {
 .page-payment-voucher .pv-header p{font-size:13px;margin:3px 0 0;opacity:.86}
 .page-payment-voucher .toolbar,.page-payment-voucher .selection-bar,.page-payment-voucher .pager-wrap{background:#fff;border:1px solid var(--pv-border);border-radius:var(--pv-radius);box-shadow:var(--pv-shadow)}
 .page-payment-voucher .toolbar{padding:14px 16px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.page-payment-voucher .search-wrap{display:flex;gap:8px;flex:1;min-width:280px}
+.page-payment-voucher .search-wrap{display:flex;gap:8px;flex:1;min-width:280px;margin:0}
 .page-payment-voucher .toolbar-actions{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
 .page-payment-voucher .pv-action-btn{display:inline-flex!important;align-items:center;justify-content:center;gap:7px;white-space:nowrap}
 .page-payment-voucher .btn-orange{background:var(--pv-primary);border-color:var(--pv-primary);color:#fff;font-weight:600}
@@ -1200,10 +1200,10 @@ if ($dataStmt) {
 <?php endif; ?>
 
 <div class="toolbar">
-    <form method="get" action="<?= pvEsc($selfPath) ?>" class="search-wrap">
+    <form method="get" action="<?= pvEsc($selfPath) ?>" class="search-wrap filters-bar" role="search">
         <input type="hidden" name="page" value="1">
         <input type="hidden" name="per_page" value="<?= $perPage ?>">
-        <input type="text" name="q" class="form-control"
+        <input type="text" name="q" class="form-control filters-grow"
                placeholder="Search voucher number, supplier, or project..."
                value="<?= pvEsc($query) ?>">
         <button type="submit" class="btn btn-outline-secondary">

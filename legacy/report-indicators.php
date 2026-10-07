@@ -182,7 +182,7 @@ $stale_indicators = array_filter($indicators, function($i) {
         </div>
     </div>
     <div class="card-body">
-        <form method="GET" action="" class="form-row">
+        <form method="GET" action="" class="filters-bar">
             <div class="form-group">
                 <label>Project</label>
                 <select name="project" class="form-control">
@@ -215,7 +215,7 @@ $stale_indicators = array_filter($indicators, function($i) {
                 <input type="date" name="date_to" class="form-control" value="<?php echo $date_to; ?>">
             </div>
             
-            <div class="form-group" style="align-self: flex-end;">
+            <div class="filters-actions">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-search"></i> Apply Filters
                 </button>

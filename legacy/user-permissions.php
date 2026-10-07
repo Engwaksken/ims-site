@@ -215,11 +215,11 @@ $isFiltered = ($search !== '' || $filter_role !== '' || $filter_status !== '');
         <div class="users-panel-head">
             <h3 class="panel-title"><i class="fas fa-user-lock"></i> Permissions</h3>
 
-            <form method="GET" class="users-toolbar" id="filterForm">
+            <form method="GET" class="users-toolbar filters-bar" id="filterForm" role="search">
                 <input type="hidden" name="page" value="1">
 
                 <!-- Search -->
-                <div class="search-box">
+                <div class="search-box filters-grow">
                     <i class="fas fa-search search-icon"></i>
                     <input
                         type="search"

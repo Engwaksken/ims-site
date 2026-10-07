@@ -134,6 +134,7 @@ $total_apps = array_sum(array_map(fn($o) => (int)$o['total_applications'], $oppo
 .bullet-row{display:flex;gap:8px;padding:8px;background:#fff}
 .bullet-row input{flex:1}
 .form-note{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:12px;color:#9a4f0b;font-size:13px}
+.opp-panel-head > .filters-bar{flex:0 1 auto;min-width:0;margin:0 0 0 auto}
 @media(max-width:760px){.modal-card{width:96vw!important}.form-grid{grid-template-columns:1fr!important}}
 </style>
 
@@ -160,7 +161,7 @@ $total_apps = array_sum(array_map(fn($o) => (int)$o['total_applications'], $oppo
 <div class="opp-panel">
     <div class="opp-panel-head">
         <h3><i class="fas fa-bullhorn" style="color:var(--brand-500);"></i> Opportunities</h3>
-        <form method="GET" style="display:flex;gap:10px;flex-wrap:wrap">
+        <form method="GET" class="filters-bar" role="search" aria-label="Filter opportunities">
             <select name="cohort_id" class="form-control" style="min-width:170px">
                 <option value="">All Cohorts</option>
                 <?php foreach ($cohorts as $cohort): ?>
@@ -192,7 +193,7 @@ $total_apps = array_sum(array_map(fn($o) => (int)$o['total_applications'], $oppo
             ?>
                 <div class="opp-card" style="animation-delay:<?= $i*50 ?>ms">
                     <div class="opp-card-head">
-                        <div class="opp-card-title-row"><div class="opp-card-title"><?= h($opp['opportunity_title']) ?><?php if(!empty($opp['is_featured'])): ?> <span class="opp-featured-badge"><i class="fas fa-star"></i> Featured</span><?php endif; ?></div></div>
+                        <div class="opp-card-title-row"><div class="opp-card-title" title="<?= h($opp['opportunity_title']) ?>"><?= h($opp['opportunity_title']) ?><?php if(!empty($opp['is_featured'])): ?> <span class="opp-featured-badge"><i class="fas fa-star"></i> Featured</span><?php endif; ?></div></div>
                         <span class="badge <?= $badgeMap[$status] ?? 'badge-secondary' ?>"><?= h($status) ?></span>
                     </div>
                     <div class="opp-meta">

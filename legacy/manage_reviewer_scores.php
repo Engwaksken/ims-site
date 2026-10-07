@@ -548,7 +548,7 @@ foreach ($reviewTypes as $rt) {
     <div class="panel">
         <!-- Toolbar: search -->
         <div class="pb-toolbar">
-            <form method="GET" style="display:contents;">
+            <form method="GET" class="filters-bar" role="search">
                 <input type="hidden" name="reviewer_id" value="<?= $reviewerId ?>">
                 <input type="hidden" name="tab" value="<?= $activeTab ?>">
                 <input type="hidden" name="page" value="1">

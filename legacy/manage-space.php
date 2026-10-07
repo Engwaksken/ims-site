@@ -76,6 +76,10 @@ if (isset($_GET['edit'])) {
     margin-bottom: 25px;
 }
 
+.filter-bar > .filters-bar {
+    margin-bottom: 0;
+}
+
 .space-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -368,7 +372,7 @@ if (isset($_GET['edit'])) {
 
 <!-- Filter Bar -->
 <form method="GET" action="" class="filter-bar">
-    <div class="form-row">
+    <div class="filters-bar" role="search" aria-label="Filter spaces">
         <div class="form-group">
             <label for="type">Space Type</label>
             <select name="type" id="type" class="form-control">
@@ -392,7 +396,7 @@ if (isset($_GET['edit'])) {
             </select>
         </div>
         
-        <div class="form-group" style="display: flex; align-items: flex-end; gap: 10px;">
+        <div class="filters-actions">
             <button type="submit" class="btn btn-info">
                 <i class="fas fa-filter"></i> Filter
             </button>

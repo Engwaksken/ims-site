@@ -224,6 +224,9 @@ if ($job['salary_min'] || $job['salary_max']) {
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
+/* Links: no underlines (matches css/style.css); visible keyboard focus. */
+a, a:hover, a:focus, a:active, a:visited { text-decoration: none; }
+:where(a):focus-visible { outline: 2px solid #ea580c; outline-offset: 2px; }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
     --orange:  #FF6B2B;

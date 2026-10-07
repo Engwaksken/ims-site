@@ -135,7 +135,7 @@ $process_url = 'includes/event-attendance-process.php?id=' . (int)$event_id . '&
 
 <div class="card">
     <div class="card-body">
-        <form method="GET" style="display:flex;gap:10px;align-items:end;flex-wrap:wrap;">
+        <form method="GET" class="filters-bar" style="margin-bottom:0;" aria-label="Attendance day">
             <input type="hidden" name="id" value="<?= (int)$event_id ?>">
             <div class="form-group" style="min-width:260px;">
                 <label class="form-label">Attendance Day</label>

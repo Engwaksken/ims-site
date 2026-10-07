@@ -692,3 +692,5 @@ tr.best-quotation:hover {
 @media (max-width: 400px) {
   .stats-grid { grid-template-columns: 1fr; }
 }
+/* -- Filter bars (layout from .filters-bar in style.css) -- */
+.panel-body > .filters-bar:last-child { margin-bottom: 0; }

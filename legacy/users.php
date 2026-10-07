@@ -194,14 +194,14 @@ function pageRange(int $cur, int $total): array {
         <div class="users-panel-head">
             <h3 class="panel-title"><i class="fas fa-list"></i> All Users</h3>
 
-            <form method="GET" class="users-toolbar" id="filterForm">
+            <form method="GET" class="users-toolbar filters-bar" id="filterForm" role="search">
                 <?php if ($edit_user): ?>
                     <input type="hidden" name="edit" value="<?= (int)$edit_user['user_id'] ?>">
                 <?php endif; ?>
                 <input type="hidden" name="p" value="1">
 
                 <!-- Search -->
-                <div class="search-box">
+                <div class="search-box filters-grow">
                     <i class="fas fa-search search-icon"></i>
                     <input
                         type="search"

@@ -196,14 +196,13 @@
     text-transform: uppercase;
 }
 
-/* Toolbar */
+/* Toolbar: one-row layout comes from .filters-bar (style.css). */
 .page-internet-subs .toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
     margin-bottom: 18px;
+}
+
+.page-internet-subs .toolbar > .filter-tabs {
+    flex: 0 0 auto;
 }
 
 .page-internet-subs .filter-tabs {
@@ -233,9 +232,6 @@
 
 .page-internet-subs .search-wrap {
     position: relative;
-    flex: 1;
-    min-width: 200px;
-    max-width: 340px;
 }
 
 .page-internet-subs .search-wrap i {
@@ -785,8 +781,7 @@
         padding: 16px 12px 40px;
     }
 
-    .page-internet-subs .page-header,
-    .page-internet-subs .toolbar {
+    .page-internet-subs .page-header {
         flex-direction: column;
         align-items: stretch;
     }
@@ -803,6 +798,11 @@
 
     .page-internet-subs .search-wrap {
         max-width: 100%;
+    }
+
+    .page-internet-subs .toolbar > .filter-tabs {
+        flex: 1 1 100%;
+        overflow-x: auto;
     }
 
     .page-internet-subs .modal-overlay .modal {

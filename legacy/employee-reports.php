@@ -163,7 +163,7 @@ function h($v): string {
             <h3><i class="fas fa-filter icon-brand"></i> Filters</h3>
         </div>
         <div class="opp-panel-body">
-            <form method="GET" action="" class="rpt-filter-form">
+            <form method="GET" action="" class="rpt-filter-form filters-bar" aria-label="Report filters">
                 <div class="form-group">
                     <label class="form-label" for="fDept">Department</label>
                     <select name="department" id="fDept" class="form-control">
@@ -186,7 +186,7 @@ function h($v): string {
                     </select>
                 </div>
 
-                <div class="form-group form-group-row">
+                <div class="filters-actions">
                     <button type="submit" class="btn btn-primary btn-sm">
                         <i class="fas fa-filter"></i> Apply
                     </button>

@@ -355,7 +355,7 @@ if ($is_admin) {
 <div class="filter-section">
     <h3><i class="fas fa-filter"></i> Filter Bookings</h3>
     <form method="GET" action="">
-        <div class="form-row">
+        <div class="filters-bar" role="search" aria-label="Filter bookings" style="margin-bottom:0;">
             <div class="form-group">
                 <label for="space">Space</label>
                 <select name="space" id="space" class="form-control">
@@ -380,7 +380,7 @@ if ($is_admin) {
                 </select>
             </div>
             
-            <div class="form-group" style="display: flex; align-items: flex-end; gap: 10px;">
+            <div class="filters-actions">
                 <button type="submit" class="btn btn-info">
                     <i class="fas fa-search"></i> Filter
                 </button>

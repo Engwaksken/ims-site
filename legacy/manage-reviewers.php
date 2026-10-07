@@ -492,7 +492,7 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
         <input type="hidden" name="action" value="send_reminders">
 
         <!-- Toolbar -->
-        <div class="asgn-toolbar">
+        <div class="asgn-toolbar filters-bar">
             <input type="search" id="asgnSearch" placeholder="Search startup or reviewer..."
                    class="form-control" style="height:38px;padding:0 12px;font-size:13px;width:220px;"
                    autocomplete="off">
@@ -913,9 +913,9 @@ if ($criteria_rt_id > 0)      $crit_base['criteria_review_type_id'] = $criteria_
 
         <!-- Filter bar -->
         <div style="padding:12px 20px;border-bottom:1px solid var(--ink-50);">
-            <form method="GET" action="manage-reviewers" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <form method="GET" action="manage-reviewers" class="filters-bar" role="search" style="margin:0;">
                 <input type="hidden" name="tab" value="criteria">
-                <div class="criteria-search-wrap">
+                <div class="criteria-search-wrap filters-grow">
                     <i class="fas fa-search criteria-search-icon"></i>
                     <input type="search" name="criteria_search" value="<?= h($criteria_search) ?>"
                            class="criteria-search-input" placeholder="Search category, question, guide, type...">

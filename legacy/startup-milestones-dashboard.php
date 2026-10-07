@@ -586,10 +586,10 @@ $basePageUrl = 'startup-milestones-dashboard' . ($baseQueryString ? '?' . $baseQ
                 </div>
             </div>
 
-            <form method="GET" class="filter-bar no-print">
+            <form method="GET" class="filter-bar filters-bar no-print">
                 <input type="hidden" name="active_tab" value="reports">
 
-                <div class="form-group search-group">
+                <div class="form-group search-group filters-grow">
                     <label class="form-label">Search Reports</label>
                     <div class="search-input-wrap">
                         <i class="fas fa-search"></i>

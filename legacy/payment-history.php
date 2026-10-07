@@ -126,6 +126,10 @@ while ($row = $years_result->fetch_assoc()) {
     margin-bottom: 25px;
 }
 
+.filter-bar > .filters-bar {
+    margin-bottom: 0;
+}
+
 .payment-table {
     background: white;
     border-radius: 12px;
@@ -355,7 +359,7 @@ while ($row = $years_result->fetch_assoc()) {
 
 <!-- Filter Bar -->
 <form method="GET" action="" class="filter-bar">
-    <div class="form-row">
+    <div class="filters-bar" role="search" aria-label="Filter payments">
         <div class="form-group">
             <label for="status">Payment Status</label>
             <select name="status" id="status" class="form-control">
@@ -411,7 +415,7 @@ while ($row = $years_result->fetch_assoc()) {
             </select>
         </div>
         
-        <div class="form-group" style="display: flex; align-items: flex-end; gap: 10px;">
+        <div class="filters-actions">
             <button type="submit" class="btn btn-info">
                 <i class="fas fa-filter"></i> Filter
             </button>

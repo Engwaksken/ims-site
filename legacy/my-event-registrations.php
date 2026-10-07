@@ -312,6 +312,10 @@ $stats['pending_payment'] = $conn->query("SELECT COUNT(*) as count FROM event_re
     margin-bottom: 25px;
 }
 
+.filter-bar > .filters-bar {
+    margin-bottom: 0;
+}
+
 .countdown {
     background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
     color: white;
@@ -400,7 +404,7 @@ $stats['pending_payment'] = $conn->query("SELECT COUNT(*) as count FROM event_re
 <!-- Filter Bar -->
 <form method="GET" action="" class="filter-bar">
     <input type="hidden" name="view" value="<?php echo htmlspecialchars($view); ?>">
-    <div class="form-row">
+    <div class="filters-bar" role="search" aria-label="Filter registrations">
         <div class="form-group">
             <label for="status">Registration Status</label>
             <select name="status" id="status" class="form-control">
@@ -412,7 +416,7 @@ $stats['pending_payment'] = $conn->query("SELECT COUNT(*) as count FROM event_re
             </select>
         </div>
         
-        <div class="form-group" style="display: flex; align-items: flex-end; gap: 10px;">
+        <div class="filters-actions">
             <button type="submit" class="btn btn-info">
                 <i class="fas fa-filter"></i> Filter
             </button>

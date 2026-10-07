@@ -123,23 +123,10 @@ background: linear-gradient(135deg, #c2410c 0%, #f97316 55%, #fb923c 100%);
   box-shadow: var(--shadow-md);
   border: 1px solid rgba(0,0,0,.04);
   padding: 16px 20px;
-  display: flex;
-  gap: 12px;
-  align-items: flex-end;
-  flex-wrap: wrap;
+  margin-bottom: 0; /* parent wrapper spaces sections with gap; layout comes from .filters-bar */
 }
 
 /* .search-input-wrap* and .filter-actions moved to style.css (section 7.5). */
- {
-  flex: 1;
-  min-width: 140px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: 0;
-}
-
-.filter-bar .form-group.search-group { flex: 2; min-width: 200px; }
 
 
 
@@ -372,11 +359,6 @@ background: linear-gradient(135deg, #c2410c 0%, #f97316 55%, #fb923c 100%);
   .indicators-stats-top    { grid-template-columns: 1fr 1fr; gap: 12px; }
   .indicators-stats-bottom { grid-template-columns: 1fr 1fr; gap: 10px; }
   .stat-value { font-size: 24px !important; }
-  .filter-bar { flex-direction: column; }
-  .filter-bar .form-group,
-  .filter-bar .form-group.search-group { flex: unset; width: 100%; min-width: unset; }
-  .filter-actions { width: 100%; }
-  .filter-actions .btn { flex: 1; justify-content: center; }
   .form-grid { grid-template-columns: 1fr; }
   .modal { padding: 12px; }
   .modal-card { margin: 12px auto; }

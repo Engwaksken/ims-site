@@ -101,8 +101,8 @@ $totalPages = $pageData['totalPages'];
     </div>
 
     <div class="panel-body">
-        <form method="GET" class="form-grid">
-            <div class="form-group">
+        <form method="GET" class="filters-bar" role="search">
+            <div class="form-group filters-grow">
                 <label class="form-label">Search</label>
                 <input 
                     type="text" 
@@ -125,7 +125,7 @@ $totalPages = $pageData['totalPages'];
                 </select>
             </div>
 
-            <div class="form-group" style="justify-content:flex-end;">
+            <div class="filters-actions">
                 <div class="actions">
                     <button class="btn btn-dark">
                         <i class="fas fa-search"></i> Search

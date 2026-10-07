@@ -117,6 +117,10 @@ $bank_details = [
     margin-bottom: 25px;
 }
 
+.filter-bar > .filters-bar {
+    margin-bottom: 0;
+}
+
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -622,7 +626,7 @@ $bank_details = [
 
 <!-- Filter Bar -->
 <form method="GET" action="" class="filter-bar">
-    <div class="form-row">
+    <div class="filters-bar" role="search" aria-label="Filter bookings">
         <div class="form-group">
             <label for="status">Status</label>
             <select name="status" id="status" class="form-control">
@@ -646,7 +650,7 @@ $bank_details = [
                    value="<?php echo htmlspecialchars($filter_date_to); ?>">
         </div>
         
-        <div class="form-group" style="display: flex; align-items: flex-end; gap: 10px;">
+        <div class="filters-actions">
             <button type="submit" class="btn btn-info">
                 <i class="fas fa-filter"></i> Filter
             </button>

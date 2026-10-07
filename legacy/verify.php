@@ -111,7 +111,7 @@ $remaining_seconds = max(0, strtotime($_SESSION['verification_expiry']) - time()
             background: none;
             border: none;
             color: var(--primary-color);
-            text-decoration: underline;
+            text-decoration: none;
             cursor: pointer;
             font-size: 14px;
         }

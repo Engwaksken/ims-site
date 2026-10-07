@@ -33,6 +33,9 @@ $reference = 'DRAFT-' . str_pad($draft_id, 6, '0', STR_PAD_LEFT);
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
+/* Links: no underlines (matches css/style.css); visible keyboard focus. */
+a, a:hover, a:focus, a:active, a:visited { text-decoration: none; }
+:where(a):focus-visible { outline: 2px solid #ea580c; outline-offset: 2px; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {

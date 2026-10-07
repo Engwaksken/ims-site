@@ -110,9 +110,9 @@ $status_badge = [
     </div>
 
     <!-- -- Filter Bar --------------------------------------------------- -->
-    <form method="GET" action="" class="filter-bar">
+    <form method="GET" action="" class="filter-bar filters-bar">
 
-        <div class="form-group search-group">
+        <div class="form-group search-group filters-grow">
             <label class="form-label">Search</label>
             <div class="search-input-wrap">
                 <i class="fas fa-search"></i>

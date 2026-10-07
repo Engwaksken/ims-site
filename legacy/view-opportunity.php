@@ -315,7 +315,7 @@ $titleJs = h(addslashes((string)($opportunity['opportunity_title'] ?? '')));
 .vo-rich ul,.vo-rich ol{padding-left:22px;margin:10px 0}
 .vo-rich li{margin:7px 0}
 .vo-rich h2,.vo-rich h3,.vo-rich h4{color:var(--ink-700);margin:18px 0 8px}
-.vo-rich a{color:var(--brand-600);text-decoration:underline}
+.vo-rich a{color:var(--brand-600);text-decoration:none}
 .vo-rich blockquote{border-left:4px solid var(--brand-300);margin:14px 0;padding:10px 14px;background:var(--brand-50);border-radius:0 8px 8px 0}
 .vo-content-card{border:1px solid var(--ink-100);border-radius:var(--radius-lg);padding:18px;background:#fff;margin-bottom:14px}
 .vo-content-card:last-child{margin-bottom:0}

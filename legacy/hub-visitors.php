@@ -141,6 +141,7 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
 
 /* -- Misc ----------------------------------------------------------------- */
 .filter-bar { background:#f8f9fa; padding:18px; border-radius:12px; margin-bottom:20px; }
+.filter-bar > .filters-bar { margin-bottom:0; }
 .visitor-badge { display:inline-flex; align-items:center; gap:6px; background:#f8f9fa; padding:4px 10px; border-radius:6px; font-size:13px; }
 .check-in-badge { background:#d4edda; color:#155724; padding:4px 10px; border-radius:4px; font-size:12px; font-weight:600; }
 
@@ -241,8 +242,8 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
     <div class="card-body">
         <!-- Filter Bar -->
         <form method="GET" action="" class="filter-bar">
-            <div class="form-row">
-                <div class="form-group">
+            <div class="filters-bar">
+                <div class="form-group filters-grow">
                     <input type="text" name="search" class="form-control"
                            placeholder="Search name, org, email, phone..."
                            value="<?php echo htmlspecialchars($search); ?>">
@@ -265,7 +266,7 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="filters-actions">
                     <button type="submit" class="btn btn-info"><i class="fas fa-filter"></i> Filter</button>
                     <a href="hub-visitors" class="btn btn-secondary"><i class="fas fa-times"></i> Clear</a>
                 </div>

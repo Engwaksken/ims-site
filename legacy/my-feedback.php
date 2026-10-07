@@ -95,6 +95,10 @@ $stats['resolved'] = $conn->query("SELECT COUNT(*) as count FROM member_feedback
     margin-bottom: 25px;
 }
 
+.filter-bar > .filters-bar {
+    margin-bottom: 0;
+}
+
 .feedback-card {
     background: white;
     border-radius: 12px;
@@ -340,7 +344,7 @@ $stats['resolved'] = $conn->query("SELECT COUNT(*) as count FROM member_feedback
 
 <!-- Filter Bar -->
 <form method="GET" action="" class="filter-bar">
-    <div class="form-row">
+    <div class="filters-bar" role="search" aria-label="Filter feedback">
         <div class="form-group">
             <label for="type">Feedback Type</label>
             <select name="type" id="type" class="form-control">
@@ -366,7 +370,7 @@ $stats['resolved'] = $conn->query("SELECT COUNT(*) as count FROM member_feedback
             </select>
         </div>
         
-        <div class="form-group" style="display: flex; align-items: flex-end; gap: 10px;">
+        <div class="filters-actions">
             <button type="submit" class="btn btn-info">
                 <i class="fas fa-filter"></i> Filter
             </button>

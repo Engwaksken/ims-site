@@ -782,6 +782,10 @@ function ac_list_page_url(
     width: 100%;
 }
 
+.activities-wrap > .filter-bar {
+    margin-bottom: 20px;
+}
+
 .ac-note {
     display: flex;
     align-items: center;
@@ -1525,10 +1529,10 @@ function ac_list_page_url(
     <form
         method="GET"
         action="activities-calendar"
-        class="filter-bar"
+        class="filter-bar filters-bar"
     >
 
-        <div class="form-group search-group">
+        <div class="form-group search-group filters-grow">
             <label class="form-label">Search</label>
 
             <div class="search-input-wrap">
@@ -1750,7 +1754,7 @@ function ac_list_page_url(
         </div>
 
         <?php if ($hasCarryOver): ?>
-            <div class="form-group">
+            <div class="form-group filters-check">
                 <label class="form-label">
                     <input type="checkbox" name="carried" value="1" <?= $filterCarried ? 'checked' : '' ?>>
                     Carried over only

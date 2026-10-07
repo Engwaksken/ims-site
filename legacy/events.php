@@ -1603,22 +1603,8 @@ $canDeleteEvents = auth_has_role([
 }
 
 
+/* One-row layout comes from .filters-bar (style.css). */
 .events-filter {
-
-    display: grid;
-
-    grid-template-columns:
-        1.5fr
-        repeat(
-            5,
-            minmax(
-                110px,
-                .7fr
-            )
-        )
-        auto;
-
-    gap: 8px;
 
     margin-bottom:
         14px;
@@ -1633,6 +1619,29 @@ $canDeleteEvents = auth_has_role([
 
     background:
         #f8fafc;
+}
+
+
+.events-filter > div {
+    flex: 0 1 150px;
+    min-width: 110px;
+}
+
+/* First field is the search box: it takes the spare width. */
+.events-filter > div:first-of-type {
+    flex: 1 1 220px;
+    min-width: 180px;
+}
+
+@media (max-width: 768px) {
+    .events-filter > div {
+        flex: 1 1 calc(50% - 12px);
+        min-width: 0;
+    }
+
+    .events-filter > div:first-of-type {
+        flex-basis: 100%;
+    }
 }
 
 
@@ -2118,16 +2127,6 @@ $canDeleteEvents = auth_has_role([
                 1fr
             );
     }
-
-
-    .events-filter {
-
-        grid-template-columns:
-            repeat(
-                3,
-                1fr
-            );
-    }
 }
 
 
@@ -2149,8 +2148,7 @@ $canDeleteEvents = auth_has_role([
     }
 
 
-    .events-stats,
-    .events-filter {
+    .events-stats {
 
         grid-template-columns:
             1fr;
@@ -2434,7 +2432,9 @@ body.ev-modal-open{overflow:hidden}
 
     <form
         method="GET"
-        class="events-filter"
+        class="events-filter filters-bar"
+        role="search"
+        aria-label="Filter events"
     >
 
         <input
