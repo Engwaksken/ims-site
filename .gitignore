@@ -1,0 +1,35 @@
+# Secrets / environment
+.env
+.env.*
+!.env.example
+.user.ini.local
+
+# Dependencies (install with: composer install)
+/vendor/
+
+# Full database dumps and backups (contain personal data)
+/database/*.sql
+!/database/migrations/
+*.sql.gz
+/legacy/exports/*
+!/legacy/exports/*.php
+!/legacy/exports/.htaccess
+
+# User uploads (CVs, IDs, receipts, documents)
+/legacy/uploads/*
+!/legacy/uploads/.htaccess
+/public/uploads/*
+!/public/uploads/.htaccess
+
+# Runtime / logs / cache
+error_log
+*.log
+/storage/*
+!/storage/.htaccess
+/legacy/cgi-bin/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

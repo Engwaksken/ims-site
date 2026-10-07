@@ -1,0 +1,9 @@
+# Generated exports and database backups must never be served directly.
+# Files are delivered through the authenticated legacy/download-export.php.
+# Only the PHP export scripts in this folder may be requested.
+Options -Indexes
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !\.php$ [NC]
+    RewriteRule ^ - [F,L]
+</IfModule>

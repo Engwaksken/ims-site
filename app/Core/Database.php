@@ -1,0 +1,5 @@
+<?php
+declare(strict_types=1);
+namespace App\Core;
+use PDO; use PDOException;
+final class Database {private PDO $pdo; public function __construct(){try{$dsn=sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',env('DB_HOST','localhost'),env('DB_PORT','3306'),env('DB_DATABASE',''));$this->pdo=new PDO($dsn,(string)env('DB_USERNAME',''),(string)env('DB_PASSWORD',''),[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC,PDO::ATTR_EMULATE_PREPARES=>false]);}catch(PDOException $e){http_response_code(500);exit(env('APP_DEBUG',false)?e($e->getMessage()):'Database connection failed.');}} public function pdo():PDO{return $this->pdo;} public function fetch(string $sql,array $p=[]):?array{$s=$this->pdo->prepare($sql);$s->execute($p);$r=$s->fetch();return $r?:null;} public function fetchAll(string $sql,array $p=[]):array{$s=$this->pdo->prepare($sql);$s->execute($p);return $s->fetchAll();} public function execute(string $sql,array $p=[]):bool{$s=$this->pdo->prepare($sql);return $s->execute($p);} }

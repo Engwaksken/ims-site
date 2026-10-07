@@ -1,0 +1,110 @@
+/* =========================================================
+   Activities Calendar Modal Fix
+   ========================================================= */
+
+#addActivityModal,
+#editActivityModal,
+#deleteActivityModal {
+    background: rgba(15, 23, 42, 0.35) !important;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    padding: 24px !important;
+}
+
+#addActivityModal.show,
+#editActivityModal.show,
+#deleteActivityModal.show {
+    display: flex !important;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+#addActivityModal .modal-dialog,
+#editActivityModal .modal-dialog {
+    width: 100%;
+    max-width: 800px !important;
+    margin: 30px auto !important;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+    overflow: hidden;
+}
+
+#deleteActivityModal .modal-dialog {
+    width: 100%;
+    max-width: 460px !important;
+    margin: 80px auto !important;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+    overflow: hidden;
+}
+
+#addActivityModal .modal-header,
+#editActivityModal .modal-header,
+#deleteActivityModal .modal-header {
+    padding: 16px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+#addActivityModal .modal-body,
+#editActivityModal .modal-body {
+    padding: 20px;
+    max-height: calc(100vh - 190px);
+    overflow-y: auto;
+    background: #ffffff;
+}
+
+#deleteActivityModal .modal-body {
+    padding: 20px;
+    background: #ffffff;
+}
+
+#addActivityModal .modal-footer,
+#editActivityModal .modal-footer,
+#deleteActivityModal .modal-footer {
+    margin-top: 0 !important;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+#addActivityModal .form-grid,
+#editActivityModal .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+#addActivityModal .form-group.full-width,
+#editActivityModal .form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+#addActivityModal textarea.form-control,
+#editActivityModal textarea.form-control {
+    min-height: 76px;
+}
+
+@media (max-width: 860px) {
+    #addActivityModal,
+    #editActivityModal,
+    #deleteActivityModal {
+        padding: 12px !important;
+    }
+
+    #addActivityModal .modal-dialog,
+    #editActivityModal .modal-dialog {
+        max-width: 100% !important;
+        margin: 12px auto !important;
+    }
+
+    #addActivityModal .form-grid,
+    #editActivityModal .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

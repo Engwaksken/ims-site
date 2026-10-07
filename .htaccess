@@ -1,0 +1,221 @@
+Options -Indexes -MultiViews
+DirectoryIndex index.php index.html
+ServerSignature Off
+
+<IfModule mod_rewrite.c>
+
+RewriteEngine On
+RewriteBase /
+
+# ============================================================
+# 1. FORCE HTTPS + CANONICAL DOMAIN
+# ============================================================
+
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} !^ims\.hivecolab\.com$ [NC]
+RewriteRule ^ https://ims.hivecolab.com%{REQUEST_URI} [R=301,L,NE]
+
+
+# ============================================================
+# 2. PROTECT SENSITIVE FILES / DIRECTORIES
+# ============================================================
+
+# Block hidden files except .well-known
+RewriteRule (^|/)\.(?!well-known/) - [F,L]
+
+# Block sensitive project files
+RewriteRule ^(?:legacy/)?(?:\.env|artisan|composer\.(?:json|lock)|package(?:-lock)?\.json|phpunit\.xml|server\.php)$ - [F,L,NC]
+
+# Block sensitive directories
+RewriteRule ^(?:legacy/)?(?:storage|database|tests|node_modules|bootstrap/cache)(?:/|$) - [F,L,NC]
+
+# Block application source / config / tooling directories when the
+# project root is the document root (public/ uses its own .htaccess)
+RewriteRule ^(?:app|config|routes|vendor|storage|database|tests)(?:/|$) - [F,L,NC]
+RewriteRule ^legacy/(?:cron|database|helpers|services|partials|cgi-bin|vendor)(?:/|$) - [F,L,NC]
+
+# Library-only include files are never valid web entry points
+RewriteRule ^(?:legacy/)?includes/(?:config|security|auth|header|sidebar|footer|mail-function|google-calendar-service|backup-service|AiReviewService|workplan-stats|unifi_api|task-carryover)\.php$ - [F,L,NC]
+
+# Database dumps, backups, logs, environment and editor/backup artifacts
+RewriteRule (?:^|/)(?:error_log|php_errors?\.log|\.user\.ini|composer\.(?:json|lock)|artisan|generate-key\.php)$ - [F,L,NC]
+RewriteRule \.(?:sql|sql\.gz|gz|bak|bk|old|orig|save|swp|swo|tmp|log|ini|env|sh|dist|md|lock|yml|yaml)$ - [F,L,NC]
+
+# Generated exports/backups are only served through the authenticated
+# download endpoint (legacy/download-export.php); allow only the PHP
+# export scripts in that folder to be requested directly
+RewriteRule ^(?:legacy/)?exports/.+\.(?!php$)[A-Za-z0-9]+$ - [F,L,NC]
+
+# Prevent PHP/script execution from uploads
+RewriteRule ^(?:legacy/|public/)?uploads/.+\.(?:php\d?|phtml|phar|pht|phps|cgi|pl|py|sh|asp|aspx|jsp|htaccess|shtml)$ - [F,L,NC]
+
+
+# ============================================================
+# 3. KEEP BACKEND PROCESSORS WITH .php
+# ============================================================
+#
+# /includes/*.php and /actions/*.php must not be redirected
+# to extensionless URLs because these are processing endpoints.
+# ============================================================
+
+# Root includes processors
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^includes/(.+\.php)$ - [END,QSA,NC]
+
+# Legacy includes processors
+RewriteCond %{DOCUMENT_ROOT}/legacy/includes/$1 -f
+RewriteRule ^includes/(.+\.php)$ legacy/includes/$1 [END,QSA,NC]
+
+# Root actions processors
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^actions/(.+\.php)$ - [END,QSA,NC]
+
+# Legacy actions processors
+RewriteCond %{DOCUMENT_ROOT}/legacy/actions/$1 -f
+RewriteRule ^actions/(.+\.php)$ legacy/actions/$1 [END,QSA,NC]
+
+# Direct legacy backend paths
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^legacy/(?:actions|includes)/.+\.php$ - [END,QSA,NC]
+
+
+# ============================================================
+# 4. REMOVE .php FROM FRONTEND URLS
+# ============================================================
+#
+# Example:
+#
+# /login.php
+#      ->
+# /login
+#
+# /verify.php?token=123
+#      ->
+# /verify?token=123
+#
+# Backend processors are excluded.
+# ============================================================
+
+# Only GET/HEAD are redirected: a 301/302 turns a POST into a GET and
+# silently drops the submitted form data (see 8b for POSTs to *.php).
+RewriteCond %{REQUEST_METHOD} ^(?:GET|HEAD)$
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php(?:[\s?]) [NC]
+RewriteCond %1 !^(?:includes|actions|legacy/(?:includes|actions))/ [NC]
+RewriteRule ^(?:legacy/)?(.+?)\.php$ /$1 [R=301,L,NE]
+
+
+# ============================================================
+# 5. CLEAN /index.php
+# ============================================================
+
+RewriteCond %{REQUEST_METHOD} ^(?:GET|HEAD)$
+RewriteCond %{THE_REQUEST} \s/+index\.php(?:[\s?]) [NC]
+RewriteRule ^index\.php$ / [R=301,L,NE]
+
+
+# ============================================================
+# 6. ROOT URL
+# ============================================================
+#
+# Send root URL to clean /login
+# ============================================================
+
+RewriteRule ^$ login [R=302,L,NE]
+
+
+# ============================================================
+# 7. LEGACY PUBLIC ASSETS
+# ============================================================
+
+RewriteCond %{DOCUMENT_ROOT}/legacy/assets/css/$1 -f
+RewriteRule ^css/(.+)$ legacy/assets/css/$1 [END,NC]
+
+RewriteCond %{DOCUMENT_ROOT}/legacy/assets/js/$1 -f
+RewriteRule ^js/(.+)$ legacy/assets/js/$1 [END,NC]
+
+RewriteCond %{DOCUMENT_ROOT}/legacy/assets/images/$1 -f
+RewriteRule ^images/(.+)$ legacy/assets/images/$1 [END,NC]
+
+RewriteCond %{DOCUMENT_ROOT}/legacy/assets/fonts/$1 -f
+RewriteRule ^fonts/(.+)$ legacy/assets/fonts/$1 [END,NC]
+
+# Uploaded files are never served directly: /uploads/..., /legacy/uploads/...
+# and /public/uploads/... all go through the authenticated endpoint
+# legacy/download-file.php (login + per-file authorization).
+RewriteRule ^(?:legacy/|public/)?uploads/(.+)$ legacy/download-file.php?path=$1 [END,B,NC]
+
+
+# ============================================================
+# 8. SERVE REAL FILES / DIRECTORIES FIRST
+# ============================================================
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [END]
+
+# 8b. Non-GET requests to legacy *.php pages are not redirected by
+# rule 4, so map them internally (e.g. <form method="post"
+# action="my-employee-profile-process.php"> posted from /my-profile).
+RewriteCond %{DOCUMENT_ROOT}/legacy/$1 -f
+RewriteRule ^(.+\.php)$ legacy/$1 [END,QSA,NC]
+
+
+# ============================================================
+# 9. EXTENSIONLESS ROOT PHP PAGES
+# ============================================================
+#
+# /login
+#     internally loads:
+# /login.php
+#
+# Browser remains:
+# /login
+# ============================================================
+
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^(.+?)/?$ $1.php [END,QSA,NC]
+
+
+# ============================================================
+# 10. EXTENSIONLESS LEGACY PHP PAGES
+# ============================================================
+#
+# /verify
+#     internally loads:
+# /legacy/verify.php
+#
+# Browser remains:
+# /verify
+# ============================================================
+
+RewriteCond %{DOCUMENT_ROOT}/legacy/$1.php -f
+RewriteRule ^(.+?)/?$ legacy/$1.php [END,QSA,NC]
+
+
+# ============================================================
+# 11. LEGACY FRONT CONTROLLER FALLBACK
+# ============================================================
+
+RewriteCond %{DOCUMENT_ROOT}/legacy/index.php -f
+RewriteRule ^ legacy/index.php [END,QSA]
+
+</IfModule>
+
+
+# ============================================================
+# DEFAULT SETTINGS
+# ============================================================
+
+AddDefaultCharset UTF-8
+FileETag None
+
+# ============================================================
+# SECURITY HEADERS (static files; PHP pages also send these
+# plus X-Frame-Options/CSP from legacy/includes/security.php)
+# ============================================================
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header unset X-Powered-By
+</IfModule>

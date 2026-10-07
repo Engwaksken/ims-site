@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+namespace App\Core;
+final class Auth {public static function check():bool{return !empty($_SESSION['user_id']);} public static function user():array{return ['id'=>$_SESSION['user_id']??null,'username'=>$_SESSION['username']??null,'full_name'=>$_SESSION['full_name']??null,'role'=>$_SESSION['role']??null];} public static function requireLogin():void{if(!self::check())redirect('/login');} public static function requireRole(array $roles):void{self::requireLogin();if(!in_array((string)($_SESSION['role']??''),$roles,true)){http_response_code(403);exit('Access denied.');}} public static function logout():void{$_SESSION=[];if(ini_get('session.use_cookies')){$p=session_get_cookie_params();setcookie(session_name(),'',time()-42000,$p['path'],$p['domain'],$p['secure'],$p['httponly']);}session_destroy();}}

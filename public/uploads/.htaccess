@@ -1,0 +1,37 @@
+# Uploaded files are data, never code, and are NOT publicly readable.
+#
+# CVs, national IDs, receipts, signatures, application documents etc. live
+# here. Every direct request is handed to the authenticated endpoint
+# /download-file (legacy/download-file.php), which requires a login and
+# checks that the user owns the record or has a reviewer role for that
+# category of file. Pages link files via ims_upload_url().
+#
+# Without mod_rewrite, direct access is denied outright.
+Options -Indexes -ExecCGI
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule (?:^|/)\. - [F,L]
+    RewriteRule \.(?:php\d?|phtml|phar|pht|phps|cgi|pl|py|sh|asp|aspx|jsp|shtml|htaccess|html?|xhtml|js)$ - [F,L,NC]
+    RewriteRule ^(.+)$ /download-file?path=$1 [L,B]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</IfModule>
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
