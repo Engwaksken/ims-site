@@ -16,3 +16,14 @@ PHP information management system (programs, projects, KPIs, workplans, HR, hub 
 
 - `.env`, database dumps, backups, uploads and logs are deliberately not in version control.
 - Uploaded files are served only through `legacy/download-file.php` (login + per-file permission checks).
+
+## PowerPoint previews
+
+The Documents module previews `.pptx` files locally using PHP's ZIP, DOM/XML and
+Fileinfo extensions. Slides appear in presentation order with text, tables,
+embedded PNG/JPEG/GIF/WebP images and slide navigation. This is a simplified
+content preview; exact layouts, charts, animations and unsupported image formats
+require downloading the original presentation. Legacy `.ppt` and `.odp` remain
+download-only. Compressed documents use the existing decompression flow.
+
+Run the preview regression checks with `php tests/pptx-preview-test.php`.
