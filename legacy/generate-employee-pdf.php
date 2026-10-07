@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/config.php';
+require_once __DIR__ . '/includes/config.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -71,7 +71,7 @@ if ($employee['date_of_birth']) {
 }
 
 // Load DomPDF
-require_once 'vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -213,7 +213,7 @@ $html = '
     <div class="header">
         <h1>' . htmlspecialchars($employee['full_name']) . '</h1>
         <p>' . htmlspecialchars($employee['job_title']) . '</p>
-        <p>' . htmlspecialchars($employee['department_name']) . ' • ' . htmlspecialchars($employee['contract_type']) . '</p>
+        <p>' . htmlspecialchars($employee['department_name']) . ' &bull; ' . htmlspecialchars($employee['contract_type']) . '</p>
         <p><span class="status-badge badge-' . 
             ($employee['status'] == 'Approved' ? 'success' : 
             ($employee['status'] == 'Submitted' ? 'info' : 'warning')) . '">' . 

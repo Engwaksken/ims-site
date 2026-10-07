@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/documents-process.php';
 
-$composerAutoload = dirname(__DIR__) . '/vendor/autoload.php';
+$composerAutoload = dirname(__DIR__, 2) . '/vendor/autoload.php';
 
 if (is_file($composerAutoload)) {
     require_once $composerAutoload;
