@@ -440,11 +440,12 @@ a { color: inherit; text-decoration: none; }
 
 /* -- Opportunity cards: admin dashboard grid ------------------
    application-opportunities.php only (.opp-list is not used elsewhere).
-   4 per row on desktop, 3 <=1280px, 2 <=900px, 1 <=560px. Cards in a row
-   share the same height; the actions row is pinned to the card bottom. */
+   3 per row on desktop, 2 <=900px, 1 <=560px. Cards show no description
+   (kept compact); cards in a row share the same height and the actions
+   row is pinned to the card bottom. */
 .opp-list {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   align-items: stretch;
 }
@@ -474,17 +475,9 @@ a { color: inherit; text-decoration: none; }
   vertical-align: middle;
 }
 
-.opp-list .opp-desc {
-  overflow-wrap: anywhere;
-}
-
 .opp-list .opp-actions {
   margin-top: auto;
   padding-top: 12px;
-}
-
-@media (max-width: 1280px) {
-  .opp-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-width: 900px) {
@@ -587,7 +580,7 @@ a { color: inherit; text-decoration: none; }
    collides with the admin dashboard's .opp-card-head above
    (a row containing a badge/title on the left and actions on
    the right). Both reuse the class names .opp-card /
-   .opp-card-head / .opp-card-title on purpose — the .opp-grid
+   .opp-card-head / .opp-card-title on purpose ï¿½ the .opp-grid
    ancestor is what disambiguates them.
    ------------------------------------------------------------ */
 .opp-grid {
@@ -1217,7 +1210,7 @@ select.form-control {
 
 
 /* ============================================================
-   AI APIS PAGE — manage-ai-apis.php
+   AI APIS PAGE ï¿½ manage-ai-apis.php
    ============================================================ */
 
 .ai-page { max-width: 1280px; margin: 0 auto; padding: 20px 18px 40px; overflow: visible; }
@@ -1352,7 +1345,7 @@ select.form-control {
 
 
 /* ============================================================
-   EMPLOYEE REPORTS PAGE — employee-reports.php
+   EMPLOYEE REPORTS PAGE ï¿½ employee-reports.php
    ============================================================ */
 
 .rpt-page { max-width: 1280px; margin: 0 auto; padding: 20px 18px 40px; }
@@ -1565,7 +1558,7 @@ select.form-control {
 
 
 /* ============================================================
-   USER PROFILE PAGE — user-profile.php
+   USER PROFILE PAGE ï¿½ user-profile.php
    ============================================================ */
 
 .prof-page { max-width: 1100px; margin: 0 auto; padding: 20px 18px 48px; }
@@ -1804,7 +1797,7 @@ select.form-control {
 
 
 /* ============================================================
-   MANAGE JOBS PAGE — manage-jobs.php
+   MANAGE JOBS PAGE ï¿½ manage-jobs.php
    ============================================================ */
 
 .jm-wrap { padding: 24px 28px 60px; max-width: 1400px; margin: 0 auto; }
@@ -2326,11 +2319,11 @@ select.form-control {
 
 
 /* ============================================================
-   SUBMIT APPLICATION PAGE — submit-application.php
+   SUBMIT APPLICATION PAGE ï¿½ submit-application.php
    Multi-step application wizard. Everything below is scoped
    under .layout (the wizard's own page wrapper) wherever the
-   markup uses a generic class name — .section, .nav-bar,
-   .form-row, .req, .hint, .radio-group, .alert-* — so it can
+   markup uses a generic class name ï¿½ .section, .nav-bar,
+   .form-row, .req, .hint, .radio-group, .alert-* ï¿½ so it can
    never leak into the admin dashboard pages above, which reuse
    some of the same short names for unrelated things.
    ============================================================ */
@@ -2602,7 +2595,7 @@ select.form-control {
   border-top: 1px solid var(--ink-100);
 }
 
-/* Wizard buttons run slightly larger than the site-wide .btn default —
+/* Wizard buttons run slightly larger than the site-wide .btn default ï¿½
    scoped here instead of redeclaring the base .btn rule, so pages
    outside the wizard keep their original button sizing. */
 .layout .nav-bar .btn {
@@ -2720,7 +2713,7 @@ body.modal-open {
 }
 
 /* ============================================================
-   SUBMIT APPLICATION — HEADER / LANGUAGE / 9-TAB FIX
+   SUBMIT APPLICATION ï¿½ HEADER / LANGUAGE / 9-TAB FIX
    Append this block to the END of css/opportunities.css
    ============================================================ */
 

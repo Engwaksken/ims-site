@@ -189,7 +189,6 @@ $total_apps = array_sum(array_map(fn($o) => (int)$o['total_applications'], $oppo
             <?php foreach($opportunities as $i => $opp):
                 $status = (string)($opp['status'] ?? 'Draft');
                 $badgeMap = ['Published'=>'badge-published','Draft'=>'badge-draft','Closed'=>'badge-closed','Completed'=>'badge-completed'];
-                $desc = strip_html_preview($opp['description'] ?? '');
             ?>
                 <div class="opp-card" style="animation-delay:<?= $i*50 ?>ms">
                     <div class="opp-card-head">
@@ -202,7 +201,6 @@ $total_apps = array_sum(array_map(fn($o) => (int)$o['total_applications'], $oppo
                         <span class="opp-meta-item"><i class="fas fa-calendar"></i> Deadline: <?= !empty($opp['deadline']) ? date('d M Y', strtotime($opp['deadline'])) : 'N/A' ?></span>
                         <span class="opp-meta-item"><i class="fas fa-file-alt"></i> <?= (int)$opp['total_applications'] ?> applications</span>
                     </div>
-                    <?php if ($desc): ?><p class="opp-desc"><?= h($desc) ?></p><?php endif; ?>
                     <div class="opp-actions">
                         <a href="view-opportunity?id=<?= (int)$opp['opportunity_id'] ?>" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> View</a>
                         <a href="manage-applications?opportunity_id=<?= (int)$opp['opportunity_id'] ?>" class="btn btn-info btn-sm"><i class="fas fa-file-alt"></i> Applications</a>
