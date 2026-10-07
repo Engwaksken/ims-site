@@ -1445,6 +1445,17 @@ if (in_array($action, ['view', 'download'], true)) {
     $temporary = false;
 
     try {
+        if (in_array($extension, ['ppt', 'pptx'], true)) {
+            header('Cache-Control: private, no-store');
+            doc_preview_unsupported(
+                $downloadName,
+                $downloadUrl,
+                $backUrl,
+                $extension,
+                'PowerPoint presentations cannot be previewed on this platform. Click Download to open the file in Microsoft PowerPoint or LibreOffice.'
+            );
+        }
+
         $materialized =
             doc_preview_temp_file(
                 $absolutePath,
@@ -1773,26 +1784,6 @@ if (in_array($action, ['view', 'download'], true)) {
                 $backUrl,
                 'Spreadsheet'
             );
-        }
-
-        if (in_array($extension, ['ppt', 'pptx'], true)) {
-            require_once __DIR__ . '/powerpoint-pdf.php';
-            $defaultBinary = PHP_OS_FAMILY === 'Windows'
-                ? (getenv('ProgramFiles') ?: 'C:/Program Files') . '/LibreOffice/program/soffice.com'
-                : 'soffice';
-            $binary = (string)environment_value('LIBREOFFICE_BINARY', $defaultBinary);
-            $timeout = (int)environment_value('POWERPOINT_PDF_TIMEOUT', 60);
-            $pdf = (new DocPowerPointPdf($binary, $timeout))->convert($previewPath, $extension);
-            doc_preview_cleanup($tempPath, $temporary);
-            $pdfName = pathinfo(basename($downloadName), PATHINFO_FILENAME) . '.pdf';
-            $pdfName = str_replace(['"', "\r", "\n"], '', $pdfName);
-            header('Content-Type: application/pdf');
-            header('Content-Disposition: inline; filename="' . $pdfName . '"');
-            header('Content-Length: ' . strlen($pdf));
-            header('X-Content-Type-Options: nosniff');
-            header('Cache-Control: private, no-store');
-            echo $pdf;
-            exit;
         }
 
         doc_preview_cleanup($tempPath, $temporary);
