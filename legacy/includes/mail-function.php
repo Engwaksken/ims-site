@@ -1027,14 +1027,14 @@ function send_booking_admin_notification(array $recipients, array $booking, stri
             <div><strong>Attendees:</strong> " . (int)($booking['number_of_attendees'] ?? 0) . "</div>
             <div><strong>Amount:</strong> UGX " . number_format((float)($booking['booking_amount'] ?? 0)) . "</div>
         </div>
-        <a href='https://ims.hivecolab.com/manage_bookings.php' class='btn'>Review Booking</a>
+        <a href='https://ims.hivecolab.com/manage-bookings' class='btn'>Review Booking</a>
     ";
 
     $altBody = "New Booking Request\n"
         . "Requested By: {$member_name}\n"
         . "Space: " . ($booking['space_name'] ?? '-') . "\n"
         . "Date: " . ($booking['booking_date'] ?? '-') . "\n"
-        . "Review: https://ims.hivecolab.com/manage_bookings.php";
+        . "Review: https://ims.hivecolab.com/manage-bookings";
 
     sendEmail($recipients, $subject, email_wrapper($content), $altBody);
 }
@@ -1076,7 +1076,7 @@ function send_booking_cancellation_admin_notification(array $recipients, array $
         <p><strong>" . htmlspecialchars($member_name) . "</strong> has cancelled the following booking.
            This slot is now free again.</p>
         " . _booking_info_box($booking) . "
-        <a href='https://ims.hivecolab.com/manage_bookings.php' class='btn'>View Bookings Calendar</a>
+        <a href='https://ims.hivecolab.com/manage-bookings' class='btn'>View Bookings Calendar</a>
     ";
 
     $altBody = "Booking Cancelled\n"
@@ -1139,7 +1139,7 @@ function send_booking_reschedule_admin_notification(array $recipients, array $bo
         <p><strong>" . htmlspecialchars($member_name) . "</strong> moved their booking for
            <strong>" . htmlspecialchars((string)($booking['space_name'] ?? '')) . "</strong>
            from {$oldDate} to {$newDate}. It is now Pending and needs confirmation.</p>
-        <a href='https://ims.hivecolab.com/manage_bookings.php' class='btn'>Review Booking</a>
+        <a href='https://ims.hivecolab.com/manage-bookings' class='btn'>Review Booking</a>
     ";
 
     $altBody = "Booking Rescheduled\n"

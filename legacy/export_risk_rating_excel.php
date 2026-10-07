@@ -29,7 +29,7 @@ $applicationId = (int)($_GET['application_id'] ?? $_GET['id'] ?? 0);
 
 if ($applicationId <= 0) {
     $_SESSION['error'] = 'Invalid application ID.';
-    header('Location: applications.php');
+    header('Location: manage_risk_ratings');
     exit();
 }
 

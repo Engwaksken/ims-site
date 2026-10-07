@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 /* -- Helpers ---------------------------------------------------------- */
 
-function procurement_redirect(string $page = 'manage-procurement.php'): never
+function procurement_redirect(string $page = 'manage_procurement'): never
 {
     header("Location: {$page}");
     exit;

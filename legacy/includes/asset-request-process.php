@@ -12,7 +12,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 function go_back(): never
 {
-    header('Location: ../asset_request.php');
+    header('Location: ../my_requests');
     exit;
 }
 

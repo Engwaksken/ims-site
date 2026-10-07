@@ -634,7 +634,7 @@ if ($feedback['attachments']) {
             <span class="close" onclick="closeModal('respondModal')">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="process-feedback-admin.php">
+            <form method="POST" action="respond-feedback">
                 <input type="hidden" name="action" value="respond">
                 <input type="hidden" name="feedback_id" value="<?php echo $feedback['feedback_id']; ?>">
                 
@@ -676,7 +676,7 @@ if ($feedback['attachments']) {
 <script>
 function confirmDelete(feedbackId) {
     if (confirm('Are you sure you want to delete this feedback?\n\nNote: Only feedback with "New" status can be deleted.')) {
-        window.location.href = `process-feedback.php?delete_feedback=${feedbackId}`;
+        window.location.href = `includes/process-feedback.php?delete_feedback=${feedbackId}&csrf_token=<?= urlencode(csrf_token()) ?>`;
     }
 }
 </script>

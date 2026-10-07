@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
 
     if ($title === '' || empty($items)) {
         $_SESSION['error'] = 'Please provide a title and at least one item.';
-        header('Location: manage-procurement.php');
+        header('Location: manage_procurement');
         exit;
     }
 
@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'creat
         $_SESSION['error'] = 'Failed to save the request. Please try again.';
     }
 
-    header('Location: manage-procurement.php');
+    header('Location: manage_procurement');
     exit;
 }
 

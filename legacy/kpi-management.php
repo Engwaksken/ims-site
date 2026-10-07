@@ -664,6 +664,6 @@ function filterByStatus(status) {
 }
 
 function exportAllKPIs() {
-    window.location.href = 'export-all-kpis.php?year=<?php echo $filter_year; ?>&department=<?php echo $filter_department; ?>';
+    window.location.href = 'export-kpi-report-pdf?year=<?php echo $filter_year; ?>&department=<?php echo $filter_department; ?>';
 }
 </script>

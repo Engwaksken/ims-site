@@ -22,6 +22,47 @@ if ($member_result->num_rows == 0) {
 
 $member_id = $member_result->fetch_assoc()['member_id'];
 
+// Cancel own registration (POST + CSRF via config.php; 24-hour rule as shown on the card)
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['cancel_registration'])) {
+    $cancelId = (int) $_POST['cancel_registration'];
+    $notice   = ['type' => 'error', 'message' => 'Registration not found.'];
+
+    $stmt = $conn->prepare(
+        "SELECT er.registration_status, e.event_date, e.start_time, e.event_title
+           FROM event_registrations er
+           JOIN hub_events e ON e.event_id = er.event_id
+          WHERE er.registration_id = ? AND er.member_id = ?
+          LIMIT 1"
+    );
+    $stmt->bind_param('ii', $cancelId, $member_id);
+    $stmt->execute();
+    $reg = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    if ($reg) {
+        $hoursUntil = (strtotime($reg['event_date'] . ' ' . $reg['start_time']) - time()) / 3600;
+
+        if ($reg['registration_status'] === 'Cancelled') {
+            $notice = ['type' => 'info', 'message' => 'This registration is already cancelled.'];
+        } elseif ($hoursUntil < 24) {
+            $notice = ['type' => 'error', 'message' => 'Registrations can only be cancelled at least 24 hours before the event.'];
+        } else {
+            $stmt = $conn->prepare(
+                "UPDATE event_registrations SET registration_status = 'Cancelled'
+                  WHERE registration_id = ? AND member_id = ?"
+            );
+            $stmt->bind_param('ii', $cancelId, $member_id);
+            $stmt->execute();
+            $stmt->close();
+            $notice = ['type' => 'success', 'message' => 'Your registration for "' . $reg['event_title'] . '" has been cancelled.'];
+        }
+    }
+
+    $_SESSION['notification'] = $notice;
+    header('Location: my-event-registrations');
+    exit();
+}
+
 // Get filter parameters
 $filter_status = isset($_GET['status']) ? $conn->real_escape_string(sanitize_input($_GET['status'])) : '';
 $view = isset($_GET['view']) ? $conn->real_escape_string(sanitize_input($_GET['view'])) : 'upcoming';
@@ -601,12 +642,18 @@ $stats['pending_payment'] = $conn->query("SELECT COUNT(*) as count FROM event_re
     <?php endforeach; ?>
 <?php endif; ?>
 
+<form id="cancelRegistrationForm" method="POST" action="my-event-registrations" hidden>
+    <input type="hidden" name="cancel_registration" value="">
+</form>
+
 <?php include 'includes/footer.php'; ?>
 
 <script>
 function confirmCancelRegistration(registrationId, eventTitle) {
     if (confirm(`Are you sure you want to cancel your registration for "${eventTitle}"?\n\nNote: Cancellations must be made at least 24 hours before the event.`)) {
-        window.location.href = `process-event-registration.php?cancel_registration=${registrationId}`;
+        const form = document.getElementById('cancelRegistrationForm');
+        form.elements['cancel_registration'].value = registrationId;
+        form.submit();
     }
 }
 </script>

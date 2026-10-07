@@ -28,13 +28,13 @@ if (
 
 if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     $_SESSION['error'] = 'Invalid request method.';
-    header('Location: ../applications.php');
+    header('Location: ../startups-shortlisting');
     exit();
 }
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
     $_SESSION['error'] = 'Database connection not available.';
-    header('Location: ../applications.php');
+    header('Location: ../startups-shortlisting');
     exit();
 }
 
@@ -169,7 +169,7 @@ if (!in_array($action, VALID_ACTIONS, true)) {
 
 if ($riskRatingId <= 0 || $applicationId <= 0) {
     $_SESSION['error'] = 'Missing risk rating or application ID.';
-    header('Location: ../applications.php');
+    header('Location: ../startups-shortlisting');
     exit();
 }
 

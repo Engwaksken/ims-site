@@ -17,7 +17,7 @@ $is_admin = in_array($_SESSION['role'], ['Administrator', 'Operations/Admin']);
 // Get payment ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     $_SESSION['error'] = "Payment ID not provided.";
-    header("Location: " . ($is_admin ? 'verify-payment-receipts.php' : 'payment-history'));
+    header("Location: " . ($is_admin ? 'hub-operations?tab=receipts' : 'payment-history'));
     exit();
 }
 
@@ -64,7 +64,7 @@ $result = $conn->query($query);
 
 if (!$result || $result->num_rows == 0) {
     $_SESSION['error'] = "Payment not found or access denied.";
-    header("Location: " . ($is_admin ? 'verify-payment-receipts.php' : 'payment-history'));
+    header("Location: " . ($is_admin ? 'hub-operations?tab=receipts' : 'payment-history'));
     exit();
 }
 

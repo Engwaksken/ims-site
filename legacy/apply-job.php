@@ -50,6 +50,11 @@ $success_msg = $_SESSION['job_app_success'] ?? '';
 $error_msg   = $_SESSION['job_app_error']   ?? '';
 unset($_SESSION['job_app_success'], $_SESSION['job_app_error']);
 
+/* Confirmation after submit: only for the session that just submitted it */
+$submitted_app_id = isset($_GET['submitted']) ? (int)$_GET['submitted'] : 0;
+$show_submitted   = $submitted_app_id > 0
+    && (int)($_SESSION['job_app_submitted'] ?? 0) === $submitted_app_id;
+
 /* ---------------------------------------------------------------
    AJAX auto-save
 --------------------------------------------------------------- */
@@ -193,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submi
     }
 
     $_SESSION['job_app_submitted'] = $aid;
-    header("Location: job-application-success.php?id=$aid");
+    header("Location: apply-job?job_id=$job_id&submitted=" . (int)$aid);
     exit();
 }
 
@@ -548,6 +553,24 @@ body {
         </div>
         <?php endif; ?>
     </div>
+
+    <?php /* -- Submitted confirmation -- */ ?>
+    <?php if ($show_submitted): ?>
+    <div class="aj-card">
+        <div class="aj-closed">
+            <i class="fas fa-check-circle" style="color:var(--success, #16a34a);"></i>
+            <h3>Application Submitted</h3>
+            <p>
+                Thank you for applying for <strong><?= htmlspecialchars($job['job_title']) ?></strong>.
+                Your reference number is <strong>#<?= $submitted_app_id ?></strong>.
+                We will contact you by email about the next steps.
+            </p>
+            <a href="jobs-listings" class="aj-btn aj-btn-primary">
+                <i class="fas fa-search"></i> Browse Other Jobs
+            </a>
+        </div>
+    </div>
+    <?php include 'includes/footer.php'; exit(); endif; ?>
 
     <?php /* -- Closed / full states -- */ ?>
     <?php if ($is_expired || $is_full): ?>

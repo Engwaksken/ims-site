@@ -47,7 +47,7 @@
     if (!BASE_SRC) {
         var scripts = document.getElementsByTagName('script');
         var me      = scripts[scripts.length - 1];
-        BASE_SRC    = me.src.replace(/jobs-embed\.js(\?.*)?$/, 'jobs-widget.php');
+        BASE_SRC    = me.src.replace(/jobs-embed\.js(\?.*)?$/, 'jobs-embed.php');
     }
 
     /* -- Build iframe query string ------------------------------- */

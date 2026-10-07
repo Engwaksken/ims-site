@@ -244,6 +244,7 @@ if (isset($_POST['update_feedback'])) {
    DELETE FEEDBACK
 ====================== */
 if (isset($_GET['delete_feedback'])) {
+    csrf_protect(true); // state-changing GET link: token required
     $feedback_id = (int)$_GET['delete_feedback'];
     $member_id = get_member_id($conn, $user_id);
     if (!$member_id) {

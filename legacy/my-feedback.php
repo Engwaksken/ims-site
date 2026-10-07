@@ -580,7 +580,7 @@ $stats['resolved'] = $conn->query("SELECT COUNT(*) as count FROM member_feedback
 <script>
 function confirmDelete(feedbackId) {
     if (confirm('Are you sure you want to delete this feedback?\n\nNote: Only feedback with "New" status can be deleted.')) {
-        window.location.href = `process-feedback.php?delete_feedback=${feedbackId}`;
+        window.location.href = `includes/process-feedback.php?delete_feedback=${feedbackId}&csrf_token=<?= urlencode(csrf_token()) ?>`;
     }
 }
 </script>

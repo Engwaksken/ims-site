@@ -17,7 +17,7 @@ function redirect_my_requests(): never
 
 function redirect_asset_request_form(): never
 {
-    header('Location: ../asset_request.php');
+    header('Location: ../my_requests');
     exit;
 }
 

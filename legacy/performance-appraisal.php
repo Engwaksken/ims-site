@@ -24,7 +24,7 @@ $profile = $profile_q ? $profile_q->fetch_assoc() : [];
 
 if (!$profile || !$profile['job_title']) {
     send_notification($uid, 'Please complete your employee profile before creating an appraisal.', 'warning');
-    header("Location: my-employee-profile.php");
+    header("Location: my-profile");
     exit();
 }
 
