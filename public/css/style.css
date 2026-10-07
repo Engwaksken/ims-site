@@ -940,6 +940,111 @@ table tbody tr:hover {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Collapsible sidebar sections (grouped by menu_items.category).
+   <details name="sidebar-group"> keeps one section open at a time. */
+.sidebar-menu li.sidebar-group {
+    margin: 2px 10px;
+}
+
+.sidebar-group-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 15px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-group-toggle::-webkit-details-marker {
+    display: none;
+}
+
+.sidebar-group-toggle::marker {
+    content: '';
+}
+
+.sidebar-group-toggle > i:first-child {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-group-toggle > span:first-of-type {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sidebar-group-count {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.sidebar-group-chevron {
+    font-size: 11px;
+    transition: transform 0.2s ease;
+    opacity: 0.7;
+}
+
+.sidebar-group details[open] > .sidebar-group-toggle .sidebar-group-chevron {
+    transform: rotate(180deg);
+}
+
+.sidebar-group-toggle:hover,
+.sidebar-group details[open] > .sidebar-group-toggle {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+/* Section that contains the current page: marked even when collapsed. */
+.sidebar-group.has-active > details > .sidebar-group-toggle {
+    color: #fff;
+    box-shadow: inset 3px 0 0 var(--primary-color);
+}
+
+.sidebar-group-toggle:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.sidebar-submenu {
+    list-style: none;
+    margin: 4px 0 6px;
+    padding: 0 0 0 14px;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    margin-left: 24px;
+}
+
+.sidebar-menu .sidebar-submenu li {
+    margin: 2px 0;
+}
+
+.sidebar-menu .sidebar-submenu li a {
+    padding: 9px 12px;
+    font-size: 13.5px;
+}
+
+.sidebar-menu .sidebar-submenu li a i {
+    font-size: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar-group-chevron { transition: none; }
+}
+
 .logout-btn {
     display: flex;
     align-items: center;
