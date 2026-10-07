@@ -19,11 +19,23 @@ PHP information management system (programs, projects, KPIs, workplans, HR, hub 
 
 ## PowerPoint previews
 
-The Documents module previews `.pptx` files locally using PHP's ZIP, DOM/XML and
-Fileinfo extensions. Slides appear in presentation order with text, tables,
-embedded PNG/JPEG/GIF/WebP images and slide navigation. This is a simplified
-content preview; exact layouts, charts, animations and unsupported image formats
-require downloading the original presentation. Legacy `.ppt` and `.odp` remain
-download-only. Compressed documents use the existing decompression flow.
+Viewing a `.ppt` or `.pptx` in Documents converts it to PDF with headless
+LibreOffice and opens it in the browser's existing PDF viewer. Conversion runs
+after the document permission check. Downloads return the original presentation.
+Compressed presentations use the existing decompression flow.
 
-Run the preview regression checks with `php tests/pptx-preview-test.php`.
+Install LibreOffice Impress on the web server (Debian/Ubuntu:
+`sudo apt-get install libreoffice-impress`) and enable PHP `proc_open`. Set
+`LIBREOFFICE_BINARY` in `.env` to the executable path, for example
+`/usr/bin/soffice` or `"C:/Program Files/LibreOffice/program/soffice.com"`.
+Install the presentation's fonts on the server for consistent PDF layouts.
+
+Each conversion uses a private temporary workspace and isolated LibreOffice
+profile, cleaned up after the request. `POWERPOINT_PDF_TIMEOUT` defaults to 60
+seconds (maximum 180); PDF previews are limited to 32 MB. Failed conversions
+show the download fallback and log the cause in the server error log.
+
+Run conversion regression checks with `php tests/powerpoint-pdf-test.php`.
+With LibreOffice installed, run the real two-slide PPT/PPTX conversion check:
+`php tests/powerpoint-pdf-integration-test.php /usr/bin/soffice` (use the Windows
+executable path on Windows).

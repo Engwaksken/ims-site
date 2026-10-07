@@ -153,16 +153,6 @@ function doc_preview_html_shell(
         .preview-empty h2{margin:0 0 8px;color:#0f172a;font-size:18px}
         .preview-text{margin:0;padding:18px;overflow:auto;white-space:pre-wrap;word-break:break-word;font-family:Consolas,Monaco,monospace;font-size:12px;line-height:1.6}
         .preview-media{display:block;max-width:100%;max-height:calc(100vh - 130px);margin:0 auto}
-        .pptx-preview{padding:22px}
-        .pptx-notice{font-size:13px;color:#64748b;line-height:1.6}
-        .pptx-navigation{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
-        .pptx-navigation a{padding:6px 10px;border-radius:6px;background:#f1f5f9;color:#0f766e;text-decoration:none;font-size:12px}
-        .pptx-slide{padding:24px;margin:18px 0;border:1px solid #e2e8f0;border-radius:10px;scroll-margin-top:90px;overflow-wrap:anywhere}
-        .pptx-slide h2{margin:0 0 20px;font-size:18px;color:#0f766e}
-        .pptx-slide p{white-space:pre-wrap;line-height:1.6}
-        .pptx-image{display:block;max-width:100%;max-height:600px;height:auto;margin:16px auto}
-        .pptx-table{overflow:auto;margin:16px 0}
-        @media(max-width:600px){.pptx-preview,.pptx-slide{padding:12px}}
     </style>';
     echo '</head><body>';
     echo '<header class="preview-topbar">';
@@ -1785,18 +1775,24 @@ if (in_array($action, ['view', 'download'], true)) {
             );
         }
 
-        if ($extension === 'pptx') {
-            require_once __DIR__ . '/pptx-preview.php';
-            $body = (new DocPptxPreview())->render($previewPath);
+        if (in_array($extension, ['ppt', 'pptx'], true)) {
+            require_once __DIR__ . '/powerpoint-pdf.php';
+            $defaultBinary = PHP_OS_FAMILY === 'Windows'
+                ? (getenv('ProgramFiles') ?: 'C:/Program Files') . '/LibreOffice/program/soffice.com'
+                : 'soffice';
+            $binary = (string)environment_value('LIBREOFFICE_BINARY', $defaultBinary);
+            $timeout = (int)environment_value('POWERPOINT_PDF_TIMEOUT', 60);
+            $pdf = (new DocPowerPointPdf($binary, $timeout))->convert($previewPath, $extension);
             doc_preview_cleanup($tempPath, $temporary);
+            $pdfName = pathinfo(basename($downloadName), PATHINFO_FILENAME) . '.pdf';
+            $pdfName = str_replace(['"', "\r", "\n"], '', $pdfName);
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: inline; filename="' . $pdfName . '"');
+            header('Content-Length: ' . strlen($pdf));
+            header('X-Content-Type-Options: nosniff');
             header('Cache-Control: private, no-store');
-            doc_preview_html_shell(
-                $downloadName,
-                $body,
-                $downloadUrl,
-                $backUrl,
-                'PowerPoint presentation (simplified preview)'
-            );
+            echo $pdf;
+            exit;
         }
 
         doc_preview_cleanup($tempPath, $temporary);
@@ -1806,7 +1802,6 @@ if (in_array($action, ['view', 'download'], true)) {
                 'doc' =>
                     'Legacy Word .doc preview is not reliably supported by PhpWord. Download the file to open it in Microsoft Word or LibreOffice.',
 
-                'ppt',
                 'odp' =>
                     'PowerPoint files are stored correctly, but this server does not currently have a reliable PowerPoint-to-browser renderer. Download the presentation to open it normally.',
 
