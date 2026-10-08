@@ -15,10 +15,76 @@ $notice = '';
 $noticeType = 'warning';
 $escape = static fn($value): string => htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-$schemaCheck = $conn->query("SHOW COLUMNS FROM employee_tasks LIKE 'is_recurring'");
-$schemaReady = $schemaCheck && $schemaCheck->num_rows > 0;
+$requiredTaskColumns = ['is_recurring','recurrence_days','recurrence_end_date','recurrence_parent_id','reminder_at','reminder_time','reminder_sent_at'];
+$requiredTaskIndexes = ['uq_employee_tasks_recurrence_date','idx_employee_tasks_reminder','idx_employee_tasks_recurring'];
+$inspectTaskSchema = static function () use ($conn, $requiredTaskColumns, $requiredTaskIndexes): bool {
+    foreach ($requiredTaskColumns as $column) {
+        $result = $conn->query("SHOW COLUMNS FROM employee_tasks LIKE '" . $conn->real_escape_string($column) . "'");
+        if (!$result || $result->num_rows === 0) return false;
+    }
+    foreach ($requiredTaskIndexes as $index) {
+        $result = $conn->query("SHOW INDEX FROM employee_tasks WHERE Key_name='" . $conn->real_escape_string($index) . "'");
+        if (!$result || $result->num_rows === 0) return false;
+    }
+    return true;
+};
+$schemaReady = $inspectTaskSchema();
+$schemaRepairError = '';
+
+// Apply the additive task schema to the exact database connected by this page.
+// This recovery action is administrator-only and protected by CSRF validation.
+if (!$schemaReady && $_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'repair_task_schema' && $isAdmin) {
+    if (!verify_csrf_token($_POST['csrf_token'] ?? null)) {
+        http_response_code(419);
+        exit('Invalid security token. Refresh the page and try again.');
+    }
+
+    $tableCheck = $conn->query("SHOW TABLES LIKE 'employee_tasks'");
+    if (!$tableCheck || $tableCheck->num_rows === 0) {
+        $schemaRepairError = 'The employee_tasks table is missing. Apply 2026_10_09_my_tasks.sql first.';
+    } else {
+        $columns = [
+            'is_recurring' => 'TINYINT(1) NOT NULL DEFAULT 0',
+            'recurrence_days' => 'VARCHAR(20) NULL',
+            'recurrence_end_date' => 'DATE NULL',
+            'recurrence_parent_id' => 'INT UNSIGNED NULL',
+            'reminder_at' => 'DATETIME NULL',
+            'reminder_time' => 'TIME NULL',
+            'reminder_sent_at' => 'DATETIME NULL',
+        ];
+        foreach ($columns as $column => $definition) {
+            $columnCheck = $conn->query("SHOW COLUMNS FROM employee_tasks LIKE '" . $conn->real_escape_string($column) . "'");
+            if ($columnCheck && $columnCheck->num_rows > 0) continue;
+            if (!$conn->query("ALTER TABLE employee_tasks ADD COLUMN `$column` $definition")) {
+                $schemaRepairError = 'Could not add ' . $column . ': ' . $conn->error;
+                break;
+            }
+        }
+
+        $indexes = [
+            'uq_employee_tasks_recurrence_date' => 'UNIQUE INDEX uq_employee_tasks_recurrence_date (recurrence_parent_id, task_date)',
+            'idx_employee_tasks_reminder' => 'INDEX idx_employee_tasks_reminder (status, reminder_at, reminder_sent_at)',
+            'idx_employee_tasks_recurring' => 'INDEX idx_employee_tasks_recurring (is_recurring, task_date, recurrence_end_date)',
+        ];
+        if ($schemaRepairError === '') foreach ($indexes as $index => $definition) {
+            $indexCheck = $conn->query("SHOW INDEX FROM employee_tasks WHERE Key_name='" . $conn->real_escape_string($index) . "'");
+            if ($indexCheck && $indexCheck->num_rows > 0) continue;
+            if (!$conn->query("CREATE $definition")) {
+                $schemaRepairError = 'Could not create index ' . $index . ': ' . $conn->error;
+                break;
+            }
+        }
+
+        $schemaReady = $inspectTaskSchema();
+        if ($schemaReady && $schemaRepairError === '') {
+            header('Location: my-tasks?view=' . urlencode($view));
+            exit;
+        }
+    }
+}
+
 if (!$schemaReady) {
-    error_log('[my-tasks] active database is missing employee_tasks.is_recurring: ' . $conn->error);
+    error_log('[my-tasks] active database task recurrence/reminder schema is incomplete: ' . $conn->error);
 }
 
 if ($schemaReady) {
@@ -212,7 +278,7 @@ if ($res) while ($row = $res->fetch_assoc()) $counts[$row['status']] = (int)$row
 
 include 'includes/header.php';
 if (!$schemaReady): ?>
-    <div class="card"><div class="card-body"><div class="alert alert-warning">The database connected to this site does not show <code>employee_tasks.is_recurring</code>. Confirm <code>2026_10_10_task_recurrence_reminders.sql</code> ran against this same database, then verify with <code>SHOW COLUMNS FROM employee_tasks LIKE 'is_recurring';</code> and reload this page.</div></div></div>
+    <div class="card"><div class="card-body"><div class="alert alert-warning">The connected database is missing task recurrence/reminder schema.<?php if ($schemaRepairError): ?><br><strong>Update error:</strong> <?= $escape($schemaRepairError) ?><?php endif; ?><?php if ($isAdmin): ?><form method="post" style="margin-top:14px"><?= csrf_field() ?><input type="hidden" name="action" value="repair_task_schema"><button type="submit" class="btn btn-primary"><i class="fas fa-database"></i> Apply task database update</button></form><?php else: ?><br>Ask an Administrator to apply the task database update from this page.<?php endif; ?></div></div></div>
     <?php include 'includes/footer.php'; exit; ?>
 <?php endif; ?>
 
