@@ -15,8 +15,8 @@ $notice = '';
 $noticeType = 'warning';
 $escape = static fn($value): string => htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-$schemaCheck = $conn->query("SELECT COUNT(*) AS n FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='employee_tasks' AND COLUMN_NAME='is_recurring'");
-$schemaReady = $schemaCheck && (int)$schemaCheck->fetch_assoc()['n'] > 0;
+$schemaCheck = $conn->query("SHOW COLUMNS FROM employee_tasks LIKE 'is_recurring'");
+$schemaReady = $schemaCheck && $schemaCheck->num_rows > 0;
 
 if ($schemaReady) {
     task_generate_recurring_occurrences($conn, $today);
