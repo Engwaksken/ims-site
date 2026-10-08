@@ -17,6 +17,9 @@ $escape = static fn($value): string => htmlspecialchars((string)$value, ENT_QUOT
 
 $schemaCheck = $conn->query("SHOW COLUMNS FROM employee_tasks LIKE 'is_recurring'");
 $schemaReady = $schemaCheck && $schemaCheck->num_rows > 0;
+if (!$schemaReady) {
+    error_log('[my-tasks] active database is missing employee_tasks.is_recurring: ' . $conn->error);
+}
 
 if ($schemaReady) {
     task_generate_recurring_occurrences($conn, $today);
@@ -209,7 +212,7 @@ if ($res) while ($row = $res->fetch_assoc()) $counts[$row['status']] = (int)$row
 
 include 'includes/header.php';
 if (!$schemaReady): ?>
-    <div class="card"><div class="card-body"><div class="alert alert-warning">Task reminders and recurrence need the database update <code>database/migrations/2026_10_10_task_recurrence_reminders.sql</code> applied before this page can load.</div></div></div>
+    <div class="card"><div class="card-body"><div class="alert alert-warning">The database connected to this site does not show <code>employee_tasks.is_recurring</code>. Confirm <code>2026_10_10_task_recurrence_reminders.sql</code> ran against this same database, then verify with <code>SHOW COLUMNS FROM employee_tasks LIKE 'is_recurring';</code> and reload this page.</div></div></div>
     <?php include 'includes/footer.php'; exit; ?>
 <?php endif; ?>
 
