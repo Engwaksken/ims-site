@@ -472,8 +472,7 @@ if (isset($_GET['edit_receipt'])) {
               LEFT JOIN members m ON sb.member_id = m.member_id 
               LEFT JOIN users u ON m.user_id = u.user_id 
               WHERE $filter 
-              ORDER BY sb.booking_date DESC, sb.start_time DESC 
-              LIMIT 100";
+              ORDER BY sb.booking_date DESC, sb.start_time DESC";
     $result = $conn->query($query);
     while ($row = $result->fetch_assoc()) {
         $bookings[] = $row;
@@ -648,8 +647,7 @@ if (isset($_GET['edit_receipt'])) {
               LEFT JOIN users u ON m.user_id = u.user_id 
               LEFT JOIN users v ON pr.verified_by = v.user_id 
               WHERE $filter 
-              ORDER BY pr.created_at DESC 
-              LIMIT 100";
+              ORDER BY pr.created_at DESC";
     $result = $conn->query($query);
     while ($row = $result->fetch_assoc()) {
         $receipts[] = $row;
@@ -809,8 +807,7 @@ if (isset($_GET['edit_receipt'])) {
               LEFT JOIN users u ON m.user_id = u.user_id 
               LEFT JOIN users r ON mf.responded_by = r.user_id 
               WHERE $filter 
-              ORDER BY mf.created_at DESC 
-              LIMIT 100";
+              ORDER BY mf.created_at DESC";
     $result = $conn->query($query);
     while ($row = $result->fetch_assoc()) {
         $feedbacks[] = $row;
@@ -1464,8 +1461,7 @@ new Chart(revenueTrendCtx, {
               LEFT JOIN members m ON sp.member_id = m.member_id 
               LEFT JOIN users u ON m.user_id = u.user_id 
               WHERE $filter 
-              ORDER BY sp.created_at DESC 
-              LIMIT 100";
+              ORDER BY sp.created_at DESC";
     $result = $conn->query($query);
     while ($row = $result->fetch_assoc()) {
         $subscriptions[] = $row;

@@ -135,7 +135,7 @@ $current_year = date('Y');
             <strong>Note:</strong> Create SMART KPIs (Specific, Measurable, Achievable, Relevant, Time-bound) for effective performance tracking.
         </div>
         
-        <form method="POST" action="kpi-process" id="kpiForm">
+        <form method="POST" action="kpi-process" id="kpiForm" data-form-tabs="sections">
             <input type="hidden" name="action" value="create">
             <input type="hidden" name="department_id" value="<?php echo (int) $user_dept['department_id']; ?>">
             

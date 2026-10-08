@@ -226,7 +226,7 @@ $total_apps = array_sum(array_map(fn($o) => (int)$o['total_applications'], $oppo
             <button type="button" class="modal-close" onclick="closeModal('createOpportunityModal')">&times;</button>
         </div>
 
-        <form method="POST" action="includes/opportunity-process.php" id="opportunityForm">
+        <form method="POST" action="includes/opportunity-process.php" id="opportunityForm" data-form-tabs="label-sections">
             <input type="hidden" name="action" value="create">
 
             <div class="modal-body">

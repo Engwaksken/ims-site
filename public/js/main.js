@@ -31,6 +31,7 @@ function initializeApp() {
     initTooltips();
     initModals();
     initFormValidation();
+    initTabbedLongForms();
 
     if (typeof Chart !== 'undefined') {
         initCharts();
@@ -38,6 +39,85 @@ function initializeApp() {
 
     initDataTables();
     initSidebarToggle();
+}
+
+// Break very long multi-section forms into compact tabs while keeping every
+// input in the same form for validation and submission.
+function initTabbedLongForms() {
+    document.querySelectorAll('form[data-form-tabs]').forEach(form => {
+        const mode = form.dataset.formTabs;
+        let panels = [];
+        let navAnchor = null;
+        if (mode === 'sections') {
+            const sections = Array.from(form.querySelectorAll(':scope > .form-section'));
+            if (sections.length < 3) return;
+            panels = sections.slice(0, -1).map((element, index) => ({ element, title: element.querySelector('.section-title')?.textContent.trim() || `Section ${index + 1}` }));
+            navAnchor = sections[0];
+            sections[sections.length - 1].classList.add('long-form-actions');
+        } else if (mode === 'label-sections') {
+            const grid = form.querySelector('.form-grid');
+            if (!grid) return;
+            const children = Array.from(grid.children);
+            const groups = [];
+            children.forEach(element => {
+                if (element.classList.contains('form-section-label')) groups.push({ title: element.textContent.trim(), elements: [element] });
+                else if (groups.length) groups[groups.length - 1].elements.push(element);
+            });
+            if (groups.length < 3) return;
+            panels = groups.map(group => {
+                const panel = document.createElement('section');
+                panel.className = 'long-form-panel';
+                panel.style.cssText = 'grid-column:1/-1;display:grid;grid-template-columns:inherit;gap:inherit;align-content:start';
+                group.elements.forEach(element => panel.append(element));
+                grid.append(panel);
+                return { element: panel, title: group.title };
+            });
+            navAnchor = grid;
+        } else return;
+
+        if (!panels.length) return;
+        const nav = document.createElement('div');
+        nav.className = 'long-form-tabs';
+        nav.setAttribute('role', 'tablist');
+        nav.setAttribute('aria-label', 'Form sections');
+        panels.forEach((panel, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'long-form-tab';
+            button.setAttribute('role', 'tab');
+            button.textContent = panel.title;
+            button.addEventListener('click', () => activate(index));
+            panel.button = button;
+            nav.append(button);
+        });
+        navAnchor.parentElement.insertBefore(nav, navAnchor);
+        let active = 0;
+        const activate = index => {
+            active = index;
+            panels.forEach((panel, i) => {
+                panel.element.hidden = i !== active;
+                panel.button.classList.toggle('active', i === active);
+                panel.button.setAttribute('aria-selected', i === active ? 'true' : 'false');
+            });
+        };
+        activate(0);
+        const style = document.getElementById('long-form-tab-styles') || document.createElement('style');
+        style.id = 'long-form-tab-styles';
+        style.textContent = '.long-form-tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid #dbe3ec;margin:0 0 18px}.long-form-tab{border:0;border-bottom:3px solid transparent;background:transparent;padding:11px 15px;color:#64748b;font-weight:700;white-space:nowrap;cursor:pointer}.long-form-tab.active{color:#0f766e;border-color:#0f766e}.long-form-panel[hidden],.form-section[hidden]{display:none!important}';
+        if (!style.isConnected) document.head.append(style);
+
+        // Native browser validation cannot focus an invalid input in a hidden
+        // panel. Reveal its tab first, then invoke the usual field message.
+        form.noValidate = true;
+        form.addEventListener('submit', event => {
+            const invalid = Array.from(form.elements).find(field => field.willValidate && !field.checkValidity());
+            if (!invalid) return;
+            event.preventDefault();
+            const panelIndex = panels.findIndex(panel => panel.element.contains(invalid));
+            if (panelIndex >= 0) activate(panelIndex);
+            window.setTimeout(() => invalid.reportValidity(), 0);
+        });
+    });
 }
 
 // Sidebar Toggle (legacy .sidebar-toggle button, if a page has one)
@@ -395,11 +475,84 @@ function createBeneficiaryChart() {}
 // Data tables (search + sort on .data-table)
 // ---------------------------------------------------------------------------
 function initDataTables() {
-    const tables = document.querySelectorAll('.data-table');
+    const tables = document.querySelectorAll('.main-content table');
     tables.forEach(table => {
         addTableSearch(table);
         addTableSort(table);
+        initTablePagination(table);
     });
+}
+
+function initTablePagination(table) {
+    const tbody = table.tBodies && table.tBodies[0];
+    if (!tbody) return;
+    const rows = Array.from(tbody.rows);
+    if (rows.length <= 25 || table.closest('[data-no-pagination]')) return;
+
+    // Existing server/client pagers remain authoritative.
+    let ancestor = table.parentElement;
+    while (ancestor && ancestor !== document.body) {
+        if (ancestor.querySelector('[class*="pagination"], [class*="pager"], [aria-label*="pagination" i], .dataTables_paginate, [data-table-pagination]')) return;
+        if (ancestor.matches('.card, .panel, .modal, .table-responsive')) break;
+        ancestor = ancestor.parentElement;
+    }
+
+    rows.forEach(row => {
+        row.dataset.tableSearchMatch = 'true';
+        row.dataset.tableInitiallyHidden = row.style.display === 'none' ? 'true' : 'false';
+    });
+    const host = table.closest('.table-responsive, .table-wrap, .table-scroll') || table;
+    if (table.parentElement && table.parentElement.closest('table')) return;
+    const pager = document.createElement('div');
+    pager.className = 'table-pagination-auto';
+    pager.setAttribute('aria-label', 'Table pagination');
+    host.insertAdjacentElement('afterend', pager);
+    if (!document.getElementById('table-pagination-auto-styles')) {
+        const style = document.createElement('style');
+        style.id = 'table-pagination-auto-styles';
+        style.textContent = '.table-pagination-auto{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 2px;color:#64748b;font-size:12px}.table-pagination-controls{display:flex;align-items:center;gap:7px}.table-pagination-controls select,.table-pagination-controls button{min-height:34px;padding:6px 10px;border:1px solid #dbe3ec;border-radius:7px;background:#fff;color:#334155;font-weight:700}.table-pagination-controls button:not(:disabled){cursor:pointer}.table-pagination-controls button:disabled{opacity:.5;cursor:not-allowed}@media(max-width:600px){.table-pagination-auto{align-items:flex-start;flex-direction:column}}';
+        document.head.append(style);
+    }
+
+    let page = 1;
+    let pageSize = 25;
+    const searchableRows = () => rows.filter(row => row.dataset.tableInitiallyHidden !== 'true' && row.dataset.tableSearchMatch !== 'false');
+    const render = () => {
+        const matching = searchableRows();
+        const pages = Math.max(1, Math.ceil(matching.length / pageSize));
+        page = Math.min(Math.max(1, page), pages);
+        const start = (page - 1) * pageSize;
+        rows.forEach(row => { row.style.display = 'none'; });
+        matching.slice(start, start + pageSize).forEach(row => { row.style.display = ''; });
+        const end = Math.min(start + pageSize, matching.length);
+        pager.replaceChildren();
+        const info = document.createElement('span');
+        info.className = 'table-pagination-info';
+        info.textContent = matching.length ? `Showing ${start + 1}–${end} of ${matching.length}` : 'No matching rows';
+        const controls = document.createElement('div');
+        controls.className = 'table-pagination-controls';
+        const size = document.createElement('select');
+        size.setAttribute('aria-label', 'Rows per page');
+        [25, 50, 100].forEach(value => {
+            const option = document.createElement('option');
+            option.value = String(value);
+            option.textContent = `${value} per page`;
+            option.selected = pageSize === value;
+            size.append(option);
+        });
+        size.addEventListener('change', () => { pageSize = Number(size.value); page = 1; render(); });
+        const previous = document.createElement('button');
+        previous.type = 'button'; previous.textContent = 'Previous'; previous.disabled = page <= 1;
+        previous.addEventListener('click', () => { page--; render(); });
+        const next = document.createElement('button');
+        next.type = 'button'; next.textContent = 'Next'; next.disabled = page >= pages;
+        next.addEventListener('click', () => { page++; render(); });
+        controls.append(size, previous, next);
+        pager.append(info, controls);
+        pager.hidden = matching.length <= 25;
+    };
+    table._paginationRender = render;
+    render();
 }
 
 function addTableSearch(table) {
@@ -413,8 +566,10 @@ function addTableSearch(table) {
 
         rows.forEach(row => {
             const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
+            row.dataset.tableSearchMatch = text.includes(searchTerm) ? 'true' : 'false';
         });
+        if (table._paginationRender) table._paginationRender();
+        else rows.forEach(row => { row.style.display = row.dataset.tableSearchMatch === 'true' ? '' : 'none'; });
     });
 }
 
@@ -441,6 +596,7 @@ function sortTable(table, columnIndex) {
     });
 
     rows.forEach(row => tbody.appendChild(row));
+    if (table._paginationRender) table._paginationRender();
 }
 
 // ---------------------------------------------------------------------------

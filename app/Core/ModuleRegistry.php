@@ -327,6 +327,8 @@ final class ModuleRegistry
         'my-profile.php' => 'my-profile.php',
         'my-subscription' => 'my-subscription.php',
         'my-subscription.php' => 'my-subscription.php',
+        'my-tasks' => 'my-tasks.php',
+        'my-tasks.php' => 'my-tasks.php',
         'my_procurement_requests' => 'my_procurement_requests.php',
         'my_procurement_requests.php' => 'my_procurement_requests.php',
         'my_requests' => 'my_requests.php',
