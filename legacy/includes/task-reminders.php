@@ -23,16 +23,17 @@ if (!function_exists('task_generate_recurring_occurrences')) {
         $insert = $conn->prepare(
             'INSERT IGNORE INTO employee_tasks
                 (title,details,assigned_to,created_by,kpi_source,kpi_id,kra_id,task_frequency,
-                 task_date,status,recurrence_parent_id,reminder_at)
+                 task_date,task_due_at,status,recurrence_parent_id,reminder_at)
              SELECT title,details,assigned_to,created_by,kpi_source,kpi_id,kra_id,task_frequency,
-                    ?,"Pending",task_id,IF(reminder_time IS NULL,NULL,CONCAT(?," ",reminder_time))
+                    ?,IF(task_due_at IS NULL,NULL,CONCAT(?," ",TIME(task_due_at))),"Pending",task_id,
+                    IF(reminder_time IS NULL,NULL,CONCAT(?," ",reminder_time))
              FROM employee_tasks WHERE task_id=? AND is_recurring=1'
         );
         if (!$insert) return 0;
         $created = 0;
         foreach ($rules as $rule) {
             $ruleId = (int)$rule['task_id'];
-            $insert->bind_param('ssi', $date, $date, $ruleId);
+            $insert->bind_param('sssi', $date, $date, $date, $ruleId);
             if ($insert->execute()) $created += max(0, $insert->affected_rows);
         }
         $insert->close();
@@ -46,7 +47,7 @@ if (!function_exists('task_dispatch_due_reminders')) {
     {
         $limit = max(1, min(1000, $limit));
         $result = $conn->query(
-            'SELECT task_id,assigned_to,title,task_date FROM employee_tasks
+            'SELECT task_id,assigned_to,title,task_date,task_due_at FROM employee_tasks
              WHERE reminder_at IS NOT NULL AND reminder_at <= NOW() AND reminder_sent_at IS NULL
                AND status IN ("Pending","In Progress")
              ORDER BY reminder_at ASC LIMIT ' . $limit
@@ -66,7 +67,7 @@ if (!function_exists('task_dispatch_due_reminders')) {
             if (function_exists('notify_user') && notify_user(
                 (int)$task['assigned_to'],
                 'Task reminder',
-                (string)$task['title'] . ' · Due ' . (string)$task['task_date'],
+                (string)$task['title'] . ' · Due ' . (string)($task['task_due_at'] ?? $task['task_date']),
                 'warning',
                 $taskId,
                 'employee_task'
