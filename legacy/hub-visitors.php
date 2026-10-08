@@ -36,9 +36,18 @@ if ($search) {
     $where .= " AND (visitor_name LIKE '%$sql_search%' OR organization LIKE '%$sql_search%' OR email LIKE '%$sql_search%' OR phone LIKE '%$sql_search%')";
 }
 
+// Fetch visitors with server-side pagination
+$per_page = 25;
+$current_page = max(1, (int)($_GET['page'] ?? 1));
+$count_result = $conn->query("SELECT COUNT(*) AS total FROM hub_visitors WHERE $where");
+$visitor_total = $count_result ? (int)$count_result->fetch_assoc()['total'] : 0;
+$total_pages = max(1, (int)ceil($visitor_total / $per_page));
+$current_page = min($current_page, $total_pages);
+$offset = ($current_page - 1) * $per_page;
+
 // Fetch visitors
 $visitors = [];
-$query  = "SELECT * FROM hub_visitors WHERE $where ORDER BY visit_date DESC, visit_time DESC LIMIT 200";
+$query  = "SELECT * FROM hub_visitors WHERE $where ORDER BY visit_date DESC, visit_time DESC LIMIT $per_page OFFSET $offset";
 $result = $conn->query($query);
 while ($row = $result->fetch_assoc()) {
     $visitors[] = $row;
@@ -67,6 +76,13 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
 ?>
 
 <style>
+/* Match the shared dashboard-card style while keeping the visitor metrics compact. */
+.hub-visitor-stats{grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:14px;margin-bottom:22px}
+.hub-visitor-stats .stat-card{padding:18px;border:1px solid #e5eaf1;border-radius:14px;box-shadow:0 3px 12px rgba(15,23,42,.045);gap:14px}
+.hub-visitor-stats .stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,23,42,.08)}
+.hub-visitor-stats .stat-icon{width:48px;height:48px;min-width:48px;border-radius:13px;font-size:20px}
+.hub-visitor-stats .stat-details h4{font-size:26px;line-height:1.1;margin:0 0 4px}
+.hub-visitor-stats .stat-details p{font-size:12px;margin:0;color:#64748b}
 /* -- Header --------------------------------------------------------------- */
 .visitors-header {
     background: linear-gradient(135deg, #ff6b35 0%, #ff9800 100%);
@@ -138,6 +154,14 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
 .quick-stat:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.12); }
 .quick-stat h3 { font-size: 28px; margin-bottom: 6px; color: var(--primary-color); }
 .quick-stat p  { font-size: 12px; color: #7f8c8d; margin: 0; }
+.visitor-pagination{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 0 2px;color:#64748b;font-size:13px}
+.visitor-pagination nav{display:flex;gap:6px;align-items:center}
+.visitor-pagination a,.visitor-pagination span{display:inline-flex;min-width:36px;height:36px;align-items:center;justify-content:center;padding:0 10px;border:1px solid #dbe3ec;border-radius:8px;background:#fff;color:#334155;text-decoration:none;font-weight:700}
+.visitor-pagination .current{background:var(--primary-color);border-color:var(--primary-color);color:#fff}
+.visitor-section-tabs{display:flex;gap:8px;border-bottom:1px solid #e2e8f0;margin:22px 0 16px;overflow-x:auto}
+.visitor-section-tabs button{border:0;border-bottom:3px solid transparent;background:transparent;padding:11px 16px;color:#64748b;font-weight:700;white-space:nowrap;cursor:pointer}
+.visitor-section-tabs button.active{color:var(--primary-color);border-bottom-color:var(--primary-color)}
+.visitor-section-panel{display:none}.visitor-section-panel.active{display:block}
 
 /* -- Misc ----------------------------------------------------------------- */
 .filter-bar { background:#f8f9fa; padding:18px; border-radius:12px; margin-bottom:20px; }
@@ -195,7 +219,7 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
 </div>
 
 <!-- -- Stats Cards ----------------------------------------------------------- -->
-<div class="stats-grid">
+<div class="stats-grid hub-visitor-stats">
     <div class="stat-card">
         <div class="stat-icon blue"><i class="fas fa-user-clock"></i></div>
         <div class="stat-details"><h4><?php echo $stats['today']; ?></h4><p>Today's Visitors</p></div>
@@ -222,6 +246,12 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
     </div>
 </div>
 
+<div class="visitor-section-tabs" role="tablist" aria-label="Visitor sections">
+    <button type="button" class="active" data-visitor-tab="log" role="tab" aria-selected="true"><i class="fas fa-list"></i> Visitors Log</button>
+    <button type="button" data-visitor-tab="analytics" role="tab" aria-selected="false"><i class="fas fa-chart-bar"></i> Analytics</button>
+</div>
+
+<section class="visitor-section-panel active" data-visitor-panel="log" role="tabpanel">
 <!-- -- Main Table Card ------------------------------------------------------- -->
 <div class="card">
     <div class="card-header">
@@ -405,11 +435,30 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
                 </tbody>
             </table>
         </div>
+        <?php if ($visitor_total > $per_page): ?>
+        <div class="visitor-pagination">
+            <span>Showing <?php echo $offset + 1; ?>–<?php echo min($offset + $per_page, $visitor_total); ?> of <?php echo $visitor_total; ?> visitors</span>
+            <nav aria-label="Visitor pages">
+                <?php
+                $page_query = $_GET;
+                foreach (['Previous' => $current_page - 1, 'Next' => $current_page + 1] as $label => $page_number):
+                    if ($page_number < 1 || $page_number > $total_pages) continue;
+                    $page_query['page'] = $page_number;
+                ?>
+                    <a href="?<?php echo htmlspecialchars(http_build_query($page_query), ENT_QUOTES, 'UTF-8'); ?>"><?php echo $label; ?></a>
+                <?php endforeach; ?>
+                <?php for ($page_number = max(1, $current_page - 2); $page_number <= min($total_pages, $current_page + 2); $page_number++): $page_query['page'] = $page_number; ?>
+                    <?php if ($page_number === $current_page): ?><span class="current" aria-current="page"><?php echo $page_number; ?></span><?php else: ?><a href="?<?php echo htmlspecialchars(http_build_query($page_query), ENT_QUOTES, 'UTF-8'); ?>"><?php echo $page_number; ?></a><?php endif; ?>
+                <?php endfor; ?>
+            </nav>
+        </div>
+        <?php endif; ?>
     </div>
 </div>
+</section>
 
 <!-- -- Analytics ------------------------------------------------------------ -->
-<div class="analytics-section">
+<section class="visitor-section-panel" data-visitor-panel="analytics" role="tabpanel"><div class="analytics-section">
     <h3 style="margin-bottom:20px;"><i class="fas fa-chart-bar"></i> Visitor Analytics</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:20px;">
         <div>
@@ -426,6 +475,7 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
         <canvas id="hourlyChart" style="max-height:250px;"></canvas>
     </div>
 </div>
+</section>
 
 <!-- -- QR Code Modal --------------------------------------------------------- -->
 <div id="qrModal" class="modal">
@@ -572,6 +622,21 @@ $purposes = ['Meeting','Event','Co-working','Training','Consultation','Tour','In
 
 <script>
 const REGISTER_URL = <?php echo json_encode($register_url); ?>;
+
+document.querySelectorAll('[data-visitor-tab]').forEach((tab) => tab.addEventListener('click', () => {
+    document.querySelectorAll('[data-visitor-tab]').forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    document.querySelectorAll('[data-visitor-panel]').forEach((panel) => panel.classList.toggle('active', panel.dataset.visitorPanel === tab.dataset.visitorTab));
+    if (tab.dataset.visitorTab === 'analytics' && window.Chart) {
+        document.querySelectorAll('[data-visitor-panel="analytics"] canvas').forEach((canvas) => {
+            const chart = Chart.getChart(canvas);
+            if (chart) chart.resize();
+        });
+    }
+}));
 
 // -- Populate QR when modal opens -----------------------------------------
 (function initQR() {

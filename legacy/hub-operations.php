@@ -107,6 +107,12 @@ if (isset($_GET['edit_receipt'])) {
 
 
 <style>
+    .hub-ops-stats{grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:14px;margin-bottom:22px}
+    .hub-ops-stats .stat-card{padding:18px;border:1px solid #e5eaf1;border-radius:14px;box-shadow:0 3px 12px rgba(15,23,42,.045);gap:14px}
+    .hub-ops-stats .stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,23,42,.08)}
+    .hub-ops-stats .stat-icon{width:48px;height:48px;min-width:48px;border-radius:13px;font-size:20px}
+    .hub-ops-stats .stat-details h4{font-size:26px;line-height:1.1;margin:0 0 4px}
+    .hub-ops-stats .stat-details p{font-size:12px;margin:0;color:#64748b}
     .tabs {
         display: flex;
         gap: 10px;
@@ -151,7 +157,7 @@ if (isset($_GET['edit_receipt'])) {
 </style>
 
 <!-- Statistics -->
-<div class="stats-grid">
+<div class="stats-grid hub-ops-stats">
     <div class="stat-card">
         <div class="stat-icon blue">
             <i class="fas fa-users"></i>
