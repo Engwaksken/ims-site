@@ -10,9 +10,9 @@
 .bg-red    { background: var(--red-bg);    color: var(--red-fg);    }
 .bg-amber  { background: var(--amber-bg);  color: var(--amber-fg);  }
 
-/* -- Stats grid: 6 columns on this page ----------------------- */
+/* -- Stats grid: four cards per row on desktop ---------------- */
 .dash-stats {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 /* -- Stat value denominator (e.g. " / 12") -------------------- */
@@ -229,7 +229,7 @@
 
 /* -- Responsive ------------------------------------------------ */
 @media (max-width: 1100px) {
-    .dash-stats { grid-template-columns: repeat(3, 1fr); }
+    .dash-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 @media (max-width: 900px) {
