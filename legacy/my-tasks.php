@@ -104,10 +104,10 @@ if (!$schemaReady && $_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] 
         }
 
         $indexes = [
-            'uq_employee_tasks_recurrence_date' => 'UNIQUE INDEX uq_employee_tasks_recurrence_date (recurrence_parent_id, task_date)',
-            'idx_employee_tasks_reminder' => 'INDEX idx_employee_tasks_reminder (status, reminder_at, reminder_sent_at)',
-            'idx_employee_tasks_recurring' => 'INDEX idx_employee_tasks_recurring (is_recurring, task_date, recurrence_end_date)',
-            'idx_employee_tasks_due_datetime' => 'INDEX idx_employee_tasks_due_datetime (task_due_at)',
+            'uq_employee_tasks_recurrence_date' => 'UNIQUE INDEX uq_employee_tasks_recurrence_date ON employee_tasks (recurrence_parent_id, task_date)',
+            'idx_employee_tasks_reminder' => 'INDEX idx_employee_tasks_reminder ON employee_tasks (status, reminder_at, reminder_sent_at)',
+            'idx_employee_tasks_recurring' => 'INDEX idx_employee_tasks_recurring ON employee_tasks (is_recurring, task_date, recurrence_end_date)',
+            'idx_employee_tasks_due_datetime' => 'INDEX idx_employee_tasks_due_datetime ON employee_tasks (task_due_at)',
         ];
         if ($schemaRepairError === '') foreach ($indexes as $index => $definition) {
             $indexCheck = $conn->query("SHOW INDEX FROM employee_tasks WHERE Key_name='" . $conn->real_escape_string($index) . "'");
