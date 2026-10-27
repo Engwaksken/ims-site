@@ -248,8 +248,8 @@ include 'includes/header.php';
             </div>
 
             <?php foreach ($groups as $groupName => $items): if (!$items) continue; ?>
-                <section class="rp-group" aria-labelledby="rp-<?= e(md5($groupName)) ?>">
-                    <h3 id="rp-<?= e(md5($groupName)) ?>"><?= e($groupName) ?> <span class="note">(<?= count($items) ?>)</span></h3>
+                <details class="rp-group" open>
+                    <summary id="rp-<?= e(md5($groupName)) ?>"><?= e($groupName) ?> <span class="note">(<?= count($items) ?>)</span><i class="fas fa-chevron-down" aria-hidden="true"></i></summary>
                     <div class="rp-list">
                         <?php foreach ($items as $item): ?>
                             <label class="rp-item" data-search="<?= e(strtolower($item['label'] . ' ' . $item['file'] . ' ' . implode(' ', $item['defaults']))) ?>">
@@ -273,7 +273,7 @@ include 'includes/header.php';
                             </label>
                         <?php endforeach; ?>
                     </div>
-                </section>
+                </details>
             <?php endforeach; ?>
             <p class="note rp-nomatch" id="rpNoMatch" hidden>No pages match your search.</p>
 
@@ -301,8 +301,11 @@ include 'includes/header.php';
 .rp-filters{display:flex;flex-wrap:wrap;gap:8px;padding:14px 16px;align-items:center}
 .rp-filters input{flex:1;min-width:200px}
 .rp-filters select{width:auto}
-.rp-group{padding:0 16px 8px}
-.rp-group h3{margin:12px 0 8px;font-size:14px}
+.rp-group{margin:0 16px 10px;padding:0 12px 12px;border:1px solid var(--border,#e5e7eb);border-radius:var(--radius-sm);background:var(--surface-card)}
+.rp-group summary{display:flex;align-items:center;gap:8px;padding:12px 0;font-size:14px;font-weight:700;cursor:pointer;list-style:none}
+.rp-group summary::-webkit-details-marker{display:none}
+.rp-group summary i{margin-left:auto;font-size:12px;transition:transform .15s}
+.rp-group:not([open]) summary i{transform:rotate(-90deg)}
 .rp-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
 .rp-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border,#e5e7eb);border-radius:var(--radius-sm);background:var(--surface-card);cursor:pointer;margin:0}
 .rp-item:hover{border-color:var(--brand-400,#fb923c)}
@@ -347,7 +350,9 @@ function rpFilter() {
         if (!item.hidden) shown++;
     });
     document.querySelectorAll('#rpForm .rp-group').forEach(group => {
-        group.hidden = !group.querySelector('.rp-item:not([hidden])');
+        const hasMatches = !!group.querySelector('.rp-item:not([hidden])');
+        group.hidden = !hasMatches;
+        if (term && hasMatches) group.open = true;
     });
     document.getElementById('rpNoMatch').hidden = shown > 0;
 }
