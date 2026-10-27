@@ -252,16 +252,19 @@ include 'includes/header.php';
                     <summary id="rp-<?= e(md5($groupName)) ?>"><?= e($groupName) ?> <span class="note">(<?= count($items) ?>)</span><i class="fas fa-chevron-down" aria-hidden="true"></i></summary>
                     <div class="rp-list">
                         <?php foreach ($items as $item): ?>
-                            <label class="rp-item" data-search="<?= e(strtolower($item['label'] . ' ' . $item['file'] . ' ' . implode(' ', $item['defaults']))) ?>">
-                                <input type="checkbox" name="perm[]" value="<?= e($item['key']) ?>"
-                                       <?= $item['granted'] || $item['protected'] ? 'checked' : '' ?>
-                                       <?= $item['protected'] ? 'disabled' : '' ?>
-                                       onchange="rpUpdate()">
+                            <details class="rp-item" data-search="<?= e(strtolower($item['label'] . ' ' . $item['file'] . ' ' . implode(' ', $item['defaults']))) ?>">
+                                <summary>
+                                    <input type="checkbox" name="perm[]" value="<?= e($item['key']) ?>"
+                                           <?= $item['granted'] || $item['protected'] ? 'checked' : '' ?>
+                                           <?= $item['protected'] ? 'disabled' : '' ?>
+                                           onclick="event.stopPropagation()" onchange="rpUpdate()">
+                                    <strong><?= e($item['label']) ?></strong>
+                                    <i class="fas fa-chevron-down rp-card-chevron" aria-hidden="true"></i>
+                                </summary>
                                 <?php if ($item['protected']): ?>
                                     <input type="hidden" name="perm[]" value="<?= e($item['key']) ?>">
                                 <?php endif; ?>
                                 <span class="rp-text">
-                                    <strong><?= e($item['label']) ?></strong>
                                     <small><?= e($item['file']) ?><?= empty($item['is_action']) ? '.php' : '' ?></small>
                                     <small class="rp-defaults">
                                         Default: <?= e(implode(', ', $item['defaults'])) ?>
@@ -270,7 +273,7 @@ include 'includes/header.php';
                                         <small class="rp-lock"><i class="fas fa-lock" aria-hidden="true"></i> Always allowed for Administrator</small>
                                     <?php endif; ?>
                                 </span>
-                            </label>
+                            </details>
                         <?php endforeach; ?>
                     </div>
                 </details>
@@ -307,7 +310,12 @@ include 'includes/header.php';
 .rp-group summary i{margin-left:auto;font-size:12px;transition:transform .15s}
 .rp-group:not([open]) summary i{transform:rotate(-90deg)}
 .rp-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
-.rp-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border,#e5e7eb);border-radius:var(--radius-sm);background:var(--surface-card);cursor:pointer;margin:0}
+.rp-item{padding:0 12px 10px;border:1px solid var(--border,#e5e7eb);border-radius:var(--radius-sm);background:var(--surface-card);margin:0;min-width:0}
+.rp-item summary{display:flex;gap:10px;align-items:center;min-height:42px;cursor:pointer;list-style:none}
+.rp-item summary::-webkit-details-marker{display:none}
+.rp-item summary strong{font-size:13px;color:var(--ink-700,#1e2530);overflow-wrap:anywhere}
+.rp-card-chevron{margin-left:auto;flex:none;font-size:11px;transition:transform .15s}
+.rp-item:not([open]) .rp-card-chevron{transform:rotate(-90deg)}
 .rp-item:hover{border-color:var(--brand-400,#fb923c)}
 .rp-item:has(input:checked){border-color:var(--brand-400,#fb923c);background:var(--brand-50,#fff4ed)}
 .rp-item[hidden]{display:none}
