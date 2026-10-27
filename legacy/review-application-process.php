@@ -490,22 +490,22 @@ switch ($action) {
         failTo($redirectBack, "Error changing status: " . $err);
     }
 
-    case 'bulk_delete_submitted': {
+    case 'bulk_delete_applications': {
         if (($_SESSION['role'] ?? '') !== 'Administrator') {
             failTo($redirectBack, 'Only administrators can delete applications.');
         }
         $opportunity_id = (int)($_POST['opportunity_id'] ?? 0);
         $selected_ids = $_POST['selected_applications'] ?? [];
         if ($opportunity_id < 1 || !is_array($selected_ids) || !$selected_ids) {
-            failTo($redirectBack, 'Select submitted applications to delete.');
+            failTo($redirectBack, 'Select Draft or Submitted applications to delete.');
         }
         $ids = array_values(array_unique(array_filter(array_map('intval', $selected_ids), static fn($id) => $id > 0)));
         if (!$ids) failTo($redirectBack, 'No valid applications selected.');
 
-        // Scope deletion to the requested opportunity and submitted status only.
+        // Scope deletion to the requested opportunity and Draft/Submitted statuses only.
         $placeholders = implode(',', array_fill(0, count($ids), '?'));
         $types = 'i' . str_repeat('i', count($ids));
-        $stmt = $conn->prepare("SELECT application_id FROM applications WHERE opportunity_id = ? AND status = 'Submitted' AND application_id IN ($placeholders)");
+        $stmt = $conn->prepare("SELECT application_id FROM applications WHERE opportunity_id = ? AND status IN ('Submitted', 'Draft') AND application_id IN ($placeholders)");
         if (!$stmt) failTo($redirectBack, 'Could not validate selected applications.');
         $params = array_merge([$opportunity_id], $ids);
         $stmt->bind_param($types, ...$params);
@@ -514,7 +514,7 @@ switch ($action) {
         $deletable = [];
         while ($result && ($row = $result->fetch_assoc())) $deletable[] = (int)$row['application_id'];
         $stmt->close();
-        if (!$deletable) failTo($redirectBack, 'No selected applications are submitted for this opportunity.');
+        if (!$deletable) failTo($redirectBack, 'No selected Draft or Submitted applications were found for this opportunity.');
 
         $deleteMarks = implode(',', array_fill(0, count($deletable), '?'));
         $deleteTypes = str_repeat('i', count($deletable));
@@ -531,7 +531,7 @@ switch ($action) {
                     $del->close();
                 }
             }
-            $del = $conn->prepare("DELETE FROM applications WHERE opportunity_id = ? AND status = 'Submitted' AND application_id IN ($deleteMarks)");
+            $del = $conn->prepare("DELETE FROM applications WHERE opportunity_id = ? AND status IN ('Submitted', 'Draft') AND application_id IN ($deleteMarks)");
             if (!$del) throw new RuntimeException($conn->error);
             $deleteParams = array_merge([$opportunity_id], $deletable);
             $del->bind_param('i' . $deleteTypes, ...$deleteParams);
@@ -539,8 +539,8 @@ switch ($action) {
             $count = $del->affected_rows;
             $del->close();
             $conn->commit();
-            log_activity($conn, $user_id, 'Bulk Delete Submitted Applications', "Deleted {$count} submitted applications for opportunity #{$opportunity_id}");
-            okTo("manage-applications?opportunity_id={$opportunity_id}", "Deleted {$count} submitted application(s).");
+            log_activity($conn, $user_id, 'Bulk Delete Applications', "Deleted {$count} Draft or Submitted applications for opportunity #{$opportunity_id}");
+            okTo("manage-applications?opportunity_id={$opportunity_id}", "Deleted {$count} Draft or Submitted application(s).");
         } catch (Throwable $error) {
             $conn->rollback();
             failTo($redirectBack, 'Could not delete the selected applications.');
