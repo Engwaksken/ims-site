@@ -21,10 +21,10 @@ if ($decoded !== false && preg_match('/^rid=(\d+)&eid=(\d+)(?:&sig=([a-f0-9]{32}
     $sig = (string)($m[3] ?? '');
     $expected = ims_event_checkin_signature((int)$m[1], (int)$m[2]);
 
-    // Unsigned (legacy) QR codes are forgeable by changing the ids. They are
-    // accepted only while EVENT_CHECKIN_ALLOW_UNSIGNED is not set to false in
-    // .env (so QR codes already e-mailed keep working); new codes are signed.
-    $allowUnsigned = function_exists('ims_env_bool') ? ims_env_bool('EVENT_CHECKIN_ALLOW_UNSIGNED', true) : true;
+    // Unsigned (legacy) QR codes are forgeable by changing the ids, so they are
+    // rejected unless EVENT_CHECKIN_ALLOW_UNSIGNED=true is set explicitly in
+    // .env (a temporary switch for old printed codes); new codes are signed.
+    $allowUnsigned = function_exists('ims_env_bool') ? ims_env_bool('EVENT_CHECKIN_ALLOW_UNSIGNED', false) : false;
 
     if (($sig !== '' && hash_equals($expected, $sig)) || ($sig === '' && $allowUnsigned)) {
         $registration_id = (int)$m[1];

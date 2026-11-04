@@ -180,8 +180,9 @@ if (!function_exists('ims_script_name')) {
 | Security headers
 |--------------------------------------------------------------------------
 |
-| Embeddable widgets (*-embed.php, *widget*.php) are allowed to be framed
-| by other sites; everything else is restricted to same-origin framing.
+| Embeddable widgets (*-embed.php, *widget*.php) may be framed only by the
+| origins in EMBED_ALLOWED_ORIGINS (space- or comma-separated
+| scheme://host[:port]); everything else is restricted to same-origin framing.
 |
 */
 
@@ -189,6 +190,31 @@ if (!function_exists('ims_is_embeddable_script')) {
     function ims_is_embeddable_script(): bool
     {
         return (bool) preg_match('/(embed|widget)/i', ims_script_name());
+    }
+}
+
+if (!function_exists('ims_embed_allowed_origins')) {
+    /** Validated origins allowed to frame embed scripts (never header-injectable). */
+    function ims_embed_allowed_origins(): array
+    {
+        $raw = (string) ims_env(
+            'EMBED_ALLOWED_ORIGINS',
+            'https://hivecolab.org https://www.hivecolab.org https://hivecolab.com https://www.hivecolab.com'
+        );
+
+        $origins = [];
+
+        foreach (preg_split('/[\s,]+/', $raw, -1, PREG_SPLIT_NO_EMPTY) ?: [] as $origin) {
+            $origin = strtolower(rtrim($origin, '/'));
+
+            if (preg_match('#\Ahttps?://[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*(:[0-9]{1,5})?\z#', $origin)) {
+                $origins[$origin] = true;
+            } else {
+                error_log('EMBED_ALLOWED_ORIGINS: ignoring invalid origin');
+            }
+        }
+
+        return array_keys($origins);
     }
 }
 
@@ -213,6 +239,10 @@ if (!function_exists('ims_send_security_headers')) {
         if (!ims_is_embeddable_script()) {
             header('X-Frame-Options: SAMEORIGIN');
             $csp .= "; frame-ancestors 'self'";
+        } else {
+            // frame-ancestors supersedes X-Frame-Options, which cannot express
+            // an allowlist, so X-Frame-Options is omitted for embeds.
+            $csp .= "; frame-ancestors " . implode(' ', array_merge(["'self'"], ims_embed_allowed_origins()));
         }
 
         header('Content-Security-Policy: ' . $csp);

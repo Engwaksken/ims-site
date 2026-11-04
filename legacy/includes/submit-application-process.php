@@ -888,14 +888,10 @@ if ($sessionUserId < 1 && !$userInfo['is_new']) {
     );
 }
 
-if ($userInfo['is_new'] && $sessionUserId < 1) {
-    session_regenerate_id(true); // new authenticated session: prevent fixation
-    $_SESSION['user_id'] = $submittedBy;
-    $_SESSION['user_email'] = $data['email'];
-    $_SESSION['user_name'] = $data['contact_person'] ?: $data['startup_name'];
-    $_SESSION['user_role'] = 'Applicant';
-    $_SESSION['role'] = 'Applicant';
-}
+// A newly created applicant account is NOT logged in here: whoever filled in
+// the form has not proved they own the email address. The applicant gets into
+// the account through the emailed link/credentials and the normal login,
+// which still asks for the emailed code.
 
 /*
 |--------------------------------------------------------------------------
@@ -1460,10 +1456,24 @@ try {
     error_log('Application confirmation email failed: ' . $e->getMessage());
 }
 
+// New account: email a single-use link so the applicant can choose a password
+// (the existing self-service password reset), instead of logging them in.
+$accountSetupEmailed = false;
+if ($userInfo['is_new'] && $sessionUserId < 1 && !empty($data['email'])) {
+    try {
+        require_once __DIR__ . '/password-reset.php';
+        pr_request($conn, (string)$data['email']);
+        $accountSetupEmailed = true;
+    } catch (Throwable $e) {
+        error_log('Applicant account setup email failed: ' . $e->getMessage());
+    }
+}
+
 clear_application_old_input();
 
 $_SESSION['success'] = 'Application submitted successfully.';
 $_SESSION['application_id'] = $applicationId;
+$_SESSION['application_account_setup_emailed'] = $accountSetupEmailed;
 
 header('Location: /application-success?id=' . $applicationId);
 exit;

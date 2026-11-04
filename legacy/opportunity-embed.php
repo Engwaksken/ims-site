@@ -4,8 +4,7 @@ declare(strict_types=1);
 ini_set('display_errors', '0');
 error_reporting(E_ALL);
 
-header_remove('X-Frame-Options');
-header("Content-Security-Policy: frame-ancestors *");
+// Framing is limited to EMBED_ALLOWED_ORIGINS by ims_send_security_headers().
 
 require_once __DIR__ . '/includes/config.php';
 

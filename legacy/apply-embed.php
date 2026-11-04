@@ -1,9 +1,7 @@
 <?php
 
 
-// --- CORS: allow any origin to embed this page ---
-header('X-Frame-Options: ALLOWALL');
-header('Content-Security-Policy: frame-ancestors *');
+// Framing is limited to EMBED_ALLOWED_ORIGINS by ims_send_security_headers().
 
 require_once 'includes/config.php';
 $brand = ims_brand();

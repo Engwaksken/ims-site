@@ -458,6 +458,9 @@ a, a:hover, a:focus, a:active, a:visited { text-decoration: none; }
                         <li><strong>Final Results:</strong> Winners will be announced after the selection process is complete.</li>
                     <?php endif; ?>
                     <li><strong>Confirmation:</strong> A confirmation email has been sent to <strong><?php echo htmlspecialchars($application['email']); ?></strong></li>
+                    <?php if (!empty($_SESSION['application_account_setup_emailed'])): ?>
+                        <li><strong>Your Account:</strong> We have also emailed you a link to choose a password for your applicant account. After setting it, log in to track your application.</li>
+                    <?php endif; ?>
                 </ol>
             </div>
             

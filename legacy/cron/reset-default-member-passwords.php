@@ -17,6 +17,9 @@ declare(strict_types=1);
 | --reset gives each affected account a random temporary password and emails
 | it to the account holder. CLI only.
 |
+| The old password must be supplied in the OLD_DEFAULT_MEMBER_PASSWORD
+| environment variable; the script refuses to run without it.
+|
 */
 
 if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
@@ -30,7 +33,16 @@ require_once __DIR__ . '/../includes/mail-function.php';
 $options = getopt('', ['reset']);
 $doReset = array_key_exists('reset', $options);
 
-const OLD_DEFAULT_PASSWORD = 'member123';
+// The old default password is NOT kept in the source. Pass it via the
+// OLD_DEFAULT_MEMBER_PASSWORD environment variable for this run only, e.g.
+//   OLD_DEFAULT_MEMBER_PASSWORD='...' php legacy/cron/reset-default-member-passwords.php
+$oldDefaultPassword = (string)ims_env('OLD_DEFAULT_MEMBER_PASSWORD', '');
+if ($oldDefaultPassword === '') {
+    fwrite(STDERR, "OLD_DEFAULT_MEMBER_PASSWORD is not set; refusing to run.\n");
+    exit(1);
+}
+define('OLD_DEFAULT_PASSWORD', $oldDefaultPassword);
+unset($oldDefaultPassword);
 
 function temp_password(int $length = 14): string
 {
