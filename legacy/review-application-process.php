@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'includes/config.php';
+require_once __DIR__ . '/includes/nsp-integration.php';
 
 /**
  * review-application-process.php
@@ -60,6 +61,12 @@ function log_activity(mysqli $conn, int $user_id, string $action, string $detail
 
 function log_status_change(mysqli $conn, int $application_id, ?string $old_status, string $new_status, int $user_id, string $comments = ''): void {
     $comments = sanitize_input($comments);
+
+    // Hive NSP (no-op unless enabled; only for linked, consenting startups).
+    // Sends the status only - never the comments, scores or notes.
+    if ((string)$old_status !== $new_status) {
+        nsp_on_application_status_change($conn, $application_id, $new_status);
+    }
 
     $stmt = $conn->prepare("
         INSERT INTO application_status_history (application_id, old_status, new_status, changed_by, comments)

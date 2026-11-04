@@ -94,12 +94,30 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
+/*
+| Hive NSP prefill (only when NSP_INTEGRATION_ENABLED): values the applicant
+| chose to import from their NSP startup profile. They fill empty fields only
+| and stay editable; typed input and saved draft answers take priority.
+*/
+require_once __DIR__ . '/includes/nsp-integration.php';
+$nspEnabled = nsp_enabled();
+$nspPrefill = $nspEnabled ? nsp_session_prefill() : null;
+$nspPrefillValues = [];
+
 function rawApplicationValue(string $field, array $draft, mixed $default = ''): mixed
 {
-    global $oldInput, $hasOldInput;
+    global $oldInput, $hasOldInput, $nspPrefillValues;
 
     if ($hasOldInput && array_key_exists($field, $oldInput)) {
         return $oldInput[$field];
+    }
+
+    $draftHasValue = array_key_exists($field, $draft)
+        && $draft[$field] !== null
+        && !in_array(trim((string)$draft[$field]), ['', '[]'], true);
+
+    if (!$draftHasValue && is_array($nspPrefillValues) && array_key_exists($field, $nspPrefillValues)) {
+        return $nspPrefillValues[$field];
     }
 
     if (array_key_exists($field, $draft)) {
@@ -191,6 +209,10 @@ $sectorOptions = [
     'Career Pathways & Employment Services',
 ];
 
+if ($nspPrefill !== null) {
+    $nspPrefillValues = nsp_prefill_map($nspPrefill['fields'], $sectorOptions);
+}
+
 $heardOptions = [
     'Programme website or ' . $brandName . ' website',
     'Social media',
@@ -277,7 +299,7 @@ function safe_saved_html(?string $html): string
 <?= ims_theme_style_tag((array)($GLOBALS['IMS_SITE_BRANDING']['theme'] ?? [])) ?>
 <style>
 :root{--brand:var(--brand-600, #f28c28);--brand-dark:var(--brand-700, #c96709);--ink:#1f2937;--muted:#6b7280;--border:#e5e7eb;--soft:var(--brand-50, #fff8f1);--danger:#b91c1c;--success:#15803d}
-*{box-sizing:border-box}.apply-shell{max-width:1180px;margin:0 auto;padding:24px 18px 60px}.apply-notice{padding:14px 16px;border-radius:12px;margin:0 0 18px;border:1px solid var(--border);background:#fff}.apply-notice--error{border-color:#fecaca;background:#fef2f2;color:#991b1b}.apply-notice--draft{border-color:#fde68a;background:#fffbeb}.progress-shell{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--border)}.progress-inner{max-width:1180px;margin:auto;padding:12px 18px}.stepper{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:2px;overflow:visible}.step-btn{border:0;background:transparent;padding:7px 2px;cursor:pointer;color:var(--muted);font-weight:700;font-size:11px;min-width:0;white-space:nowrap}.step-btn span{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;margin:0 auto 5px;border:2px solid var(--border);background:#fff}.step-btn.active{color:var(--brand-dark)}.step-btn.active span,.step-btn.done span{border-color:var(--brand);background:var(--brand);color:#fff}.progress-track{height:5px;background:#f3f4f6;border-radius:999px;margin-top:10px;overflow:hidden}.progress-fill{height:100%;width:11.111%;background:var(--brand);transition:.25s}.form-section{display:none;background:#fff;border:1px solid var(--border);border-radius:18px;padding:26px;margin-top:24px;box-shadow:0 8px 24px rgba(0,0,0,.04)}.form-section.active{display:block}.section-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:22px}.section-head__icon{width:44px;height:44px;border-radius:12px;background:var(--soft);display:grid;place-items:center;color:var(--brand-dark);font-size:19px}.section-head h2{margin:0 0 4px;font-family:'Playfair Display',serif}.section-head p{margin:0;color:var(--muted)}.grid-2,.grid-3,.grid-4{display:grid;gap:16px}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.grid-4{grid-template-columns:repeat(4,1fr)}.form-group{margin-bottom:18px}.form-group label,.group-label{display:block;font-weight:700;margin-bottom:7px;color:var(--ink)}.req{color:var(--danger)}.form-control{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:11px 12px;font:inherit;background:#fff}.form-control:focus{outline:2px solid color-mix(in srgb, var(--brand) 18%, transparent);border-color:var(--brand)}textarea.form-control{resize:vertical;min-height:110px}.help{font-size:12px;color:var(--muted);margin-top:6px}.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.choice{display:flex;align-items:flex-start;gap:8px;padding:11px;border:1px solid var(--border);border-radius:10px;background:#fff}.choice input{margin-top:3px}.conditional{display:none;margin-top:10px}.conditional.show{display:block}.repeater{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}.repeater-row{display:grid;gap:10px;padding:12px;border-bottom:1px solid var(--border);align-items:end}.repeater-row:last-child{border-bottom:0}.repeater-founders{grid-template-columns:1.4fr 1fr .55fr .85fr .8fr .8fr .9fr 42px}.repeater-team{grid-template-columns:1.5fr 1fr .6fr .9fr .9fr 1fr 42px}.repeater-programmes{grid-template-columns:1.2fr 1.2fr .55fr 1.7fr 42px}.repeater-funding{grid-template-columns:1.2fr .9fr .8fr .55fr .55fr .9fr 42px}.remove-row{height:42px;width:42px;border:0;border-radius:9px;background:#fef2f2;color:#b91c1c;cursor:pointer}.btn-add{border:1px dashed var(--brand);background:var(--soft);color:var(--brand-dark);padding:10px 14px;border-radius:9px;font-weight:700;cursor:pointer}.nav-bar{display:flex;gap:10px;align-items:center;margin-top:24px;border-top:1px solid var(--border);padding-top:20px}.nav-bar .spacer{flex:1}.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none}.btn-primary{background:var(--brand);color:#fff}.btn-secondary{background:#fff;border:1px solid var(--border);color:var(--ink)}.btn-draft{background:var(--brand-50, #fff7ed);color:var(--brand-700, #9a4f0b);border:1px solid var(--brand-200, #fed7aa)}.btn-success{background:var(--success);color:#fff}.word-counter{font-size:12px;text-align:right;color:var(--muted);margin-top:4px}.word-counter.over{color:var(--danger);font-weight:700}.privacy-box{padding:16px;border:1px solid #c7d2fe;background:#eef2ff;border-radius:12px;font-size:14px;line-height:1.6}.file-zone{border:1.5px dashed #cbd5e1;border-radius:12px;padding:18px;text-align:center;background:#fafafa;cursor:pointer}.file-zone i{font-size:26px;color:var(--brand-dark);margin-bottom:8px}.file-zone input{display:none}.file-note{font-size:12px;color:var(--muted);margin-top:6px}.mini-title{font-size:13px;font-weight:800;color:#374151;margin:0 0 8px}.metrics-table{width:100%;border-collapse:collapse}.metrics-table th,.metrics-table td{border:1px solid var(--border);padding:10px;vertical-align:top}.metrics-table th{text-align:left;background:#f9fafb}.metric-label{font-weight:600}.hidden{display:none!important}
+*{box-sizing:border-box}.apply-shell{max-width:1180px;margin:0 auto;padding:24px 18px 60px}.apply-notice{padding:14px 16px;border-radius:12px;margin:0 0 18px;border:1px solid var(--border);background:#fff}.apply-notice--error{border-color:#fecaca;background:#fef2f2;color:#991b1b}.apply-notice--draft{border-color:#fde68a;background:#fffbeb}.apply-notice--nsp{border-color:#bfdbfe;background:#eff6ff}.progress-shell{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--border)}.progress-inner{max-width:1180px;margin:auto;padding:12px 18px}.stepper{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:2px;overflow:visible}.step-btn{border:0;background:transparent;padding:7px 2px;cursor:pointer;color:var(--muted);font-weight:700;font-size:11px;min-width:0;white-space:nowrap}.step-btn span{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;margin:0 auto 5px;border:2px solid var(--border);background:#fff}.step-btn.active{color:var(--brand-dark)}.step-btn.active span,.step-btn.done span{border-color:var(--brand);background:var(--brand);color:#fff}.progress-track{height:5px;background:#f3f4f6;border-radius:999px;margin-top:10px;overflow:hidden}.progress-fill{height:100%;width:11.111%;background:var(--brand);transition:.25s}.form-section{display:none;background:#fff;border:1px solid var(--border);border-radius:18px;padding:26px;margin-top:24px;box-shadow:0 8px 24px rgba(0,0,0,.04)}.form-section.active{display:block}.section-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:22px}.section-head__icon{width:44px;height:44px;border-radius:12px;background:var(--soft);display:grid;place-items:center;color:var(--brand-dark);font-size:19px}.section-head h2{margin:0 0 4px;font-family:'Playfair Display',serif}.section-head p{margin:0;color:var(--muted)}.grid-2,.grid-3,.grid-4{display:grid;gap:16px}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.grid-4{grid-template-columns:repeat(4,1fr)}.form-group{margin-bottom:18px}.form-group label,.group-label{display:block;font-weight:700;margin-bottom:7px;color:var(--ink)}.req{color:var(--danger)}.form-control{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:11px 12px;font:inherit;background:#fff}.form-control:focus{outline:2px solid color-mix(in srgb, var(--brand) 18%, transparent);border-color:var(--brand)}textarea.form-control{resize:vertical;min-height:110px}.help{font-size:12px;color:var(--muted);margin-top:6px}.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.choice{display:flex;align-items:flex-start;gap:8px;padding:11px;border:1px solid var(--border);border-radius:10px;background:#fff}.choice input{margin-top:3px}.conditional{display:none;margin-top:10px}.conditional.show{display:block}.repeater{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}.repeater-row{display:grid;gap:10px;padding:12px;border-bottom:1px solid var(--border);align-items:end}.repeater-row:last-child{border-bottom:0}.repeater-founders{grid-template-columns:1.4fr 1fr .55fr .85fr .8fr .8fr .9fr 42px}.repeater-team{grid-template-columns:1.5fr 1fr .6fr .9fr .9fr 1fr 42px}.repeater-programmes{grid-template-columns:1.2fr 1.2fr .55fr 1.7fr 42px}.repeater-funding{grid-template-columns:1.2fr .9fr .8fr .55fr .55fr .9fr 42px}.remove-row{height:42px;width:42px;border:0;border-radius:9px;background:#fef2f2;color:#b91c1c;cursor:pointer}.btn-add{border:1px dashed var(--brand);background:var(--soft);color:var(--brand-dark);padding:10px 14px;border-radius:9px;font-weight:700;cursor:pointer}.nav-bar{display:flex;gap:10px;align-items:center;margin-top:24px;border-top:1px solid var(--border);padding-top:20px}.nav-bar .spacer{flex:1}.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none}.btn-primary{background:var(--brand);color:#fff}.btn-secondary{background:#fff;border:1px solid var(--border);color:var(--ink)}.btn-draft{background:var(--brand-50, #fff7ed);color:var(--brand-700, #9a4f0b);border:1px solid var(--brand-200, #fed7aa)}.btn-success{background:var(--success);color:#fff}.word-counter{font-size:12px;text-align:right;color:var(--muted);margin-top:4px}.word-counter.over{color:var(--danger);font-weight:700}.privacy-box{padding:16px;border:1px solid #c7d2fe;background:#eef2ff;border-radius:12px;font-size:14px;line-height:1.6}.file-zone{border:1.5px dashed #cbd5e1;border-radius:12px;padding:18px;text-align:center;background:#fafafa;cursor:pointer}.file-zone i{font-size:26px;color:var(--brand-dark);margin-bottom:8px}.file-zone input{display:none}.file-note{font-size:12px;color:var(--muted);margin-top:6px}.mini-title{font-size:13px;font-weight:800;color:#374151;margin:0 0 8px}.metrics-table{width:100%;border-collapse:collapse}.metrics-table th,.metrics-table td{border:1px solid var(--border);padding:10px;vertical-align:top}.metrics-table th{text-align:left;background:#f9fafb}.metric-label{font-weight:600}.hidden{display:none!important}
 
 .application-details-content{display:flex;flex-direction:column;gap:16px}
 .detail-block{border:1px solid var(--border);border-radius:14px;padding:18px;background:#fff}
@@ -401,6 +423,23 @@ body {
 
 <?php if ($draft): ?>
     <div class="apply-notice apply-notice--draft"><i class="fas fa-pen-to-square"></i> You are continuing a saved draft. Review your answers before submitting.</div>
+<?php endif; ?>
+
+<?php if ($nspEnabled && !$applicationsFull): ?>
+    <?php if ($nspPrefill !== null): ?>
+        <?php $nspYearFounded = $nspPrefill['fields']['year_founded'] ?? null; ?>
+        <div class="apply-notice apply-notice--nsp" role="status">
+            <i class="fas fa-circle-check"></i> <strong>Prefilled from your Hive NSP profile &mdash; check and edit before submitting.</strong>
+            <?php if (is_scalar($nspYearFounded) && preg_match('/^\d{4}$/', (string)$nspYearFounded)): ?>
+                <div class="help">Your profile says the venture was founded in <?= e((string)$nspYearFounded) ?>. Please choose the founding month in section I.</div>
+            <?php endif; ?>
+        </div>
+    <?php else: ?>
+        <div class="apply-notice apply-notice--nsp">
+            <a class="btn btn-secondary" href="/nsp-connect?opportunity_id=<?= (int)$opportunityId ?><?= $draftId > 0 ? '&amp;draft_id=' . (int)$draftId : '' ?>" target="_top"><i class="fas fa-file-import"></i> Prefill from my Hive NSP startup profile</a>
+            <div class="help">You will be asked to sign in to Hive NSP and agree to share your startup profile. Do this before you start typing: answers that are not saved as a draft are not kept.</div>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
 
 

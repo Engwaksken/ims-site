@@ -6,6 +6,7 @@ session_start();
 
 require_once 'config.php';
 require_once 'mail-function.php';
+require_once __DIR__ . '/nsp-integration.php';
 
 if (!ims_allowed('shortlisting.manage', ['Administrator', 'MEAL Lead', 'Programs Lead', 'Reviewer', 'Project Officer'], 'Assign reviewers and change status on the shortlisting page')) {
     $_SESSION['error'] = 'Access denied.';
@@ -523,6 +524,9 @@ if ($action === 'update_status') {
         redirectNow($redirect);
     }
 
+    // Hive NSP (no-op unless enabled): linked applications whose status changes.
+    $nspChanging = nsp_linked_ids_changing_status($conn, [$application_id], $new_status);
+
     if ($reminder_sql_val !== null) {
         $stmt = $conn->prepare("
             UPDATE applications
@@ -584,6 +588,10 @@ if ($action === 'update_status') {
 
     $stmt->close();
 
+    foreach ($nspChanging as $nspAppId) {
+        nsp_on_application_status_change($conn, $nspAppId, $new_status);
+    }
+
     $app = fetchApplicationDetail($conn, $application_id);
     $startup_name = (string)($app['startup_name'] ?? ('Application #' . $application_id));
 
@@ -642,6 +650,9 @@ if ($action === 'batch_update') {
     $placeholders = implode(',', array_fill(0, count($application_ids), '?'));
     $id_types     = str_repeat('i', count($application_ids));
 
+    // Hive NSP (no-op unless enabled): linked applications whose status changes.
+    $nspChanging = nsp_linked_ids_changing_status($conn, $application_ids, $new_status);
+
     $stmt = $conn->prepare("
         UPDATE applications
         SET status = ?, reviewed_by = ?, reviewed_at = NOW(), updated_at = NOW()
@@ -672,6 +683,10 @@ if ($action === 'batch_update') {
 
     $updated = (int)$stmt->affected_rows;
     $stmt->close();
+
+    foreach ($nspChanging as $nspAppId) {
+        nsp_on_application_status_change($conn, $nspAppId, $new_status);
+    }
 
     $apps = fetchApplicationsByIds($conn, $application_ids);
     $staffEmails = fetchStaffEmails($conn);

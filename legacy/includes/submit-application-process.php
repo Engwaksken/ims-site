@@ -4,6 +4,7 @@ declare(strict_types=1);
 // config.php starts the session with the hardened cookie settings.
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/mail-function.php';
+require_once __DIR__ . '/nsp-integration.php';
 
 function store_application_old_input(array $source): void
 {
@@ -1326,6 +1327,9 @@ $status = $isSubmit ? 'Submitted' : 'Draft';
 $submittedAt = $isSubmit ? date('Y-m-d H:i:s') : null;
 $oldStatus = $draftId > 0 ? 'Draft' : null;
 
+// Create/verify NSP tables before the transaction (DDL would commit it).
+nsp_active($conn);
+
 try {
     $conn->begin_transaction();
 
@@ -1377,6 +1381,10 @@ try {
         $submittedBy,
         $isSubmit ? 'Application submitted' : 'Draft saved'
     );
+
+    // Hive NSP (no-op unless enabled): link the prefilled startup, store the
+    // application-time snapshot and queue the submitted event in this transaction.
+    nsp_on_application_saved($conn, $applicationId, $isSubmit, $submittedAt);
 
     $conn->commit();
 } catch (Throwable $e) {
@@ -1470,6 +1478,7 @@ if ($userInfo['is_new'] && $sessionUserId < 1 && !empty($data['email'])) {
 }
 
 clear_application_old_input();
+nsp_clear_prefill();
 
 $_SESSION['success'] = 'Application submitted successfully.';
 $_SESSION['application_id'] = $applicationId;

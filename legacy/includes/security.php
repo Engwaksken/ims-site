@@ -452,6 +452,12 @@ if (!function_exists('ims_csrf_auto_enforce')) {
             return;
         }
 
+        // Server-to-server NSP events: authenticated by an HMAC signature over
+        // the raw body (legacy/nsp-webhook.php), never by the session.
+        if (ims_script_name() === 'nsp-webhook.php') {
+            return;
+        }
+
         csrf_protect();
     }
 }

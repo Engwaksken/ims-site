@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/nsp-integration.php';
 check_login();
 
 $redirect = '../my-applications';
@@ -95,6 +96,9 @@ if ($action === 'withdraw') {
         $hist->execute();
         $hist->close();
     }
+
+    // Hive NSP (no-op unless enabled): tell the linked startup it was withdrawn.
+    nsp_on_application_status_change($conn, $applicationId, 'Withdrawn');
 
     log_action($userId, 'Withdraw Application', 'applications', $applicationId, "Applicant withdrew application '{$name}' (returned to Draft)");
 

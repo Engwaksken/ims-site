@@ -6,6 +6,7 @@ date_default_timezone_set('Africa/Nairobi');
 
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/AiReviewService.php';
+require_once __DIR__ . '/nsp-integration.php';
 
 function redirectBack(
     string $type,
@@ -242,6 +243,9 @@ try {
         $aiApiId > 0 ? $aiApiId : null
     );
 
+    // Hive NSP (no-op unless enabled): Submitted -> Under Review for linked startups.
+    $nspChanging = nsp_linked_ids_changing_status($conn, [$applicationId], 'Under Review', 'Submitted');
+
     $stmt = $conn->prepare("
         UPDATE applications
         SET
@@ -256,6 +260,10 @@ try {
     $stmt->bind_param('i', $applicationId);
     $stmt->execute();
     $stmt->close();
+
+    foreach ($nspChanging as $nspAppId) {
+        nsp_on_application_status_change($conn, $nspAppId, 'Under Review');
+    }
 
     redirectBack(
         'success',
