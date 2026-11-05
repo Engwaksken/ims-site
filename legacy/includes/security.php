@@ -199,7 +199,7 @@ if (!function_exists('ims_embed_allowed_origins')) {
     {
         $raw = (string) ims_env(
             'EMBED_ALLOWED_ORIGINS',
-            'https://hivecolab.org https://www.hivecolab.org https://hivecolab.com https://www.hivecolab.com https://edtech.hivecolab.com'
+            'https://hivecolab.org https://www.hivecolab.org https://hivecolab.com https://www.hivecolab.com https://edtech.hivecolab.com https://www.edtech.hivecolab.com'
         );
 
         $origins = [];
