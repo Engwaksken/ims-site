@@ -45,6 +45,110 @@ function siteUrl(string $path = ''): string
     return $base . '/' . ltrim($path, '/');
 }
 
+/*
+ * Opportunity text is written in a rich-text editor and saved as HTML.
+ * This page is public, so the HTML is rebuilt from an allowlist: only the
+ * tags below survive, every attribute is dropped except a safe href on
+ * links, and anything else is reduced to its text.
+ */
+const EMBED_BLOCK_TAGS  = ['p', 'br', 'strong', 'b', 'em', 'i', 'u', 'ul', 'ol', 'li', 'a', 'h2', 'h3', 'h4', 'blockquote'];
+const EMBED_INLINE_TAGS = ['br', 'strong', 'b', 'em', 'i', 'u', 'a'];
+
+function embedSafeHref(string $href): ?string
+{
+    $href = trim(html_entity_decode($href, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    $href = preg_replace('/[\x00-\x20\x7F]+/u', '', $href) ?? '';
+
+    if ($href === '') return null;
+    if (preg_match('#\A(https?:|mailto:|tel:)#i', $href)) return $href;
+    if (preg_match('#\A[a-z][a-z0-9+.\-]*:#i', $href)) return null; // javascript:, data:, etc.
+    if (str_starts_with($href, '//')) return null;
+
+    return $href; // relative link or #anchor
+}
+
+function embedCleanNode(DOMNode $node, DOMDocument $out, DOMNode $target, array $allowed): void
+{
+    foreach (iterator_to_array($node->childNodes) as $child) {
+        if ($child instanceof DOMText) {
+            $target->appendChild($out->createTextNode($child->nodeValue ?? ''));
+            continue;
+        }
+
+        if (!$child instanceof DOMElement) continue;
+
+        $tag = strtolower($child->tagName);
+
+        if (in_array($tag, ['script', 'style', 'iframe', 'object', 'embed', 'template', 'noscript', 'svg', 'math'], true)) {
+            continue; // drop the element and everything inside it
+        }
+
+        if (!in_array($tag, $allowed, true)) {
+            embedCleanNode($child, $out, $target, $allowed); // keep its text only
+            continue;
+        }
+
+        $el = $out->createElement($tag);
+
+        if ($tag === 'a') {
+            $href = embedSafeHref($child->getAttribute('href'));
+            if ($href !== null) {
+                $el->setAttribute('href', $href);
+                $el->setAttribute('target', '_blank');
+                $el->setAttribute('rel', 'noopener noreferrer');
+            }
+        }
+
+        $target->appendChild($el);
+        embedCleanNode($child, $out, $el, $allowed);
+    }
+}
+
+/** Saved text as safe HTML; plain text keeps its line breaks. */
+function richText(?string $value, bool $inline = false): string
+{
+    $value = trim((string)$value);
+    if ($value === '') return '';
+
+    // Text saved already escaped (&lt;p&gt;...) would otherwise show its tags.
+    if (!preg_match('/<[a-z!\/]/i', $value) && preg_match('/&lt;\/?[a-z][a-z0-9]*[\s&]/i', $value)) {
+        $value = html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+
+    if (!preg_match('/<[a-z!\/]/i', $value)) {
+        $text = nl2br(h(html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+        return $inline ? $text : '<p>' . $text . '</p>';
+    }
+
+    $in = new DOMDocument();
+    $prev = libxml_use_internal_errors(true);
+    $in->loadHTML('<?xml encoding="UTF-8"><div id="embed-root">' . $value . '</div>', LIBXML_NONET);
+    libxml_clear_errors();
+    libxml_use_internal_errors($prev);
+
+    $root = $in->getElementById('embed-root');
+    if ($root === null) return nl2br(h(strip_tags($value)));
+
+    $out = new DOMDocument('1.0', 'UTF-8');
+    $wrap = $out->createElement('div');
+    $out->appendChild($wrap);
+    embedCleanNode($root, $out, $wrap, $inline ? EMBED_INLINE_TAGS : EMBED_BLOCK_TAGS);
+
+    $html = '';
+    foreach ($wrap->childNodes as $child) {
+        $html .= $out->saveHTML($child);
+    }
+
+    return $html;
+}
+
+function jsonList($value): array
+{
+    if (!is_string($value) || trim($value) === '') return [];
+    $decoded = json_decode($value, true);
+    return is_array($decoded) ? $decoded : [];
+}
+
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($id <= 0) {
@@ -91,6 +195,16 @@ $description = trim((string)($opp['description'] ?? ''));
 if ($title === '') {
     $title = 'Opportunity';
 }
+
+$contentSections    = jsonList($opp['content_sections'] ?? null);
+$eligibilityBullets = jsonList($opp['eligibility_bullets'] ?? null);
+$eligibilityHeading = trim((string)($opp['eligibility_heading'] ?? '')) ?: 'Eligibility Criteria';
+$eligibilityHtml    = trim((string)($opp['eligibility_description_html'] ?? ''));
+if ($eligibilityHtml === '') {
+    $eligibilityHtml = trim((string)($opp['eligibility_criteria'] ?? '')); // older opportunities
+}
+$documentsHeading = trim((string)($opp['documents_heading'] ?? '')) ?: 'Required Documents';
+$documentsHtml    = trim((string)($opp['required_documents'] ?? ''));
 
 $applyUrl = trim((string)($opp['application_url'] ?? ''));
 
@@ -368,6 +482,24 @@ body{
     color:#374151;
 }
 
+/* Formatted opportunity text */
+.hero-text{margin:18px 0 0;font-size:16px;line-height:1.9;opacity:.95;max-width:760px}
+.hero-text p{margin:0 0 10px}
+.hero-text a{color:inherit;text-decoration:underline}
+.rich{color:#374151;line-height:1.9}
+.hero-text.rich{color:inherit}
+.rich > :first-child{margin-top:0}
+.rich > :last-child{margin-bottom:0}
+.rich p{margin:0 0 12px;white-space:normal}
+.rich h2,.rich h3,.rich h4{display:block;margin:20px 0 8px;font-family:'Poppins',sans-serif;color:inherit}
+.rich h2{font-size:18px}.rich h3{font-size:16px}.rich h4{font-size:15px}
+.rich ul,.rich ol,.rich-bullets{margin:0 0 12px;padding-left:22px;color:inherit;line-height:1.8}
+.rich-bullets{color:#374151}
+.rich li,.rich-bullets li{margin:4px 0}
+.rich blockquote{margin:0 0 12px;padding:10px 16px;border-left:4px solid var(--primary);background:rgba(234,88,12,.08);border-radius:6px}
+.rich a,.rich-bullets a{color:var(--primary);text-decoration:underline}
+.hero-text.rich a{color:inherit}
+
 .footer-cta{
     text-align:center;
 }
@@ -426,7 +558,7 @@ body{
             <h1><?= h($title) ?></h1>
 
             <?php if ($description !== ''): ?>
-                <p><?= nl2br(h($description)) ?></p>
+                <div class="hero-text rich"><?= richText($description) ?></div>
             <?php endif; ?>
 
             <?php if ($deadlinePassed): ?>
@@ -490,17 +622,55 @@ body{
 
         </div>
 
-        <?php if (!empty($opp['eligibility_criteria'])): ?>
+        <?php foreach ($contentSections as $section): ?>
+            <?php
+            if (!is_array($section)) continue;
+            $sectionHeading = trim((string)($section['heading'] ?? ''));
+            $sectionHtml    = trim((string)($section['description_html'] ?? ''));
+            $sectionBullets = is_array($section['bullets'] ?? null) ? $section['bullets'] : [];
+            if ($sectionHeading === '' && $sectionHtml === '' && $sectionBullets === []) continue;
+            ?>
             <div class="section">
-                <h3><i class="fas fa-clipboard-check"></i> Eligibility Criteria</h3>
-                <p><?= nl2br(h($opp['eligibility_criteria'])) ?></p>
+                <?php if ($sectionHeading !== ''): ?>
+                    <h3><i class="fas fa-layer-group"></i> <?= h($sectionHeading) ?></h3>
+                <?php endif; ?>
+                <?php if ($sectionHtml !== ''): ?>
+                    <div class="rich"><?= richText($sectionHtml) ?></div>
+                <?php endif; ?>
+                <?php if ($sectionBullets !== []): ?>
+                    <ul class="rich-bullets">
+                        <?php foreach ($sectionBullets as $bullet): ?>
+                            <?php if (is_string($bullet) && trim($bullet) !== ''): ?>
+                                <li><?= richText($bullet, true) ?></li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+
+        <?php if ($eligibilityHtml !== '' || $eligibilityBullets !== []): ?>
+            <div class="section">
+                <h3><i class="fas fa-clipboard-check"></i> <?= h($eligibilityHeading) ?></h3>
+                <?php if ($eligibilityHtml !== ''): ?>
+                    <div class="rich"><?= richText($eligibilityHtml) ?></div>
+                <?php endif; ?>
+                <?php if ($eligibilityBullets !== []): ?>
+                    <ul class="rich-bullets">
+                        <?php foreach ($eligibilityBullets as $bullet): ?>
+                            <?php if (is_string($bullet) && trim($bullet) !== ''): ?>
+                                <li><?= richText($bullet, true) ?></li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($opp['required_documents'])): ?>
+        <?php if ($documentsHtml !== ''): ?>
             <div class="section">
-                <h3><i class="fas fa-file-lines"></i> Required Documents</h3>
-                <p><?= nl2br(h($opp['required_documents'])) ?></p>
+                <h3><i class="fas fa-file-lines"></i> <?= h($documentsHeading) ?></h3>
+                <div class="rich"><?= richText($documentsHtml) ?></div>
             </div>
         <?php endif; ?>
 
