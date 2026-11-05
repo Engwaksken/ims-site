@@ -524,5 +524,21 @@ body{
 
 </div>
 
+<script>
+// Tell the host page the form loaded, and how tall it is, so it can size the
+// frame and skip its fallback message.
+(function () {
+    if (window.parent === window) return;
+    function report() {
+        var wrap = document.querySelector('.wrap') || document.body;
+        var h = Math.ceil(wrap.getBoundingClientRect().bottom + window.scrollY);
+        window.parent.postMessage({ type: 'ims-embed', status: 'ready', height: h }, '*');
+    }
+    report();
+    window.addEventListener('load', report);
+    window.addEventListener('resize', report);
+})();
+</script>
+
 </body>
 </html>
