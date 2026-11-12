@@ -44,6 +44,8 @@ final class ModuleRegistry
         'nsp-webhook.php' => 'nsp-webhook.php',
         'appointments' => 'appointments.php',
         'appointments.php' => 'appointments.php',
+        'it-support' => 'it-support.php',
+        'it-support.php' => 'it-support.php',
         'application-process' => 'includes/submit-application-process.php',
         'application-process.php' => 'includes/submit-application-process.php',
         'submit-application-process' => 'includes/submit-application-process.php',
