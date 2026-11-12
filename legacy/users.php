@@ -207,6 +207,7 @@ function pageRange(int $cur, int $total): array {
                         value="<?= e($search) ?>"
                         autocomplete="off"
                         id="searchInput"
+                        data-live-search="#usersResults"
                     >
                     <?php if ($search !== ''): ?>
                         <a href="<?= e(pageUrl(1)) ?>" class="search-clear" title="Clear">
@@ -242,6 +243,8 @@ function pageRange(int $cur, int $total): array {
             </form>
         </div>
 
+        <!-- Results (replaced in place while typing in the search box) -->
+        <div id="usersResults" aria-live="polite">
         <!-- Results meta bar -->
         <div class="results-meta">
             <span class="results-count">
@@ -390,6 +393,7 @@ function pageRange(int $cur, int $total): array {
             <?php endif; ?>
         </div>
         <?php endif; ?>
+        </div><!-- /#usersResults -->
 
     </div><!-- /.panel -->
 
@@ -568,18 +572,6 @@ function openDeleteModal(userId, username) {
     openModal('deleteModal');
 }
 
-// Debounce: submit search 450 ms after user stops typing
-(function () {
-    var input = document.getElementById('searchInput');
-    if (!input) return;
-    var timer;
-    input.addEventListener('input', function () {
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            document.getElementById('filterForm').submit();
-        }, 450);
-    });
-})();
 
 <?php if ($edit_user): ?>
 window.addEventListener('DOMContentLoaded', function () { openModal('editUserModal'); });
