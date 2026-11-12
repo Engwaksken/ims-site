@@ -1076,6 +1076,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     results.innerHTML = fresh.innerHTML;
                     results.removeAttribute('aria-busy');
                     history.replaceState(null, '', url);
+                    results.dispatchEvent(new CustomEvent('livesearch:updated', { bubbles: true }));
                     if (typeof scheduleTableWrap === 'function') scheduleTableWrap();
                 })
                 .catch(function (err) {
