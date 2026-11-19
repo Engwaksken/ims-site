@@ -18,9 +18,10 @@ emails and PDF/print views.
 3. Import the database, then run every file in `database/migrations/` (idempotent).
 4. Optional cron for carrying pending daily tasks to the next day:
    `5 0 * * * php /path/to/legacy/cron/carry-over-pending-tasks.php`
-5. Optional cron for automatic hub internet enforcement on pfSense (disconnect expired /
-   suspended members, reconnect active ones). Needs `tools/pfsense/ims-cp-agent.php` installed
-   on the firewall and configured under Hub Team & Internet > Packages & pfSense:
+5. Hub internet control on pfSense: install `tools/pfsense/ims-cp-agent.php` on the firewall
+   (instructions at the top of the file). In the default pull mode pfSense checks in with
+   `/hub-network-agent` every minute from its own Cron package, so no IMS cron is needed and it
+   works from shared hosting. Only in push mode (IMS server can reach the firewall) add:
    `*/5 * * * * php /path/to/legacy/cron/hub-internet-sync.php`
 6. Optional daily cron for automatic hub member subscription reminders (schedule and message
    under Hub Team & Internet > Settings & reminders > Reminders):
