@@ -265,7 +265,7 @@ function pageRange(int $cur, int $total): array {
 
         <!-- Table -->
         <div class="table-wrap">
-            <table class="table">
+            <table class="table" data-bulk-delete="includes/users-process.php" data-bulk-delete-fields='{"user_id":"{id}","delete_user":""}' data-bulk-delete-label="user|users">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -294,7 +294,7 @@ function pageRange(int $cur, int $total): array {
 
                 <?php foreach ($users as $u): ?>
                     <?php $initials = strtoupper(mb_substr(trim($u['full_name']), 0, 1)); ?>
-                    <tr>
+                    <tr<?= (int)$u['user_id'] !== (int)$_SESSION['user_id'] ? ' data-row-id="' . (int)$u['user_id'] . '"' : '' ?>>
                         <td class="note"><?= (int)$u['user_id'] ?></td>
 
                         <td>
