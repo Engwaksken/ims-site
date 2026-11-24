@@ -26,6 +26,9 @@ emails and PDF/print views.
 6. Optional daily cron for automatic hub member subscription reminders (schedule and message
    under Hub Team & Internet > Settings & reminders > Reminders):
    `0 8 * * * php /path/to/legacy/cron/hub-member-reminders.php`
+7. Optional daily cron for automatic reminders to applicants with unsubmitted draft applications
+   (days before the deadline set under Manage Applications > Draft reminders):
+   `0 8 * * * php /path/to/legacy/cron/application-draft-reminders.php`
 
 ## Notes
 
