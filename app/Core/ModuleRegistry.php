@@ -540,6 +540,8 @@ final class ModuleRegistry
         'visitor-register.php' => 'visitor-register.php',
         'voucher_print' => 'voucher_print.php',
         'voucher_print.php' => 'voucher_print.php',
+        'voucher-attachment' => 'voucher-attachment.php',
+        'voucher-attachment.php' => 'voucher-attachment.php',
         'workplan' => 'workplan.php',
         'workplan.php' => 'workplan.php',
     ];

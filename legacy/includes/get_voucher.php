@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/voucher-approval.php';
+require_once __DIR__ . '/voucher-attachments.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
@@ -55,6 +56,7 @@ if (!empty($row['items_json'])) {
 }
 
 $row['items'] = $items;
+$row['attachments'] = pvf_list($conn, $id);
 
 if ($approvalReady) {
     $row['prepared_signature_uri'] = pva_data_uri($row['prepared_signature'] ?? null, $row['prepared_signature_mime'] ?? null);

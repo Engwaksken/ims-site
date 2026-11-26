@@ -835,6 +835,11 @@ if (empty($_SESSION['user_id'])) {
 
 $action = trim((string)($_POST['action'] ?? ''));
 
+// PHP discards the whole form when it exceeds post_max_size.
+if ($action === '' && $_POST === [] && (int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
+    pvJson(false, 'The upload is too large for the server (limit ' . ini_get('post_max_size') . ' per save). Attach fewer or smaller files.');
+}
+
 // Approvers (Senior Finance / HOD) need not manage vouchers: the approval
 // handlers check that the voucher is assigned to them instead.
 if (
@@ -853,6 +858,7 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
 $conn->set_charset('utf8mb4');
 
 require_once __DIR__ . '/voucher-approval.php';
+require_once __DIR__ . '/voucher-attachments.php';
 
 try {
     switch ($action) {
@@ -995,6 +1001,13 @@ function pvHandleSave(mysqli $conn): never
             throw new InvalidArgumentException('The selected approver is not an active staff member.');
         }
     }
+
+    // Supporting files (validated now, stored once the voucher row exists).
+    // The table check runs before the transaction: DDL would commit it.
+    pvf_ensure_schema($conn);
+    $incomingFiles = pvf_incoming('attachments');
+    $removeFileIds = array_map('intval', (array)($_POST['remove_attachments'] ?? []));
+    $storedFilePaths = [];
 
     $conn->begin_transaction();
 
@@ -1158,6 +1171,9 @@ function pvHandleSave(mysqli $conn): never
 
         $stmt->close();
 
+        $removedFilePaths = pvf_remove($conn, $savedId, $removeFileIds);
+        $storedFilePaths = pvf_store($conn, $savedId, $incomingFiles, $userId);
+
         $notifyApprover = false;
 
         if ($approvalReady) {
@@ -1173,6 +1189,7 @@ function pvHandleSave(mysqli $conn): never
         }
 
         $conn->commit();
+        pvf_unlink_paths($removedFilePaths);
 
         if ($notifyApprover) {
             pva_notify(
@@ -1215,6 +1232,7 @@ function pvHandleSave(mysqli $conn): never
         );
     } catch (Throwable $e) {
         $conn->rollback();
+        pvf_unlink_paths($storedFilePaths);
 
         if ($newLogo !== null) {
             $path =
@@ -1441,6 +1459,8 @@ function pvHandleDelete(mysqli $conn): never
         );
     }
 
+    pvf_ensure_schema($conn); // before the transaction: DDL would commit it
+
     $conn->begin_transaction();
 
     try {
@@ -1468,6 +1488,8 @@ function pvHandleDelete(mysqli $conn): never
             );
         }
 
+        $removedFilePaths = pvf_remove_all($conn, $id);
+
         $stmt = pvRequireStatement(
             $conn,
             'DELETE FROM payment_vouchers
@@ -1484,6 +1506,9 @@ function pvHandleDelete(mysqli $conn): never
 
         $stmt->close();
         $conn->commit();
+
+        pvf_unlink_paths($removedFilePaths);
+        @rmdir(pvf_directory($id));
 
         if (!empty($voucher['logo_filename'])) {
             $path =

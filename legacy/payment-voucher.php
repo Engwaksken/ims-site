@@ -16,7 +16,9 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
 $conn->set_charset('utf8mb4');
 
 require_once __DIR__ . '/includes/voucher-approval.php';
+require_once __DIR__ . '/includes/voucher-attachments.php';
 $pvApprovalReady = pva_ensure_schema($conn);
+$pvFilesReady = pvf_ensure_schema($conn);
 
 $selfPath = parse_url((string)($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH);
 $selfPath = is_string($selfPath) && $selfPath !== ''
@@ -1146,6 +1148,10 @@ if ($dataStmt) {
 
     $dataStmt->close();
 }
+
+$pvFileCounts = $pvFilesReady
+    ? pvf_counts($conn, array_merge(array_column($vouchers, 'id'), array_column($pvAwaitingMe ?? [], 'id')))
+    : [];
 ?>
 <!-- Bootstrap 5.3.3, scoped to .page-payment-voucher so it does not restyle the app layout (used by the modals below) -->
 <link rel="stylesheet" href="css/payment-voucher-bootstrap.css">
@@ -1258,6 +1264,40 @@ body > .modal-backdrop.show { opacity: .55; }
 .page-payment-voucher .dk { font-size: 10px; text-transform: uppercase; font-weight: 700; color: var(--ink-400); }
 .page-payment-voucher .dv { font-size: 13px; font-weight: 500; margin-top: 3px; }
 .page-payment-voucher .section-title { font-size: 11px; text-transform: uppercase; color: var(--ink-400); font-weight: 700; margin: 17px 0 9px; }
+.pv-files-badge { display: inline-flex; align-items: center; gap: 3px; margin-left: 6px; padding: 1px 7px; border-radius: var(--radius-pill); background: var(--ink-50); color: var(--ink-600, #475569); font-size: 11px; font-weight: 600; }
+.page-payment-voucher .pv-files-box { display: grid; gap: 10px; }
+.page-payment-voucher .pv-file-drop { display: grid; gap: 3px; justify-items: center; text-align: center; padding: 16px; border: 1.5px dashed var(--ink-200, #cbd5e1); border-radius: var(--radius-lg); background: var(--ink-50, #f8fafc); cursor: pointer; font-size: 13px; margin: 0; }
+.page-payment-voucher .pv-file-drop i { font-size: 22px; color: var(--brand-500); }
+.page-payment-voucher .pv-file-drop.is-over { border-color: var(--brand-500); background: var(--surface-card, #fff); }
+.page-payment-voucher .pv-file-hint { font-size: 11px; color: var(--ink-400); }
+.page-payment-voucher .pv-file-list { display: grid; gap: 6px; }
+.page-payment-voucher .pv-file-list:empty { display: none; }
+.page-payment-voucher .pv-file-row { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border: 1px solid var(--ink-100); border-radius: var(--radius-sm); background: var(--surface-card, #fff); font-size: 13px; }
+.page-payment-voucher .pv-file-row.is-removed { opacity: .5; }
+.page-payment-voucher .pv-file-row.is-removed .pv-file-name { text-decoration: line-through; }
+.page-payment-voucher .pv-file-thumb { flex: 0 0 40px; width: 40px; height: 40px; display: grid; place-items: center; border-radius: var(--radius-sm); background: var(--ink-50); color: var(--ink-400); font-size: 18px; overflow: hidden; }
+.page-payment-voucher .pv-file-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.page-payment-voucher .pv-file-meta { flex: 1 1 auto; min-width: 0; }
+.page-payment-voucher .pv-file-name { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.page-payment-voucher .pv-file-sub { font-size: 11px; color: var(--ink-400); }
+.page-payment-voucher .pv-file-actions { display: flex; gap: 6px; flex: 0 0 auto; }
+.page-payment-voucher .pv-viewer { display: grid; grid-template-columns: minmax(200px, 260px) 1fr; gap: 12px; margin-bottom: 8px; }
+.page-payment-voucher .pv-viewer-list { display: grid; gap: 6px; align-content: start; max-height: 600px; overflow-y: auto; }
+.page-payment-voucher .pv-viewer-item { display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 9px; text-align: left; border: 1px solid var(--ink-100); border-radius: var(--radius-sm); background: var(--surface-card, #fff); font-size: 12px; cursor: pointer; }
+.page-payment-voucher .pv-viewer-item.is-active { border-color: var(--brand-500); box-shadow: var(--focus-ring); }
+.page-payment-voucher .pv-viewer-item .pv-file-meta { text-align: left; }
+.page-payment-voucher .pv-viewer-pane { border: 1px solid var(--ink-100); border-radius: var(--radius-lg); background: var(--ink-50, #f8fafc); display: grid; grid-template-rows: auto 1fr; overflow: hidden; min-width: 0; }
+.page-payment-voucher .pv-viewer-bar { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--ink-100); background: var(--surface-card, #fff); font-size: 12px; }
+.page-payment-voucher .pv-viewer-bar strong { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.page-payment-voucher .pv-viewer-body { display: grid; place-items: center; min-height: 560px; }
+.page-payment-voucher .pv-viewer-body iframe { width: 100%; height: 560px; border: 0; background: #fff; }
+.page-payment-voucher .pv-viewer-body img { max-width: 100%; max-height: 560px; object-fit: contain; }
+.page-payment-voucher .pv-viewer-empty { padding: 24px; text-align: center; color: var(--ink-400); font-size: 13px; }
+@media (max-width: 768px) {
+    .page-payment-voucher .pv-viewer { grid-template-columns: 1fr; }
+    .page-payment-voucher .pv-viewer-body { min-height: 0; }
+    .page-payment-voucher .pv-viewer-body iframe { height: 420px; }
+}
 @media (max-width: 576px) {
     .page-payment-voucher .detail-grid { grid-template-columns: 1fr; }
 }
@@ -1320,7 +1360,12 @@ body > .modal-backdrop.show { opacity: .55; }
                 <tbody>
                 <?php foreach ($pvAwaitingMe as $pending): ?>
                     <tr>
-                        <td><span class="pv-vno"><?= pvEsc($pending['voucher_no']) ?></span></td>
+                        <td>
+                            <span class="pv-vno"><?= pvEsc($pending['voucher_no']) ?></span>
+                            <?php if (!empty($pvFileCounts[(int)$pending['id']])): ?>
+                                <span class="pv-files-badge" title="Supporting files"><i class="fas fa-paperclip" aria-hidden="true"></i> <?= (int)$pvFileCounts[(int)$pending['id']] ?></span>
+                            <?php endif; ?>
+                        </td>
                         <td><?= pvEsc($pending['supplier']) ?></td>
                         <td><?= pvEsc($pending['currency']) ?> <?= number_format((float)$pending['total_amount'], 2) ?></td>
                         <td><?= !empty($pending['submitted_at']) ? pvEsc(date('d M Y H:i', strtotime((string)$pending['submitted_at']))) : '-' ?></td>
@@ -1428,7 +1473,12 @@ body > .modal-backdrop.show { opacity: .55; }
                                    value="<?= $id ?>"
                                    aria-label="Select voucher <?= pvEsc($voucher['voucher_no']) ?>">
                         </td>
-                        <td><span class="pv-vno"><?= pvEsc($voucher['voucher_no']) ?></span></td>
+                        <td>
+                            <span class="pv-vno"><?= pvEsc($voucher['voucher_no']) ?></span>
+                            <?php if (!empty($pvFileCounts[$id])): ?>
+                                <span class="pv-files-badge" title="<?= (int)$pvFileCounts[$id] ?> supporting file(s)"><i class="fas fa-paperclip" aria-hidden="true"></i> <?= (int)$pvFileCounts[$id] ?></span>
+                            <?php endif; ?>
+                        </td>
                         <td><?= !empty($voucher['voucher_date'])
                                 ? date('d M Y', strtotime((string)$voucher['voucher_date']))
                                 : '-' ?></td>
@@ -1748,6 +1798,24 @@ $endRow = min($offset + $perPage, $totalRows);
                         <span class="pv-total">Total <strong id="totalDisplay">UGX 0.00</strong></span>
                     </div>
 
+                    <?php if ($pvFilesReady): ?>
+                    <div class="pv-form-section">Supporting documents</div>
+                    <div class="pv-files-box">
+                        <div id="pvExistingFiles" class="pv-file-list"></div>
+                        <label class="pv-file-drop" for="pv_attachments" id="pvFileDrop">
+                            <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                            <span><strong>Add files</strong> or drop them here (invoices, receipts, quotations, delivery notes)</span>
+                            <span class="pv-file-hint">
+                                PDF, images, Word, Excel, PowerPoint, CSV, TXT or ZIP &middot; up to <?= pvEsc(pvf_format_bytes(pvf_limit_bytes())) ?> each,
+                                <?= PVF_MAX_FILES ?> per voucher. The approver can preview PDFs and images before signing.
+                            </span>
+                        </label>
+                        <input type="file" class="visually-hidden" name="attachments[]" id="pv_attachments" multiple
+                               accept="<?= pvEsc(pvf_accept_attribute()) ?>">
+                        <div id="pvNewFiles" class="pv-file-list"></div>
+                    </div>
+                    <?php endif; ?>
+
                     <?php if ($pvApprovalReady): ?>
                     <div class="pv-form-section">Admin/Finance signature &amp; approval</div>
                     <div id="pvApprovalNote" class="alert alert-info py-2 small" style="display:none"></div>
@@ -1821,7 +1889,7 @@ $endRow = min($offset + $perPage, $totalRows);
 
 <!-- View modal -->
 <div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><i class="fas fa-eye me-2"></i>Voucher Details</h5>
@@ -1834,7 +1902,7 @@ $endRow = min($offset + $perPage, $totalRows);
 
 <!-- Approval modal (Senior Finance / HOD) -->
 <div class="modal fade" id="approvalModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><i class="fas fa-file-signature me-2"></i>Review &amp; sign voucher</h5>
@@ -1951,6 +2019,15 @@ const defaultSeries = <?= json_encode($defaultSeries) ?>;
 const defaultVoucherNumber = <?= json_encode($autoVoucherNumber) ?>;
 const todayValue = <?= json_encode(date('Y-m-d')) ?>;
 const approvalsEnabled = <?= $pvApprovalReady ? 'true' : 'false' ?>;
+const filesEnabled = <?= $pvFilesReady ? 'true' : 'false' ?>;
+const fileLimits = <?= json_encode([
+    'maxBytes' => pvf_limit_bytes(),
+    'maxLabel' => pvf_format_bytes(pvf_limit_bytes()),
+    'maxFiles' => PVF_MAX_FILES,
+    'postBytes' => pvf_ini_bytes((string)ini_get('post_max_size')),
+    'postLabel' => (string)ini_get('post_max_size'),
+    'extensions' => array_keys(PVF_TYPES),
+]) ?>;
 const defaultApproverId = <?= json_encode($pvDefaultApprover > 0 ? (string)$pvDefaultApprover : '') ?>;
 let editingOriginal = null; // {series, number} of the voucher being edited
 
@@ -2385,6 +2462,7 @@ function openCreateModal() {
     document.getElementById('currency').value = 'UGX';
     document.getElementById('modalAlert').innerHTML = '';
     resetApprovalFields();
+    resetFileFields();
 
     clearItems();
     addItemRow();
@@ -2397,6 +2475,7 @@ function editVoucher(id) {
 
     document.getElementById('modalAlert').innerHTML = '';
     clearItems();
+    resetFileFields();
 
     fetch('includes/get_voucher.php?id=' + encodeURIComponent(id))
         .then(function (response) {
@@ -2473,6 +2552,10 @@ function editVoucher(id) {
                 }
             }
 
+            if (filesEnabled) {
+                renderExistingFiles(voucher.attachments);
+            }
+
             const items = Array.isArray(voucher.items) ? voucher.items : [];
 
             if (items.length) {
@@ -2522,6 +2605,17 @@ function submitVoucher() {
         }
     }
 
+    if (filesEnabled && fileLimits.postBytes > 0) {
+        const totalBytes = pendingFiles.reduce(function (sum, file) { return sum + file.size; }, 0);
+
+        if (totalBytes > fileLimits.postBytes * 0.95) {
+            document.getElementById('modalAlert').innerHTML =
+                '<div class="alert alert-danger">The selected files (' + formatBytes(totalBytes) + ') are more than the server accepts in one save (' +
+                escapeHtml(fileLimits.postLabel) + '). Save with fewer files, then edit the voucher to add the rest.</div>';
+            return;
+        }
+    }
+
     const button = document.getElementById('saveVoucherBtn');
     button.disabled = true;
     button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Saving...';
@@ -2550,6 +2644,291 @@ function submitVoucher() {
             button.innerHTML = '<i class="fas fa-save me-1"></i>Save Voucher';
         });
 }
+
+/* Supporting files: picker on the voucher form, previews on view / approval */
+let pendingFiles = [];      // File objects chosen for upload
+let existingFileCount = 0;  // files already on the voucher being edited
+
+function fileExtension(name) {
+    const match = /\.([^.]+)$/.exec(String(name || ''));
+    return match ? match[1].toLowerCase() : '';
+}
+
+function formatBytes(bytes) {
+    bytes = Number(bytes) || 0;
+    if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + ' MB';
+    if (bytes >= 1024) return Math.round(bytes / 1024) + ' KB';
+    return bytes + ' B';
+}
+
+function fileIconClass(nameOrKind) {
+    const ext = fileExtension(nameOrKind) || nameOrKind;
+    if (ext === 'pdf') return 'fa-file-pdf';
+    if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'image'].indexOf(ext) !== -1) return 'fa-file-image';
+    if (['doc', 'docx', 'odt'].indexOf(ext) !== -1) return 'fa-file-word';
+    if (['xls', 'xlsx', 'ods', 'csv'].indexOf(ext) !== -1) return 'fa-file-excel';
+    if (['ppt', 'pptx'].indexOf(ext) !== -1) return 'fa-file-powerpoint';
+    if (ext === 'zip') return 'fa-file-archive';
+    if (ext === 'txt' || ext === 'text') return 'fa-file-alt';
+    return 'fa-file';
+}
+
+function syncFileInput() {
+    const input = document.getElementById('pv_attachments');
+    if (!input || typeof DataTransfer === 'undefined') return;
+    const transfer = new DataTransfer();
+    pendingFiles.forEach(function (file) { transfer.items.add(file); });
+    input.files = transfer.files;
+}
+
+function renderPendingFiles() {
+    const list = document.getElementById('pvNewFiles');
+    if (!list) return;
+
+    list.querySelectorAll('img[data-object-url]').forEach(function (img) {
+        URL.revokeObjectURL(img.getAttribute('data-object-url'));
+    });
+
+    list.innerHTML = '';
+
+    pendingFiles.forEach(function (file, index) {
+        const ext = fileExtension(file.name);
+        const previewable = ext === 'pdf' || ['png', 'jpg', 'jpeg', 'gif', 'webp', 'txt'].indexOf(ext) !== -1;
+        const row = document.createElement('div');
+        row.className = 'pv-file-row';
+
+        const thumb = document.createElement('span');
+        thumb.className = 'pv-file-thumb';
+
+        if (['png', 'jpg', 'jpeg', 'gif', 'webp'].indexOf(ext) !== -1) {
+            const url = URL.createObjectURL(file);
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = '';
+            img.setAttribute('data-object-url', url);
+            thumb.appendChild(img);
+        } else {
+            thumb.innerHTML = '<i class="fas ' + fileIconClass(file.name) + '" aria-hidden="true"></i>';
+        }
+
+        const meta = document.createElement('span');
+        meta.className = 'pv-file-meta';
+        meta.innerHTML = '<span class="pv-file-name">' + escapeHtml(file.name) + '</span>' +
+            '<span class="pv-file-sub">' + formatBytes(file.size) + ' &middot; new, uploads when you save</span>';
+
+        const actions = document.createElement('span');
+        actions.className = 'pv-file-actions';
+
+        if (previewable) {
+            const preview = document.createElement('button');
+            preview.type = 'button';
+            preview.className = 'btn btn-sm btn-outline-secondary';
+            preview.innerHTML = '<i class="fas fa-eye" aria-hidden="true"></i>';
+            preview.title = 'Preview';
+            preview.setAttribute('aria-label', 'Preview ' + file.name);
+            preview.addEventListener('click', function () {
+                const url = URL.createObjectURL(file);
+                window.open(url, '_blank', 'noopener');
+                setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+            });
+            actions.appendChild(preview);
+        }
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'btn btn-sm btn-outline-danger';
+        remove.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i>';
+        remove.title = 'Remove';
+        remove.setAttribute('aria-label', 'Remove ' + file.name);
+        remove.addEventListener('click', function () {
+            pendingFiles.splice(index, 1);
+            syncFileInput();
+            renderPendingFiles();
+        });
+        actions.appendChild(remove);
+
+        row.appendChild(thumb);
+        row.appendChild(meta);
+        row.appendChild(actions);
+        list.appendChild(row);
+    });
+}
+
+function addPendingFiles(fileList) {
+    const problems = [];
+
+    Array.prototype.forEach.call(fileList || [], function (file) {
+        const ext = fileExtension(file.name);
+
+        if (fileLimits.extensions.indexOf(ext) === -1) {
+            problems.push(file.name + ' is not an accepted file type.');
+        } else if (file.size <= 0) {
+            problems.push(file.name + ' is empty.');
+        } else if (file.size > fileLimits.maxBytes) {
+            problems.push(file.name + ' is larger than ' + fileLimits.maxLabel + '.');
+        } else if (existingFileCount + pendingFiles.length >= fileLimits.maxFiles) {
+            problems.push('A voucher can have at most ' + fileLimits.maxFiles + ' supporting files.');
+        } else if (!pendingFiles.some(function (f) { return f.name === file.name && f.size === file.size; })) {
+            pendingFiles.push(file);
+        }
+    });
+
+    syncFileInput();
+    renderPendingFiles();
+
+    document.getElementById('modalAlert').innerHTML = problems.length
+        ? '<div class="alert alert-warning">' + problems.map(escapeHtml).filter(function (v, i, a) { return a.indexOf(v) === i; }).join('<br>') + '</div>'
+        : '';
+}
+
+function resetFileFields() {
+    if (!filesEnabled) return;
+    pendingFiles = [];
+    existingFileCount = 0;
+    syncFileInput();
+    renderPendingFiles();
+    const existing = document.getElementById('pvExistingFiles');
+    if (existing) existing.innerHTML = '';
+}
+
+function renderExistingFiles(files) {
+    const list = document.getElementById('pvExistingFiles');
+    if (!list) return;
+    files = Array.isArray(files) ? files : [];
+    existingFileCount = files.length;
+
+    list.innerHTML = files.map(function (file) {
+        const thumb = file.kind === 'image'
+            ? '<img src="' + escapeHtml(file.url) + '" alt="" loading="lazy">'
+            : '<i class="fas ' + fileIconClass(file.name) + '" aria-hidden="true"></i>';
+        return '<div class="pv-file-row" data-file-row>' +
+            '<span class="pv-file-thumb">' + thumb + '</span>' +
+            '<span class="pv-file-meta"><span class="pv-file-name">' + escapeHtml(file.name) + '</span>' +
+                '<span class="pv-file-sub">' + escapeHtml(file.size_label) +
+                (file.uploaded_by ? ' &middot; ' + escapeHtml(file.uploaded_by) : '') + '</span></span>' +
+            '<span class="pv-file-actions">' +
+                '<a class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener" title="Open" href="' +
+                    escapeHtml(file.kind === 'file' ? file.download_url : file.url) + '"><i class="fas ' +
+                    (file.kind === 'file' ? 'fa-download' : 'fa-eye') + '" aria-hidden="true"></i></a>' +
+                '<label class="btn btn-sm btn-outline-danger mb-0" title="Remove when saving">' +
+                    '<input type="checkbox" class="form-check-input me-1" name="remove_attachments[]" value="' +
+                    Number(file.id) + '" data-file-remove> Remove</label>' +
+            '</span></div>';
+    }).join('');
+}
+
+/** Read-only file list + preview pane used by the view and approval modals. */
+function attachmentsViewerHtml(files, viewerId) {
+    files = Array.isArray(files) ? files : [];
+
+    if (!filesEnabled) return '';
+
+    if (!files.length) {
+        return '<div class="section-title">Supporting documents</div>' +
+            '<p class="small text-muted">No supporting files were attached to this voucher.</p>';
+    }
+
+    return '<div class="section-title">Supporting documents (' + files.length + ')</div>' +
+        '<div class="pv-viewer" id="' + viewerId + '">' +
+            '<div class="pv-viewer-list">' +
+            files.map(function (file, index) {
+                return '<button type="button" class="pv-viewer-item" data-file-index="' + index + '">' +
+                    '<span class="pv-file-thumb"><i class="fas ' + fileIconClass(file.name) + '" aria-hidden="true"></i></span>' +
+                    '<span class="pv-file-meta"><span class="pv-file-name">' + escapeHtml(file.name) + '</span>' +
+                    '<span class="pv-file-sub">' + escapeHtml(file.size_label) + '</span></span></button>';
+            }).join('') +
+            '</div>' +
+            '<div class="pv-viewer-pane"><div class="pv-viewer-bar"></div><div class="pv-viewer-body"></div></div>' +
+        '</div>';
+}
+
+function bindAttachmentsViewer(viewerId, files) {
+    const viewer = document.getElementById(viewerId);
+    if (!viewer || !Array.isArray(files) || !files.length) return;
+
+    const bar = viewer.querySelector('.pv-viewer-bar');
+    const body = viewer.querySelector('.pv-viewer-body');
+
+    function show(index) {
+        const file = files[index];
+        if (!file) return;
+
+        viewer.querySelectorAll('.pv-viewer-item').forEach(function (item) {
+            item.classList.toggle('is-active', Number(item.getAttribute('data-file-index')) === index);
+        });
+
+        bar.innerHTML = '<strong title="' + escapeHtml(file.name) + '">' + escapeHtml(file.name) + '</strong>' +
+            (file.kind !== 'file'
+                ? '<a class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener" href="' + escapeHtml(file.url) +
+                  '"><i class="fas fa-external-link-alt me-1" aria-hidden="true"></i>Open</a>'
+                : '') +
+            '<a class="btn btn-sm btn-outline-secondary" href="' + escapeHtml(file.download_url) +
+            '"><i class="fas fa-download me-1" aria-hidden="true"></i>Download</a>';
+
+        if (file.kind === 'image') {
+            body.innerHTML = '<img src="' + escapeHtml(file.url) + '" alt="' + escapeHtml(file.name) + '">';
+        } else if (file.kind === 'pdf' || file.kind === 'text') {
+            body.innerHTML = '<iframe src="' + escapeHtml(file.url) + '" title="' + escapeHtml(file.name) + '"></iframe>';
+        } else {
+            body.innerHTML = '<div class="pv-viewer-empty"><i class="fas ' + fileIconClass(file.name) +
+                ' fa-3x mb-2" aria-hidden="true"></i><br>This file type cannot be previewed in the browser.<br>' +
+                '<a class="btn btn-sm btn-primary mt-2" href="' + escapeHtml(file.download_url) +
+                '"><i class="fas fa-download me-1" aria-hidden="true"></i>Download to open</a></div>';
+        }
+    }
+
+    viewer.querySelectorAll('.pv-viewer-item').forEach(function (item) {
+        item.addEventListener('click', function () {
+            show(Number(item.getAttribute('data-file-index')));
+        });
+    });
+
+    const firstPreviewable = files.findIndex(function (file) { return file.kind !== 'file'; });
+    show(firstPreviewable >= 0 ? firstPreviewable : 0);
+}
+
+(function initFilePicker() {
+    if (!filesEnabled) return;
+    const input = document.getElementById('pv_attachments');
+    const drop = document.getElementById('pvFileDrop');
+    const existing = document.getElementById('pvExistingFiles');
+
+    if (input) {
+        input.addEventListener('change', function () {
+            // input.files is replaced by syncFileInput(); copy first.
+            const chosen = Array.prototype.slice.call(input.files || []);
+            addPendingFiles(chosen);
+        });
+    }
+
+    if (drop) {
+        ['dragenter', 'dragover'].forEach(function (type) {
+            drop.addEventListener(type, function (event) {
+                event.preventDefault();
+                drop.classList.add('is-over');
+            });
+        });
+        ['dragleave', 'drop'].forEach(function (type) {
+            drop.addEventListener(type, function (event) {
+                event.preventDefault();
+                drop.classList.remove('is-over');
+            });
+        });
+        drop.addEventListener('drop', function (event) {
+            if (event.dataTransfer && event.dataTransfer.files) {
+                addPendingFiles(event.dataTransfer.files);
+            }
+        });
+    }
+
+    if (existing) {
+        existing.addEventListener('change', function (event) {
+            if (event.target && event.target.matches('[data-file-remove]')) {
+                event.target.closest('[data-file-row]').classList.toggle('is-removed', event.target.checked);
+            }
+        });
+    }
+})();
 
 /* View */
 function viewVoucher(id) {
@@ -2593,7 +2972,10 @@ function viewVoucher(id) {
                     '<thead><tr><th>#</th><th>Description</th><th>Qty</th><th class="text-end">Unit Price</th><th class="text-end">Total</th></tr></thead>' +
                     '<tbody>' + (itemRows || '<tr><td colspan="5">No line items.</td></tr>') + '</tbody>' +
                 '</table></div>' +
+                attachmentsViewerHtml(voucher.attachments, 'viewFilesViewer') +
                 approvalSummaryHtml(voucher);
+
+            bindAttachmentsViewer('viewFilesViewer', voucher.attachments);
         })
         .catch(function (error) {
             box.innerHTML = '<div class="alert alert-danger">' + escapeHtml(error.message) + '</div>';
@@ -2658,7 +3040,10 @@ function openApproval(id) {
                         '</td><td class="text-end">' + escapeHtml(item.total_price || '-') + '</td></tr>';
                 }).join('') || '<tr><td colspan="3">No line items.</td></tr>') +
                 '</tbody></table></div>' +
+                attachmentsViewerHtml(voucher.attachments, 'approvalFilesViewer') +
                 approvalSummaryHtml(voucher);
+
+            bindAttachmentsViewer('approvalFilesViewer', voucher.attachments);
 
             const canApprove = !!voucher.can_approve;
             document.getElementById('approveVoucherBtn').disabled = !canApprove;
