@@ -30,6 +30,7 @@ $menu_items = [];
 if (isset($conn) && $conn instanceof mysqli) {
     require_once __DIR__ . '/menu-defaults.php';
     ims_ensure_default_menu_items($conn);
+    ims_apply_menu_relocations($conn);
 
     // Event attendance reminders when cron is not scheduled (throttled, runs after the page is sent).
     require_once __DIR__ . '/event-reminders.php';
@@ -109,7 +110,7 @@ foreach ($menu_items as $item) {
 
 // Preferred section order; categories not listed follow alphabetically.
 $sidebar_group_order = [
-    'General', 'Programs', 'Applications', 'People', 'Operations',
+    'General', 'Programs', 'Applications', 'People', 'Operations', 'Finance',
     'General Management', 'Reporting', 'Admin', 'Member', 'Applicant',
 ];
 uksort($sidebar_groups, static function (string $a, string $b) use ($sidebar_group_order): int {
@@ -126,6 +127,7 @@ $sidebar_group_icons = [
     'Applications'       => 'fa-file-signature',
     'People'             => 'fa-users',
     'Operations'         => 'fa-cogs',
+    'Finance'            => 'fa-coins',
     'General Management' => 'fa-briefcase',
     'Reporting'          => 'fa-chart-bar',
     'Admin'              => 'fa-user-shield',

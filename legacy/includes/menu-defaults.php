@@ -104,6 +104,60 @@ if (!function_exists('ims_ensure_default_menu_items')) {
     }
 }
 
+/*
+|--------------------------------------------------------------------------
+| Sidebar relocations
+|--------------------------------------------------------------------------
+| page => new category for existing entries. A move is applied only while
+| the target category has no entries at all, so once it has run, Menu
+| Permissions stays in control (moving the entry elsewhere afterwards sticks
+| as long as the target section keeps at least one entry).
+*/
+if (!function_exists('ims_menu_relocations')) {
+    function ims_menu_relocations(): array
+    {
+        return [
+            'payment-voucher' => 'Finance',
+        ];
+    }
+}
+
+if (!function_exists('ims_apply_menu_relocations')) {
+    function ims_apply_menu_relocations(mysqli $conn): void
+    {
+        static $done = false;
+        if ($done) {
+            return;
+        }
+        $done = true;
+
+        try {
+            $check = $conn->prepare('SELECT 1 FROM menu_items WHERE category = ? LIMIT 1');
+            $move = $conn->prepare('UPDATE menu_items SET category = ? WHERE page IN (?, ?)');
+            if (!$check || !$move) {
+                return;
+            }
+
+            foreach (ims_menu_relocations() as $page => $category) {
+                $check->bind_param('s', $category);
+                $check->execute();
+                $hasEntries = $check->get_result()->fetch_row() !== null;
+
+                if (!$hasEntries) {
+                    $withExtension = $page . '.php';
+                    $move->bind_param('sss', $category, $page, $withExtension);
+                    $move->execute();
+                }
+            }
+
+            $check->close();
+            $move->close();
+        } catch (Throwable $e) {
+            error_log('ims_apply_menu_relocations: ' . $e->getMessage());
+        }
+    }
+}
+
 /** Built-in staff roles plus admin-added roles whose base role is a staff role. */
 if (!function_exists('ims_default_menu_roles')) {
     function ims_default_menu_roles(mysqli $conn): array
