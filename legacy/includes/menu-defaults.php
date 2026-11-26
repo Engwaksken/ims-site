@@ -108,16 +108,18 @@ if (!function_exists('ims_ensure_default_menu_items')) {
 |--------------------------------------------------------------------------
 | Sidebar relocations
 |--------------------------------------------------------------------------
-| page => new category for existing entries. A move is applied only while
-| the target category has no entries at all, so once it has run, Menu
-| Permissions stays in control (moving the entry elsewhere afterwards sticks
-| as long as the target section keeps at least one entry).
+| page => new category for existing entries. Each move runs once: it is
+| recorded in menu_relocations_applied, so Menu Permissions stays in control
+| afterwards (moving an entry elsewhere there sticks). To move an entry
+| again later, add it under a new key ("page@2" style is fine: the part
+| before "@" is the page).
 */
 if (!function_exists('ims_menu_relocations')) {
     function ims_menu_relocations(): array
     {
         return [
             'payment-voucher' => 'Finance',
+            'finance-reports' => 'Finance',
         ];
     }
 }
@@ -131,27 +133,56 @@ if (!function_exists('ims_apply_menu_relocations')) {
         }
         $done = true;
 
+        $relocations = ims_menu_relocations();
+        if (!$relocations) {
+            return;
+        }
+
         try {
-            $check = $conn->prepare('SELECT 1 FROM menu_items WHERE category = ? LIMIT 1');
-            $move = $conn->prepare('UPDATE menu_items SET category = ? WHERE page IN (?, ?)');
-            if (!$check || !$move) {
-                return;
+            $applied = [];
+            try {
+                $result = $conn->query('SELECT relocation_key FROM menu_relocations_applied');
+            } catch (Throwable $e) {
+                $result = false;
             }
 
-            foreach (ims_menu_relocations() as $page => $category) {
-                $check->bind_param('s', $category);
-                $check->execute();
-                $hasEntries = $check->get_result()->fetch_row() !== null;
-
-                if (!$hasEntries) {
-                    $withExtension = $page . '.php';
-                    $move->bind_param('sss', $category, $page, $withExtension);
-                    $move->execute();
+            if ($result === false) {
+                if (!$conn->query(
+                    'CREATE TABLE IF NOT EXISTS menu_relocations_applied (
+                        relocation_key VARCHAR(191) NOT NULL PRIMARY KEY,
+                        applied_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4'
+                )) {
+                    return;
+                }
+            } else {
+                foreach ($result->fetch_all(MYSQLI_NUM) as [$key]) {
+                    $applied[(string)$key] = true;
                 }
             }
 
-            $check->close();
+            $pending = array_diff_key($relocations, $applied);
+            if (!$pending) {
+                return;   // the usual case: one small SELECT per page view
+            }
+
+            $move = $conn->prepare('UPDATE menu_items SET category = ? WHERE page IN (?, ?)');
+            $mark = $conn->prepare('INSERT IGNORE INTO menu_relocations_applied (relocation_key) VALUES (?)');
+            if (!$move || !$mark) {
+                return;
+            }
+
+            foreach ($pending as $key => $category) {
+                $page = (string)strtok((string)$key, '@');
+                $withExtension = $page . '.php';
+                $move->bind_param('sss', $category, $page, $withExtension);
+                $move->execute();
+                $mark->bind_param('s', $key);
+                $mark->execute();
+            }
+
             $move->close();
+            $mark->close();
         } catch (Throwable $e) {
             error_log('ims_apply_menu_relocations: ' . $e->getMessage());
         }
