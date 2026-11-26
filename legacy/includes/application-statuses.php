@@ -124,3 +124,77 @@ if (!function_exists('app_status_repair_rejected')) {
         }
     }
 }
+
+if (!function_exists('app_ensure_rejection_reason_column')) {
+    /**
+     * applications.rejection_reason is not in every install, and where it is
+     * it may be a short VARCHAR. Make it a nullable TEXT column.
+     */
+    function app_ensure_rejection_reason_column(mysqli $conn): bool
+    {
+        static $ok = null;
+        if ($ok !== null) {
+            return $ok;
+        }
+        try {
+            $res = $conn->query("SHOW COLUMNS FROM `applications` LIKE 'rejection_reason'");
+            $col = $res ? $res->fetch_assoc() : null;
+            if (!$col) {
+                $ok = (bool)$conn->query("ALTER TABLE `applications` ADD COLUMN `rejection_reason` TEXT NULL");
+            } elseif (stripos((string)$col['Type'], 'text') === false) {
+                $ok = (bool)$conn->query("ALTER TABLE `applications` MODIFY `rejection_reason` TEXT NULL");
+            } else {
+                $ok = true;
+            }
+            if (!$ok) {
+                error_log('[application-statuses] rejection_reason column: ' . $conn->error);
+            }
+        } catch (Throwable $e) {
+            error_log('[application-statuses] rejection_reason column: ' . $e->getMessage());
+            $ok = false;
+        }
+        return $ok;
+    }
+}
+
+if (!function_exists('app_set_status')) {
+    /**
+     * Set one application's status and confirm the database really stored it
+     * (a strict-mode error, an ENUM without the value or a missing column
+     * must not pass as success). Returns true, or an error message.
+     */
+    function app_set_status(mysqli $conn, int $application_id, string $status, int $user_id): bool|string
+    {
+        if (!app_status_ensure($conn, $status)) {
+            return "The database does not accept the status \"{$status}\" yet. Ask an administrator to check the applications table.";
+        }
+        try {
+            $stmt = $conn->prepare("UPDATE applications SET status = ?, reviewed_by = ?, reviewed_at = NOW() WHERE application_id = ?");
+            if (!$stmt) {
+                return 'SQL error: ' . $conn->error;
+            }
+            $stmt->bind_param('sii', $status, $user_id, $application_id);
+            $ok = $stmt->execute();
+            $err = $stmt->error;
+            $stmt->close();
+            if (!$ok) {
+                return 'SQL error: ' . $err;
+            }
+
+            $chk = $conn->prepare("SELECT status FROM applications WHERE application_id = ?");
+            if ($chk) {
+                $chk->bind_param('i', $application_id);
+                $chk->execute();
+                $row = $chk->get_result()->fetch_assoc();
+                $chk->close();
+                $stored = (string)($row['status'] ?? '');
+                if ($stored !== $status) {
+                    return "The status was not saved (the database still has \"{$stored}\").";
+                }
+            }
+            return true;
+        } catch (Throwable $e) {
+            return 'Database error: ' . $e->getMessage();
+        }
+    }
+}

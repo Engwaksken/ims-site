@@ -324,45 +324,43 @@ switch ($action) {
     case 'reject': {
         if ($application_id <= 0) failTo('application-opportunities', "Invalid application.");
 
+        $back = "view-application?id={$application_id}";
         $rejection_reason = sanitize_input($_POST['rejection_reason'] ?? '');
         if ($rejection_reason === '') {
-            failTo("view-application?id={$application_id}", "Rejection reason is required.");
+            failTo($back, "Rejection reason is required.");
         }
 
         $old_status = $application['status'] ?? null;
         $new_status = 'Rejected';
-        // Without this a status column that lacks 'Rejected' silently stores ''
-        // and the application vanishes from the Rejected filter and stats.
-        if (!app_status_ensure($conn, $new_status)) {
-            failTo("view-application?id={$application_id}", "The database does not accept the status \"{$new_status}\" yet. Ask an administrator to check the applications table.");
+
+        // 1. The status itself, exactly like Accept/Shortlist, then read back
+        //    so a failed write can never look like success.
+        $result = app_set_status($conn, $application_id, $new_status, $user_id);
+        if ($result !== true) {
+            failTo($back, "Error rejecting application: " . $result);
         }
 
-        $stmt = $conn->prepare("
-            UPDATE applications
-            SET status = ?,
-                reviewer_notes = ?,
-                rejection_reason = ?,
-                reviewed_by = ?,
-                reviewed_at = NOW()
-            WHERE application_id = ?
-        ");
-        if (!$stmt) failTo("view-application?id={$application_id}", "SQL error: " . $conn->error);
-
-        $stmt->bind_param("sssii", $new_status, $rejection_reason, $rejection_reason, $user_id, $application_id);
-
-        if ($stmt->execute()) {
-            $stmt->close();
-
-            log_status_change($conn, $application_id, $old_status, $new_status, $user_id, "Rejection reason: {$rejection_reason}");
-            log_activity($conn, $user_id, 'Reject Application', "Rejected application #{$application_id} (" . ($application['startup_name'] ?? 'N/A') . ")");
-
-
-            okTo("view-application?id={$application_id}", "Application rejected successfully." . appstatus_mail_summary());
+        // 2. The reason. Kept apart from the status update: an install without
+        //    (or with a too-short) rejection_reason column used to fail the
+        //    whole UPDATE and leave the application as Submitted.
+        $reason_saved = false;
+        if (app_ensure_rejection_reason_column($conn)) {
+            $rs = $conn->prepare("UPDATE applications SET rejection_reason = ? WHERE application_id = ?");
+            if ($rs) {
+                $rs->bind_param("si", $rejection_reason, $application_id);
+                $reason_saved = $rs->execute();
+                $rs->close();
+            }
+        }
+        if (!$reason_saved) {
+            error_log("[review-application-process] #{$application_id} rejected but reason not stored: " . $conn->error);
         }
 
-        $err = $stmt->error;
-        $stmt->close();
-        failTo("view-application?id={$application_id}", "Error rejecting application: " . $err);
+        // The reason is always kept in the status history as well.
+        log_status_change($conn, $application_id, $old_status, $new_status, $user_id, "Rejection reason: {$rejection_reason}");
+        log_activity($conn, $user_id, 'Reject Application', "Rejected application #{$application_id} (" . ($application['startup_name'] ?? 'N/A') . ")");
+
+        okTo($back, "Application rejected." . appstatus_mail_summary());
     }
 
     /* ------------------------------------------------------------
